@@ -27,5 +27,20 @@
             d3.select("p").style("font-family", "cursive");
         </script>
     
+    <script src='https://d3js.org/d3.v7.min.js'></script>
+
+        <style>
+            .test {
+                color:'red'
+            }
+        </style>
+        <p class="test">First paragraph</p>
+        <p>Second paragraph</p>
+        <p class="test">Third paragraph</p>
+
+        <script>
+            d3.selectAll(".test").style('color','blue');
+        </script>
+    
 </body>
 </html>
