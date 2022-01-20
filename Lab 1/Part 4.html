@@ -18,7 +18,7 @@
                     .enter()
                     .append('span')
                     .style("color", function(d, i) {
-                        if ( d >= 0 && d <= 9){
+                        if ( typeof d == "number"){
                             return "green";
                         }
                         else{
@@ -30,6 +30,7 @@
                     });
 
         </script>
+
 
     </body>
 
