@@ -41,6 +41,50 @@
         <script>
             d3.selectAll(".test").style('color','blue');
         </script>
+
+    <!-- Exercise 3 -->
+
+    <script src='https://d3js.org/d3.v7.min.js'></script>
+
+    <span>Test</span>
+
+    <script>
+        let newspan = d3.select("body").append('span');
+        newspan.text('hello');
+    </script>
+
+    <script src='https://d3js.org/d3.v7.min.js'></script>
+
+    <script>
+        for(let i=1; i<11; i++){
+            let div10 = d3.select("body").append("div");
+            div10.text(i);
+
+            if(i < 6){
+                div10.text(i).style("color", "red");
+            }
+            else if (i >= 6){
+                div10.text(i).style("color", "green");
+            }
+
+            // Exercise - 4
+
+            d3.select("div").text("start").style("color", "purple");
+        }
+    </script>
+
+    <!-- Exercise 5 -->
+
+    <script src='https://d3js.org/d3.v7.min.js'></script>
+
+    <script>
+        var bodyElement = d3.select("body");
+        var div = bodyElement.append("div");
+        div.text("Hello World!");
+
+        // same as
+        d3.select("body").append("div").text("Hello World!").style("color", "green");
+    </script>
     
 </body>
 </html>
