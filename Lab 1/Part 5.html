@@ -34,10 +34,21 @@
                 else if(data.Name.includes("Mrs.") == true){
                     mrs++;
                 }
+                if(data.Sex == "male"){
+                    male++;
+                }
+                else if(data.Sex == "female"){
+                    female++;
+                }
 
             }).then(function(data){
                 console.log("Mr. count " + mr);
                 console.log("Mrs. count " + mrs);
+                
+                console.log(" ")
+
+                console.log("Male count " + male);
+                console.log("Female count " + female);
             });
 
 
