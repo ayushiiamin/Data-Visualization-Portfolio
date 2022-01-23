@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+    <head>
+        <script src='https://d3js.org/d3.v7.min.js'></script>
+    </head>
+
+    <body>
+        <script src='https://d3js.org/d3.v7.min.js'></script>
+
+        <script>
+            let titaniccsv = 'https://raw.githubusercontent.com/dsindy/kaggle-titanic/master/data/test.csv';
+
+            /*
+                PassengerId,Pclass,Name,Sex,Age,SibSp,Parch,Ticket,Fare,Cabin,Embarked
+                892,3,"Kelly, Mr. James",male,34.5,0,0,330911,7.8292,,Q
+                893,3,"Wilkes, Mrs. James (Ellen Needs)",female,47,1,0,363272,7,,S
+                894,2,"Myles, Mr. Thomas Francis",male,62,0,0,240276,9.6875,,Q
+                895,3,"Wirz, Mr. Albert",male,27,0,0,315154,8.6625,,S
+            */
+
+            var mr = 0;
+            var mrs = 0;
+
+            var male = 0;
+            var female = 0;
+
+            d3.csv(titaniccsv, function(data){
+
+                if(data.Name.includes("Mr.") == true){
+                    mr++;
+                }
+                else if(data.Name.includes("Mrs.") == true){
+                    mrs++;
+                }
+
+            }).then(function(data){
+                console.log("Mr. count " + mr);
+                console.log("Mrs. count " + mrs);
+            });
+
+
+
+             // while( data.Name.includes("Mr.") == true){
+                //      mr++;
+                //      //console.log( mr ); 
+                //      //console.log( data.Name ); 
+                //      console.log( "Mr count: " + mr );  
+                //      console.log( data.Name );
+                // }
+
+                // for( let i=0; i<data.length; i++){
+                //     if(data.Name.includes("Mr.") == true){
+                //         mr++;
+                //     }
+                // }
+
+                // //console.log(typeof data.length); 
+                // //return typeof data.length;
+                
+                // console.log( "Mr count: " + mr ); 
+
+                // while (data.Name.includes("Mrs.") == true){
+                //     mrs++;
+                // }
+                // //console.log( data.Name );
+                // console.log( "Mrs count: " + mrs ); 
+
+                // for (let i in data){
+                    
+                // }
+
+                // if(data.Sex == "male"){
+                //     male++;
+                // } 
+                // else if(data.Sex == "female"){
+                //     female++;
+                //  }  
+                 
+                 //console.log("Male count" + male);
+                 //console.log("Female count" + female);
+
+                // console.log( data.Sex );
+
+        </script>
+    </body>
+</html>
+
+
