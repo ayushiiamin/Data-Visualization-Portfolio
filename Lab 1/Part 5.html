@@ -22,6 +22,7 @@
 
             var mr = 0;
             var mrs = 0;
+            var otherCount = 0;
 
             var male = 0;
             var female = 0;
@@ -42,6 +43,9 @@
                 }
                 else if(data.Name.includes("Mrs.") == true){
                     mrs++;
+                }
+                else{
+                    otherCount++;
                 }
 
                 if(data.Sex == "male"){
@@ -77,6 +81,7 @@
             }).then(function(data){
                 console.log("Mr. count " + mr);
                 console.log("Mrs. count " + mrs);
+                console.log("Other count " + otherCount);
 
                 console.log(" ")
 
