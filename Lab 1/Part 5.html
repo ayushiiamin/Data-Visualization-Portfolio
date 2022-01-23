@@ -26,6 +26,15 @@
             var male = 0;
             var female = 0;
 
+            var zeroNine = 0;
+            var tenNineteen = 0;
+            var twenty29 = 0;
+            var thirty39 = 0;
+            var thirty39 = 0;
+            var fourty49 = 0;
+            var fifty59 = 0;
+            var sixtyAbove = 0;
+
             d3.csv(titaniccsv, function(data){
 
                 if(data.Name.includes("Mr.") == true){
@@ -34,6 +43,7 @@
                 else if(data.Name.includes("Mrs.") == true){
                     mrs++;
                 }
+
                 if(data.Sex == "male"){
                     male++;
                 }
@@ -41,14 +51,47 @@
                     female++;
                 }
 
+                if(data.Age>=0 && data.Age<10){
+                    zeroNine++;
+                }
+                else if(data.Age>=10 && data.Age<20){
+                    tenNineteen++;
+                }
+                else if(data.Age>=20 && data.Age<30){
+                    twenty29++;
+                }
+                else if(data.Age>=30 && data.Age<40){
+                    thirty39++;
+                }
+                else if(data.Age>=40 && data.Age<50){
+                    fourty49++;
+                }
+                else if(data.Age>=50 && data.Age<60){
+                    fifty59++;
+                }
+                else if(data.Age>=60){
+                    sixtyAbove++;
+                }
+
+
             }).then(function(data){
                 console.log("Mr. count " + mr);
                 console.log("Mrs. count " + mrs);
-                
+
                 console.log(" ")
 
                 console.log("Male count " + male);
                 console.log("Female count " + female);
+                
+                console.log(" ")
+
+                console.log("Age Group 0-9: " + zeroNine);
+                console.log("Age Group 10-19: " + tenNineteen);
+                console.log("Age Group 20-29: " + twenty29);
+                console.log("Age Group 30-39: " + thirty39);
+                console.log("Age Group 40-49: " + fourty49);
+                console.log("Age Group 50-59: " + fifty59);
+                console.log("Age Group 60 and Above: " + sixtyAbove);
             });
 
 
