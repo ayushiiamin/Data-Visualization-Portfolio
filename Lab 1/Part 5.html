@@ -7,6 +7,8 @@
     </head>
 
     <body>
+
+        <!-- Exercise 9 -->
         <!-- <script src='https://d3js.org/d3.v7.min.js'></script>
 
         <script>
@@ -144,11 +146,13 @@
 
         </script> -->
 
+        <!-- Exercise 10 -->
         <script src='https://d3js.org/d3.v7.min.js'></script>
 
+        <!-- <i/div><div></div>
         <div></div>
-        <div></div>
-        <div></div>
+        <dv></div>
+        <div> -->
 
         <script>
 
@@ -204,22 +208,44 @@
 
             }).then(function(data){
                 //console.log("Heart failure over 50: " + over50);
+                heartFail=[
+                                {oneThirty: one30},
+                                {thirtyoneFourty: thirtyone40},
+                                {foutyoneSixty: fourtyone60},
+                                {sixtyoneHundred: sixtyone100}]
                 let arr = d3.select("body")
-                            .selectAll("p")
-                            .data(heartFail.push({
-                                oneThirty: one30,
-                                thirtyoneFourty: thirtyone40,
-                                foutyoneSixty: fourtyone60,
-                                sixtyoneHundred: sixtyone100
-                            }));  
+                            .selectAll("div")
+                            .data(heartFail)
+                            .enter()
+                            .append('div');  
                             
                 let arr1 = d3.select("body")
                              .selectAll("div")
                              .data(heartFail)
-                             .text(function (d, i) {
-                                 console.log(d)
-                                 //return "helo" + d;
-                             }); 
+                             .text(function (d, i){
+                                if (i ==0){
+                                    return "1 to 30 - " +d.oneThirty;
+                                }
+                                else if(i==1){
+                                    return "31 to 40 - " +d.thirtyoneFourty;
+                                }
+                                else if(i==2){
+                                    return "41 to 50 - " +d.foutyoneSixty;
+                                }
+                                else if(i==3){
+                                    return "61 to 100 - " +d.sixtyoneHundred;
+                                }
+                                //console.log(i)
+                            });  
+                            
+                // let arr1 = d3.select("body")
+                //              .selectAll("div")
+                //              .data(heartFail)
+                //              .text(function (d, i) {
+                //                  //console.log(d)
+                //                  //return "helo" + d;
+                //                  "1-30 " + d.oneThirty
+                //              }); 
 
                 // console.log("Heart failure 1-30: " + one30);
                 // console.log("Heart failure 31-40: " + thirtyone40);
