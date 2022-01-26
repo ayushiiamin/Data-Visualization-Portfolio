@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+    <head>
+        <script src='https://d3js.org/d3.v7.min.js'></script>
+    </head>
+
+    <body>
+        <script src='https://d3js.org/d3.v7.min.js'></script>
+
+        <style>
+           svg rect {
+                fill: cyan;
+            }
+
+            svg text {
+                fill:black;
+                font: 10px sans-serif;
+                text-anchor: end;
+            }
+
+        </style>
+
+        <script id = "dv">
+            let heartfailurecsv = 'https://raw.githubusercontent.com/akmand/datasets/master/heart_failure.csv';
+
+            //var data = [5, 10, 12, 6];
+
+
+            var one30 = 0;
+            var thirtyone40 = 0;
+            var fourtyone60 = 0;
+            var sixtyone100 = 0;
+
+            var heartFail = [];
+
+            
+
+            d3.csv(heartfailurecsv, function(data) {
+                if(data.age>=1 && data.age<=30){
+                    one30++;
+                }
+                else if(data.age>=31 && data.age<=40){
+                    thirtyone40++;
+                }
+                else if(data.age>=41 && data.age<=60){
+                    fourtyone60++;
+                }
+                else if(data.age>=61 && data.age<=100){
+                    sixtyone100++;
+                }
+
+
+            }).then(function(data){
+                //console.log("Heart failure over 50: " + over50);
+                heartFail=[
+                                {0: one30},
+                                {1: thirtyone40},
+                                {2: fourtyone60},
+                                {3: sixtyone100}
+                          ]
+
+            var width = 200;
+            var scaleFactor = 1;
+            var barHeight = 20;
+
+            var graph = d3.select("body")
+                        .append("svg")
+                        .attr("width", width)
+                        .attr("height", barHeight * heartFail.length);
+
+            var bar = graph.selectAll("g")
+                            .data(heartFail)
+                            .enter()
+                            .append("g")
+                            .attr("transform", function(d, i) {
+                                return "translate(0," + i * barHeight + ")";
+                            });
+            
+            bar.append("rect")
+                .attr("width", function(d, i) {
+                    // if(i ==0){
+                    //     //console.log(d.oneThirty);
+                    //     return d.oneThirty * scaleFactor;
+                    // }
+                    // else if(i==1){
+                    //     //console.log(d.thirtyoneFourty);
+                    //     return d.thirtyoneFourty * scaleFactor;
+                    // }
+                    // else if(i==2){
+                    //     //console.log(d.foutyoneSixty);
+                    //     return d.foutyoneSixty * scaleFactor;
+                    // }
+                    // else if(i==3){
+                    //     //console.log(d.sixtyoneHundred);
+                    //     //document.getElementById("dv").style.color = "red";
+                    //     return d.sixtyoneHundred * scaleFactor;
+                    // }
+                    // if(i==0){
+                    //     return d[i]
+                    // }
+                    return d[i] * scaleFactor;
+                    
+                })
+                .attr("height", barHeight - 1);
+
+            bar.append("text")
+                .attr("x", function(d, i) { 
+                    // if(i==0){
+                    //     return (d.oneThirty*scaleFactor +5);
+                    // }
+                    // else if(i==1){
+                    //     return (d.thirtyoneFourty*scaleFactor);
+                    // }
+                    // else if(i==2){
+                    //     return (d.foutyoneSixty*scaleFactor);
+                    // }
+                    // else if(i==3){
+                    //     return (d.sixtyoneHundred*scaleFactor); 
+                    // }
+                    if(i==0){
+                        return (d[i]*scaleFactor +5);
+                    }
+                    else{
+                        return (d[i]*scaleFactor);
+                    }
+                })
+                // .style("fill", function(d,i){
+
+                //     if(d.oneThirty>100){
+                //         return "red"
+                //     }
+                // })
+                .attr("y", barHeight / 2)
+                .attr("dy", ".35em")
+                .text(function(d, i ) { 
+                    // if(i==0){
+                    //     return d.oneThirty;
+                    // }
+                    // else if(i==1){
+                    //     return d.thirtyoneFourty;
+                    // }
+                    // else if(i==2){
+                    //     return d.foutyoneSixty;
+                    // }
+                    // else if(i==3){
+                    //     return d.sixtyoneHundred;
+                    // } 
+                    return d[i];
+                });
+
+                
+                let arr = d3.select("body")
+                            .selectAll("p")
+                            .data(heartFail)
+                            .enter()
+                            .append('p');  
+                            
+                let arr1 = d3.select("body")
+                             .selectAll("p")
+                             .data(heartFail)
+                             .text(function (d, i){
+                                if (i ==0){
+                                    return "Heart failure 1-30: " +d.oneThirty;
+                                }
+                                else if(i==1){
+                                    return "Heart failure 31-40: " +d.thirtyoneFourty;
+                                }
+                                else if(i==2){
+                                    return "Heart failure 41-60: " +d.foutyoneSixty;
+                                }
+                                else if(i==3){
+                                    return "Heart failure 61-100: " +d.sixtyoneHundred;
+                                }
+                      
+                            }); 
+            });
+
+            
+
+            //console.log(typeof heartFail)
+
+        </script>
+
+    </body>
+</html>
