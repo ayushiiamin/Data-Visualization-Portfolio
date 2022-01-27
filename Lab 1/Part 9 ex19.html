@@ -27,8 +27,11 @@
 
         <script>
             const arrTest = [50, 400, 300, 900, 255, 1000, 87];
+            var c =0;
 
             function barChart(data){
+                c++;
+            if(c <=2 ){
 
             const width = 500;
             const barHeight = 20;
@@ -77,10 +80,22 @@
                     .style('text-anchor', 'end')
                     .text(function (d) { 
                         return d; 
-                    });
+                    });                                 
+                }
+                else{
+                    console.log("Only two bar charts can be displayed on the screen!");
+                }    
+            
             }
 
             barChart(arrTest);
+            console.log(c);
+
+            barChart(arrTest);
+            console.log(c);
+
+            barChart(arrTest);
+            console.log(c);
                    
         </script>
     </body>
