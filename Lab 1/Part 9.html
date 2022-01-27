@@ -1,0 +1,82 @@
+<!DOCTYPE html> 
+
+<html lang="en">
+
+    <head>
+        <script src='https://d3js.org/d3.v7.min.js'></script>
+    </head>
+
+    <body>
+        <!-- <script src='https://d3js.org/d3.v7.min.js'></script>
+
+        <script>
+            var data = [0, 400, 300, 900, 850, 1000];
+
+            var scale = d3.scaleLinear()
+                            .domain([d3.min(data), d3.max(data)])
+                            .range([0, 10]);
+
+            console.log( 'scale 0:', scale(0) ); // 0 maps to 0
+            console.log( 'scale 1000:', scale(1000) ); // 1000 maps to 10
+            console.log( 'scale 200:', scale(200) );
+            console.log( 'scale 30000:', scale(850) );
+
+        </script> -->
+
+        <script src='https://d3js.org/d3.v7.min.js'></script>
+
+        <script>
+            const data = [50, 400, 300, 900, 250, 1000]
+
+            const width = 500;
+            const barHeight = 20;
+            const margin = 1;
+
+            var scale = d3.scaleLinear()
+                            .domain([d3.min(data), d3.max(data)])
+                            .range([50, 500]);
+
+                var svg = d3.select("body")
+                            .append("svg")
+                            .attr("width", width)
+                            .attr("height", barHeight * data.length);
+
+                var g = svg.selectAll("g")
+                            .data(data)
+                            .enter()
+                            .append("g")
+                            .attr("transform", function (d, i) {
+                            return "translate(0," + i * barHeight + ")";
+                            });
+
+                g.append("rect")
+                    .attr("width", function (d) {
+                        return scale(d);
+                    })
+                    .attr('fill', function(d){
+                        if(d<100){
+                            return "green";
+                        }
+                        else if(d>500){
+                            return "red";
+                        }
+                        else{
+                            return "blue";
+                        }
+                    })
+                    .attr("height", barHeight - margin)
+
+                g.append("text")
+                    .attr("x", function (d) { 
+                        return (scale(d)); 
+                    })
+                    .attr("y", barHeight / 2)
+                    .attr("dy", ".35em")
+                    .style('text-anchor', 'end')
+                    .text(function (d) { 
+                        return d; 
+                    });
+                    
+        </script>
+    </body>
+</html>
