@@ -26,23 +26,36 @@
         <script src='https://d3js.org/d3.v7.min.js'></script>
 
         <script>
-            const data = [50, 400, 300, 900, 250, 1000]
+            //const data = [50, 400, 300, 900, 250, 1000]
 
+            let arrayCSV = "https://raw.githubusercontent.com/ayushiiamin/csvfileimp/main/data9.csv"
             const width = 500;
             const barHeight = 20;
             const margin = 1;
 
-            var scale = d3.scaleLinear()
-                            .domain([d3.min(data), d3.max(data)])
+            var arr = [];
+
+            d3.csv(arrayCSV, function(data, i){
+                //console.log(data);
+                arr.push(data.Number);
+                
+            }).then(function(data){
+                //console.log(arr);
+                var arrNum = arr.map((i) => Number(i));
+                //console.log(arrNum);
+
+                var scale = d3.scaleLinear()
+                            .domain([d3.min(arrNum), d3.max(arrNum)])
                             .range([50, 500]);
+
 
                 var svg = d3.select("body")
                             .append("svg")
                             .attr("width", width)
-                            .attr("height", barHeight * data.length);
+                            .attr("height", barHeight * arrNum.length);
 
                 var g = svg.selectAll("g")
-                            .data(data)
+                            .data(arrNum)
                             .enter()
                             .append("g")
                             .attr("transform", function (d, i) {
@@ -76,7 +89,8 @@
                     .text(function (d) { 
                         return d; 
                     });
-                    
+            });
+                   
         </script>
     </body>
 </html>
