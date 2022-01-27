@@ -1,3 +1,14 @@
+<!-- REFERENCES -->
+
+<!-- 
+1) W3schools.com. (2015). JavaScript Functions. [online] 
+Available at: https://www.w3schools.com/js/js_functions.asp.   
+
+
+-->
+
+
+
 <!DOCTYPE html> 
 
 <html lang="en">
@@ -7,91 +18,101 @@
     </head>
 
     <body>
-        <!-- <script src='https://d3js.org/d3.v7.min.js'></script>
-
-        <script>
-            var data = [0, 400, 300, 900, 850, 1000];
-
-            var scale = d3.scaleLinear()
-                            .domain([d3.min(data), d3.max(data)])
-                            .range([0, 10]);
-
-            console.log( 'scale 0:', scale(0) ); // 0 maps to 0
-            console.log( 'scale 1000:', scale(1000) ); // 1000 maps to 10
-            console.log( 'scale 200:', scale(200) );
-            console.log( 'scale 30000:', scale(850) );
-
-        </script> -->
 
         <script src='https://d3js.org/d3.v7.min.js'></script>
 
         <script>
             const arrTest = [50, 400, 300, 900, 255, 1000, 87];
             var c =0;
+            let arrayCSV = "https://raw.githubusercontent.com/ayushiiamin/csvfileimp/main/data9.csv";
+            let fileCSV = "https://raw.githubusercontent.com/ayushiiamin/csvfileimp/main/data19.csv";
 
-            function barChart(data){
+            function barChart(data){       //(W3schools.com, 2015)
                 c++;
             if(c <=2 ){
 
-            const width = 500;
-            const barHeight = 20;
-            const margin = 1;
+                if(data.includes(".csv") == true){
 
-            var scale = d3.scaleLinear()
-                            .domain([d3.min(data), d3.max(data)])
-                            .range([50, 500]);
+                    const width = 500;
+                    const barHeight = 20;
+                    const margin = 1;
 
-            var svg = d3.select("body")
-                            .append("svg")
-                            .attr("width", width)
-                            .attr("height", barHeight * data.length);
+                    var arr = [];
 
-            var g = svg.selectAll("g")
-                            .data(data)
-                            .enter()
-                            .append("g")
-                            .attr("transform", function (d, i) {
-                            return "translate(0," + i * barHeight + ")";
+                    d3.csv(data, function(d, i){
+                        //console.log(data);
+                        arr.push(d.Number);
+
+                        // console.log(" ");
+                        // console.log(arr);
+                
+                    }).then(function(data){
+                        //console.log(arr);
+                        var arrNum = arr.map((i) => Number(i));
+                        //console.log(arrNum);
+
+                        var scale = d3.scaleLinear()
+                                    .domain([d3.min(arrNum), d3.max(arrNum)])
+                                    .range([50, 500]);
+
+
+                        var svg = d3.select("body")
+                                    .append("svg")
+                                    .attr("width", width)
+                                    .attr("height", barHeight * arrNum.length);
+
+                        var g = svg.selectAll("g")
+                                    .data(arrNum)
+                                    .enter()
+                                    .append("g")
+                                    .attr("transform", function (d, i) {
+                                    return "translate(0," + i * barHeight + ")";
+                                    });
+
+                        g.append("rect")
+                            .attr("width", function (d) {
+                                return scale(d);
+                            })
+                            .attr('fill', function(d){
+                                if(d<100){
+                                    return "green";
+                                }
+                                else if(d>500){
+                                    return "red";
+                                }
+                                else{
+                                    return "blue";
+                                }
+                            })
+                            .attr("height", barHeight - margin)
+
+                        g.append("text")
+                            .attr("x", function (d) { 
+                                return (scale(d)); 
+                            })
+                            .attr("y", barHeight / 2)
+                            .attr("dy", ".35em")
+                            .style('text-anchor', 'end')
+                            .text(function (d) { 
+                                return d; 
                             });
-
-                g.append("rect")
-                    .attr("width", function (d) {
-                        return scale(d);
-                    })
-                    .attr('fill', function(d){
-                        if(d<100){
-                            return "green";
-                        }
-                        else if(d>500){
-                            return "red";
-                        }
-                        else{
-                            return "blue";
-                        }
-                    })
-                    .attr("height", barHeight - margin)
-
-                g.append("text")
-                    .attr("x", function (d) { 
-                        return (scale(d)); 
-                    })
-                    .attr("y", barHeight / 2)
-                    .attr("dy", ".35em")
-                    .style('text-anchor', 'end')
-                    .text(function (d) { 
-                        return d; 
-                    });                                 
+                        });                                 
+                    }
+                    else{
+                        console.log("Only csv file is accepted as input");
+                    }
                 }
+                
                 else{
                     console.log("Only two bar charts can be displayed on the screen!");
                 }    
             
             }
 
-            barChart(arrTest);
+            barChart(arrayCSV);
             console.log(c);
 
-            barChart(arrTest);
+            barChart(fileCSV);
             console.log(c);
 
             barChart(arrTest);
