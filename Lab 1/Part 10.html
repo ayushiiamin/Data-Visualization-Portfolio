@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+
+<html lang = "en">
+    <head>
+        <script src='https://d3js.org/d3.v7.min.js'></script>
+    </head>
+
+    <body>
+        <script src='https://d3js.org/d3.v7.min.js'></script>
+
+        <!-- <script>
+
+            const width = 400;
+            const height = 100;
+            const data = [10, 12, 20, 25, 32];
+
+            // Append SVG
+            var svg = d3.select("body")
+                        .append("svg")
+                        .attr("width", width)
+                        .attr("height", height);
+
+            // Create scale
+            var scale = d3.scaleLinear()
+                           .domain([d3.min(data), d3.max(data)])
+                            .range([0, width - 100]);
+
+            // Add scales to axis
+            var x_axis = d3.axisBottom()
+                            .scale(scale);
+
+            //Append group and insert axis
+            svg.append("g")
+                .call(x_axis);
+                
+        </script> -->
+
+        <style>
+            .axisColor text{
+                fill: blue;
+            }
+            .axisColor path{
+                stroke: blue;
+            }
+            .axisColor line{
+                stroke: blue;
+            }
+        </style>
+
+        <script>
+            const width = 400;
+            const height = 300;
+
+            var data = [10, 15, 20, 25, 30];
+
+            var svg = d3.select("body")
+                        .append("svg")
+                        .attr("width", width)
+                        .attr("height", height);
+
+            var xscale = d3.scaleLinear()
+                            .domain([0, d3.max(data)])
+                            .range([0, width - 100]);
+
+            var yscale = d3.scaleLinear()
+                            .domain([0, d3.max(data)])
+                            .range([height/2, 0]);
+
+            var xscaleTop = d3.scaleLinear()
+                                .domain([0, d3.max(data)])
+                                .range([0, width - 100])
+                                ;
+
+            var yscaleRight = d3.scaleLinear()
+                                .domain([0, d3.max(data)])
+                                .range([height/2, 0]);
+
+            var x_axis = d3.axisBottom()
+                            .scale(xscale);
+
+            var y_axis = d3.axisLeft()
+                            .scale(yscale);
+
+            var x_axisTop = d3.axisTop()
+                            .scale(xscaleTop);
+
+            var y_axisRight = d3.axisRight()
+                            .scale(yscaleRight); 
+
+            svg.append("g")
+                .attr("transform", "translate(50, 20)")
+                .call(y_axis);
+
+            var yRightAxisTranslate = width/2 +150;
+
+            svg.append("g")
+                .attr("transform", "translate(" + yRightAxisTranslate + ", 20)")
+                .attr("class", "axisColor")
+                .call(y_axisRight);
+
+            var xAxisTranslate = height/2 + 20;
+
+            svg.append("g")
+                .attr("transform", "translate(50, " + xAxisTranslate +")")
+                .call(x_axis);
+
+            var xAxisTranslateTop = height/10 - 10;    
+            
+            svg.append("g")
+                .attr("transform", "translate(50, " + xAxisTranslateTop +")")
+                .attr("class", "axisColor")
+                .call(x_axisTop);
+
+        </script>
+    </body>
+</html>
