@@ -3,3 +3,7 @@ Part 10 References -
 -------------> Ex 20
 1) Ocks.org. (2016). Changing the colour of an axis in v4. [online] 
 Available at: https://bl.ocks.org/d3noob/629790fc15cc1afba0253f29a4d246e7.
+
+-------------> Ex 21
+1) Team, E. (2020). How to create a bar chart using D3. [online] 
+Available at: https://www.educative.io/edpresso/how-to-create-a-bar-chart-using-d3.
