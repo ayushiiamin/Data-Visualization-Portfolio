@@ -9,6 +9,8 @@
         <script src='https://d3js.org/d3.v7.min.js'></script>
 
         <script>
+            let randPointsCSV = "https://raw.githubusercontent.com/ayushiiamin/csvfileimp/main/data23.csv";
+
             // Set Dimensions
             const xSize = 600; const ySize = 600;
             const margin = 40;
@@ -16,99 +18,135 @@
             const yMax = ySize - margin*2;
 
 
-            function mathTrig(data){
+            function mathTrig(data, trig){
 
-                // Get the 'limits' of the data - the full extent (mins and max)
-                // so the plotted data fits perfectly
-                const xExtent = d3.extent( data, d=>{ 
-                    return d.x 
-                } );
-                const yExtent = d3.extent( data, d=>{
-                    return d.y 
-                    } );
+                if(data.includes(".csv") == true){
 
-                // Append SVG Object to the Page
-                const svg = d3.select("body")
-                                .append("svg")
-                                .attr('width', xSize )
-                                .attr('height', ySize )
-                                .append("g")
-                                .attr("transform","translate(" + margin + "," + margin + ")");
+                    var arr = [];
 
-                // X Axis
-                const x = d3.scaleLinear()
-                            .domain([ xExtent[0], xExtent[1] ])
-                            .range([0, xMax]);
+                    d3.csv(data, function(d, i){
+                        if(trig == "sin" || trig == "sine"){
+                                arr.push({
+                                x: d.Number, y: Math.sin( 6.2 * d.Number )
+                            });
+                        }
+                        else if(trig == "cos" || trig == "cosine"){
+                            arr.push({
+                                x: d.Number, y: Math.cos( 8.5 * i/100)
+                            });
+                        }
+                        else if(trig == "tan" || trig == "tangent"){
+                            arr.push({
+                                x: d.Number, y: Math.tan(9.0 * i/100)
+                            });
+                        }
+                        else{
+                            console.log("Only sin/cos/tan allowed!");
+                        }
+                    }).then(function(data){
 
-                // bottom
-                svg.append("g")
-                    .attr("transform", "translate(0," + yMax + ")")
-                    .call(d3.axisBottom(x))
-                    .attr('color', 'green'); // make bottom axis green
+                        // Get the 'limits' of the data - the full extent (mins and max)
+                        // so the plotted data fits perfectly
+                        const xExtent = d3.extent( arr, d=>{ 
+                            return d.x 
+                        } );
+                        const yExtent = d3.extent( arr, d=>{
+                            return d.y 
+                            } );
 
-                // top
-                svg.append("g")
-                    .call(d3.axisTop(x));
+                        // Append SVG Object to the Page
+                        const svg = d3.select("body")
+                                        .append("svg")
+                                        .attr('width', xSize )
+                                        .attr('height', ySize )
+                                        .append("g")
+                                        .attr("transform","translate(" + margin + "," + margin + ")");
 
-                // Y Axis
-                const y = d3.scaleLinear()
-                            .domain([ yExtent[0], yExtent[1] ])
-                            .range([ yMax, 0]);
+                        // X Axis
+                        const x = d3.scaleLinear()
+                                    .domain([ xExtent[0], xExtent[1] ])
+                                    .range([0, xMax]);
 
-                // left y axis
-                svg.append("g")
-                    .call(d3.axisLeft(y));
+                        // bottom
+                        svg.append("g")
+                            .attr("transform", "translate(0," + yMax + ")")
+                            .call(d3.axisBottom(x))
+                            .attr('color', 'green'); // make bottom axis green
 
-                // right y axis
-                svg.append("g")
-                    .attr("transform", `translate(${yMax},0)`)
-                    .call(d3.axisRight(y));
+                        // top
+                        svg.append("g")
+                            .call(d3.axisTop(x));
 
-                // Add the line
-                svg.append("path")
-                    .datum(data)
-                    .attr("fill", "none")
-                    .attr("stroke", "steelblue")
-                    .attr("stroke-width", 1.5)
-                    .attr("d", d3.line()
-                    .x(function(d) { 
-                        return x(d.x) 
-                    })
-                    .y(function(d) { 
-                        return y(d.y) 
-                    })
-                );
+                        // Y Axis
+                        const y = d3.scaleLinear()
+                                    .domain([ yExtent[0], yExtent[1] ])
+                                    .range([ yMax, 0]);
+
+                        // left y axis
+                        svg.append("g")
+                            .call(d3.axisLeft(y));
+
+                        // right y axis
+                        svg.append("g")
+                            .attr("transform", `translate(${yMax},0)`)
+                            .call(d3.axisRight(y));
+
+                        // Add the line
+                        svg.append("path")
+                            .datum(arr)
+                            .attr("fill", "none")
+                            .attr("stroke", "steelblue")
+                            .attr("stroke-width", 1.5)
+                            .attr("d", d3.line()
+                            .x(function(d) { 
+                                return x(d.x) 
+                            })
+                            .y(function(d) { 
+                                return y(d.y) 
+                            })
+                        );
+
+                    });
+
+                }
+                else{
+                        console.log("Only csv file is accepted as input");
+                    }
+                
             }
+
+            mathTrig(randPointsCSV, "cos");
 
             // Create Random Points
-            const numPoints = 100;
+            // const numPoints = 100;
 
-            const dataSine = [];
-            for (let i = 0; i < numPoints; i++) { 
-                dataSine.push( {
-                    x: i/100, y: Math.sin( 6.2 * i/100 ) 
-                } ); 
-            }
+            // const dataSine = [];
+            // for (let i = 0; i < numPoints; i++) { 
+            //     console.log(i/100);
+            //     dataSine.push( {
+            //         x: i/100, y: Math.sin( 6.2 * i/100 ) 
+            //     } ); 
+            // }
 
-            mathTrig(dataSine);
+            // mathTrig(dataSine);
             
-            const dataCosine = [];
-            for (let i = 0; i < numPoints; i++) { 
-                dataCosine.push( {
-                    x: i/100, y: Math.cos( 8.5 * i/100)
-                } ); 
-            }
+            // const dataCosine = [];
+            // for (let i = 0; i < numPoints; i++) { 
+            //     dataCosine.push( {
+            //         x: i/100, y: Math.cos( 8.5 * i/100)
+            //     } ); 
+            // }
             
-            mathTrig(dataCosine);
+            // mathTrig(dataCosine);
 
-            const dataTan = [];
-            for (let i = 0; i < numPoints; i++) { 
-                dataTan.push( {
-                    x: i/100, y: Math.tan(9.0 * i/100)
-                } ); 
-            }
+            // const dataTan = [];
+            // for (let i = 0; i < numPoints; i++) { 
+            //     dataTan.push( {
+            //         x: i/100, y: Math.tan(9.0 * i/100)
+            //     } ); 
+            // }
             
-            mathTrig(dataTan);
+            // mathTrig(dataTan);
 
             // const dataCot = [];
             // for (let i = 0; i < numPoints; i++) { 
