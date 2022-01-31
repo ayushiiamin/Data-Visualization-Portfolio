@@ -11,7 +11,7 @@
 
         <style>
            svg rect {
-                fill: cyan;
+                fill: blue;
             }
 
             svg text {
@@ -83,8 +83,8 @@
                     return d[i] * scaleFactor;
                 })
                 .style("fill", function(d,i){     //exercise 15
-                    if(d[i] <= 100){
-                        return "pink"
+                    if(d[i] >= 100){
+                        return "red"
                     }
                 })
                 .attr("height", barHeight - 1);
@@ -116,16 +116,16 @@
                              .data(heartFail)
                              .text(function (d, i){
                                 if (i ==0){
-                                    return "Heart failure 1-30: " +d.oneThirty;
+                                    return "Heart failure 1-30: " +d[i];
                                 }
                                 else if(i==1){
-                                    return "Heart failure 31-40: " +d.thirtyoneFourty;
+                                    return "Heart failure 31-40: " +d[i];
                                 }
                                 else if(i==2){
-                                    return "Heart failure 41-60: " +d.foutyoneSixty;
+                                    return "Heart failure 41-60: " +d[i];
                                 }
                                 else if(i==3){
-                                    return "Heart failure 61-100: " +d.sixtyoneHundred;
+                                    return "Heart failure 61-100: " +d[i];
                                 }
                       
                             }); 
