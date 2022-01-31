@@ -1,0 +1,8 @@
+Part 15 References - 
+
+-------------> Ex 31
+1) Hasna Boumiza (2014). Coordinates of each center’s arc in a pie chart. [online] Stack Overflow. 
+Available at: https://stackoverflow.com/questions/25199725/coordinates-of-each-centers-arc-in-a-pie-chart.
+
+‌2) Aleena, L. (2011). How to place and center text in an SVG rectangle. [online] Stack Overflow. 
+Available at: https://stackoverflow.com/questions/5546346/how-to-place-and-center-text-in-an-svg-rectangle.
