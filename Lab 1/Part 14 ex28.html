@@ -1,0 +1,100 @@
+<!-- REFERENCES -->
+
+<!-- 
+1) Team, E. (2020). How to create a bar chart using D3. [online] 
+Available at: https://www.educative.io/edpresso/how-to-create-a-bar-chart-using-d3.
+
+-->
+
+
+<!DOCTYPE html>
+
+<html lang = "en">
+
+    <head>
+        <script src='https://d3js.org/d3.v7.min.js'></script>
+    </head>
+
+    <body>
+        <script src='https://d3js.org/d3.v7.min.js'></script>
+    
+        <style>
+            .barChart {
+                    fill: pink;
+                }
+        </style>
+
+        <script>
+            var width = 400;
+            var height = 300;
+            var scaleFactor = 12.5;
+            var barWidth = 34;
+
+            var data = [5, 6, 10, 12];
+
+            var myColor0 = d3.scaleLinear().domain([1,10]).range(["white", "purple"]);
+            //var myColor1 = d3.scaleSequential().domain([1,10]).interpolator(d3.interpolatePuRd);
+            //var myColor2 = d3.scaleSequential().domain([1,10]).interpolator(d3.interpolateViridis);
+            
+
+            //var myColor3 = d3.scaleOrdinal().domain(data).range(["gold", "pink", "green", "yellow"]);
+            //var myColor4 = d3.scaleOrdinal().domain(data).range(d3.schemeSet3);
+
+            var svg = d3.select("body")
+                        .append("svg")
+                        .attr("width", width)
+                        .attr("height", height)
+                        .style("border", '1px solid green');
+
+            var xscale = d3.scaleBand()              //(Team, 2020)
+                            .domain(data)
+                            .range([0, width - 100])
+                            .padding(0.5);
+            
+            var yscale = d3.scaleLinear()
+                            .domain([0, d3.max(data)])
+                            .range([height/2, 0]);
+
+            var xAxis = d3.axisBottom()
+                            .scale(xscale);
+
+            var yAxis = d3.axisLeft()
+                            .scale(yscale);
+
+            var groupSVG = svg.append("g")           //(Team, 2020)
+                                .attr("transform", "translate(50, 50)");
+
+            var xAxis_height = height/2;
+
+            groupSVG.append("g")
+                    .attr("transform", "translate(0, " + xAxis_height + ")")
+                    .call(xAxis);
+
+            groupSVG.append("g")
+                    .attr("transform", "translate(0, 0)")
+                    .call(yAxis);
+
+            groupSVG.selectAll(".barChart")
+                    .data(data)
+                    .enter()
+                    .append("rect")
+                    //.attr("class", "barChart")
+                    .style("fill", function(d){
+                        return myColor0(d);
+                    })
+                    .attr("x", function(d){
+                        return xscale(d);              //(Team, 2020)
+                    })
+                    .attr("y", function(d){
+                        return yscale(d);             //(Team, 2020)
+                    })
+                    .attr("width", barWidth - 1)
+                    .attr("height", function(d){
+                        return d * scaleFactor;
+                    });       
+
+            
+        </script>
+
+    </body>
+</html>
