@@ -1,0 +1,100 @@
+<!-- REFERENCES -->
+
+<!-- 
+1) djo (2021). Dynamically Change the Append D3. [online] Stack Overflow. 
+Available at: https://stackoverflow.com/questions/67908866/dynamically-change-the-append-d3.
+
+-->
+
+
+
+
+
+<!DOCTYPE html>
+
+<html langh = "en">
+
+    <head>
+        <script src='https://d3js.org/d3.v7.min.js'></script>
+    </head>
+
+    <body>
+        <script src='https://d3js.org/d3.v7.min.js'></script>
+
+        <script>
+            const width = 500;
+            const height = 500;
+
+            var c = -1;
+            var w = -1;
+
+            const shapeArr = [
+                {shape: "square", num: 10},
+                {shape: "circle", num: 15},
+                {shape: "square", num: 20},
+                {shape: "circle", num: 25},
+                {shape: "square", num: 30},
+            ]
+            // Note different valid ways of specifying color
+            const colors = ['#008080','#BB3242','#B80454','#348AC0','#838BC2'];
+
+            const svg = d3.select("body")
+                            .append("svg")
+                            .attr("width", width)
+                            .attr("height", height);
+
+            const g = svg.selectAll("g")
+                            .data(shapeArr)
+                            .enter()
+                            .append("g")
+                            .attr("transform", function(d, i) {
+                                return "translate(0,0)";
+                            })
+                            .append(drawShape)
+
+            function drawShape(d){                 //(djo, 2021)
+                c++;
+                //alert(d.shape)
+               if (d.shape == "square"){
+                   //alert("entered square")
+                   return d3.select("g")
+                            .append("rect")
+                            .attr("x",  c*100 + 50)
+                            .attr("y", 100)
+                            .attr("width", d.num*1.5)
+                            .attr("height", d.num*1.5)
+                            .attr("fill", colors[c])
+                            .append("text")
+                            .attr("x",c * 100 + 54)
+                            .attr("y",115)
+                            .attr("stroke", "white")
+                            .attr("font-size", "9px")
+                            .attr("font-family", "sans-serif")
+                            .text(d.num)
+                            .node()                 //(djo, 2021)
+                           
+               }
+               else{
+                   //alert("entered circle")
+                   //alert(d.shape)
+                return d3.select("g")                   //(djo, 2021)
+                            .append("circle")
+                            .attr("cx", c*100 + 50)
+                            .attr("cy", 100)
+                            .attr("r", d.num*1.5)
+                            .attr("fill",colors[c])
+                            .append("text")
+                            .attr("x",c * 100 + 40)
+                            .attr("y",105)
+                            .attr("stroke", "white")
+                            .attr("font-size", "12px")
+                            .attr("font-family", "sans-serif")
+                            .text(d.num)
+                            .node()                         //(djo, 2021)
+                            
+               }
+            }
+
+        </script>
+    </body>
+</html>
