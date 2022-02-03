@@ -22,14 +22,20 @@ Available at: https://stackoverflow.com/questions/5546346/how-to-place-and-cente
         <script type='text/javascript' src='https://d3js.org/d3.v7.min.js'></script>
 
         <script>
-            var data = [3, 4, 6, 7, 8, 10, 12, 13, 15, 16, 18, 19, 21, 23, 25, 30];
-            //var data = [3, 4, 8, 12];
-            const xSize = 400; const ySize = 400;
+
+            /////////////////////////EXERCISE 
+            
+            var data = [3, 4, 6, 7, 8, 10, 12, 13, 15, 16, 18, 19, 21, 23, 25, 30];             //Data for the pie chart wedges
+            const xSize = 400; const ySize = 400;                                               //Defining the width and height of the SVG
             const margin = 40;
             const xMax = xSize - margin*2;
             const yMax = ySize - margin*2;
 
-            // Append SVG Object to the Page
+
+            //Creating the SVG element, which has a width of 400 and a 
+            //height of 400, 
+            //Along to the SVG element, we append the group container as well, 
+            //so that we can group the elements of the pie-chart
             const svg = d3.select("body")
                             .append("svg")
                             .attr('width', xSize )
@@ -37,43 +43,70 @@ Available at: https://stackoverflow.com/questions/5546346/how-to-place-and-cente
                             .append("g")
                             .attr("transform","translate(" + xSize/2 + "," + ySize/2 + ")");
 
+            
+            //Initializing the radius of the arcs
+            //This is calculated by taking the minimum of the width and height of the SVG
+            //Since both the width and height of the SVG are equal (400), we take the average
+            //of both the values
             const radius = Math.min(xSize, ySize) / 2;
 
+
+            //Defining the categorical scale of colors, which consists of 16 colors for each of the wedges
             var color = d3.scaleOrdinal(['#4daf4a','#377eb8','#ff7f00','#984ea3','#e41a1c', "#FFC0CB", "#FFFF00", "#C0C0C0", "#EFE7D3", "#EAC58C", "#65DBC0", "#A8B082", "#1DC690", "#E57F84", "#838BC2", "#F1C83A"]);
 
-            // Generate the pie
+
+            //Generating the pie
+            //This will also help in calculating the start and end angle for each of the arcs
             var pie = d3.pie();
 
-            // Generate the arcs
+
+            //Generating the arcs
+            //Inner radius is 0 here, as we want to dsiplay a pie chart and not a 
+            //donut chart
             var arc = d3.arc()
                         .innerRadius(0)
                         .outerRadius(radius);
 
-            //Generate groups
+
+            //Generating the groups
+            //The start and end angles of each of the arcs will also be calculated using the pie (created above)
             var arcs = svg.selectAll("arc")
                             .data(pie(data))
                             .enter()
                             .append("g")
                             .attr("class", "arc")
 
-            //Draw arc paths
+
+            //Drawing arc paths
             arcs.append("path")
                 .attr("fill", function(d, i) {
-                    return color(i);
+                    return color(i);       //Using the categorical scale of colors defined above, we have colored each of the wedges
                 })
                 .attr("d", arc);
+            
+               
+                
+
+            ///////////////////////EXERCISE 31
 
             arcs.append("text")
                 .attr("transform", function(d){
-                    return "translate(" + arc.centroid(d) +")";           //(Hasna Boumiza, 2014)
+
+                    //Since we want to print the value of the data in the center of the arc,
+                    //we calculate the centroid of the arc
+                    return "translate(" + arc.centroid(d) +")";                 //(Hasna Boumiza, 2014)
                 })
-                .attr("stroke", "black")
+                .attr("stroke", "black")                    //Setting the font color to be black and its size to be 50 pixels
                 .attr("font-size", "50 px")
-                .attr("text-anchor", "middle")                    //(Aleena, 2011)
+
+                //As we want to place the text in the center of the arc,
+                //we also align the text in the middle of the arc
+                .attr("text-anchor", "middle")              //(Aleena, 2011)
                 .text(function(d, i){
-                    //console.log(d.data)
-                    return d.data;
-                })
+                    //console.log(d)
+                    return d.data;             //Getting each of the values so that it can be printed as per their position on the arc 
+                });
+
         </script>
     </body>
 </html>
