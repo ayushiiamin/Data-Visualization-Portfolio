@@ -1,3 +1,5 @@
+<!-- Exercise 20 -->
+
 <!DOCTYPE html>
 
 <html lang = "en">
@@ -8,107 +10,101 @@
     <body>
         <script src='https://d3js.org/d3.v7.min.js'></script>
 
-        <!-- <script>
-
-            const width = 400;
-            const height = 100;
-            const data = [10, 12, 20, 25, 32];
-
-            // Append SVG
-            var svg = d3.select("body")
-                        .append("svg")
-                        .attr("width", width)
-                        .attr("height", height);
-
-            // Create scale
-            var scale = d3.scaleLinear()
-                           .domain([d3.min(data), d3.max(data)])
-                            .range([0, width - 100]);
-
-            // Add scales to axis
-            var x_axis = d3.axisBottom()
-                            .scale(scale);
-
-            //Append group and insert axis
-            svg.append("g")
-                .call(x_axis);
-                
-        </script> -->
-
-        <style>
-            .axisColor text{
-                fill: blue;
-            }
-            .axisColor path{
-                stroke: blue;
-            }
-            .axisColor line{
-                stroke: blue;
-            }
-        </style>
-
         <script>
-            const width = 400;
-            const height = 300;
+            const width = 400;           //Defining the width of the SVG          
+            const height = 300;          //Defining the height of the SVG
 
-            var data = [10, 15, 20, 25, 30];
+            var data = [10, 15, 20, 25, 30];           //The data for the axes
 
+
+            //Creating the SVG element, which has a width of 400 and a 
+            //height of 300
             var svg = d3.select("body")
                         .append("svg")
                         .attr("width", width)
                         .attr("height", height);
 
+            //Defining the x-axis (for the bottom)
             var xscale = d3.scaleLinear()
-                            .domain([0, d3.max(data)])
+                            .domain([0, d3.max(data)])            //Only numbers from 0-30 will appear on the x-axis
                             .range([0, width - 100]);
 
+            //Defining the y-axis  (for the left)
             var yscale = d3.scaleLinear()
-                            .domain([0, d3.max(data)])
+                            .domain([0, d3.max(data)])            //Only numbers from 0-30 will appear on the y-axis
                             .range([height/2, 0]);
 
+            //Defining the x-axis (for the top)
             var xscaleTop = d3.scaleLinear()
-                                .domain([0, d3.max(data)])
-                                .range([0, width - 100])
-                                ;
+                                .domain([0, d3.max(data)])        //Only numbers from 0-30 will appear on the x-axis
+                                .range([0, width - 100]);
 
+            //Defining the y-axis (for the right)
             var yscaleRight = d3.scaleLinear()
-                                .domain([0, d3.max(data)])
+                                .domain([0, d3.max(data)])        //Only numbers from 0-30 will appear on the y-axis
                                 .range([height/2, 0]);
 
+
+            //Creating the horizontal bottom x-axis for the line chart, which consists of the values generated above
             var x_axis = d3.axisBottom()
                             .scale(xscale);
 
+
+            //Creating the vertical left y-axis for the line chart, which consists of the values generated above
             var y_axis = d3.axisLeft()
                             .scale(yscale);
 
+
+            //Creating the horizontal top x-axis for the line chart, which consists of the values generated above
             var x_axisTop = d3.axisTop()
                             .scale(xscaleTop);
 
+
+            //Creating the vertical right y-axis for the line chart, which consists of the values generated above
             var y_axisRight = d3.axisRight()
                             .scale(yscaleRight); 
 
+
+            //Appending the left y-axis to the SVG element
             svg.append("g")
                 .attr("transform", "translate(50, 20)")
                 .call(y_axis);
 
+
+            //Initializing a variable below, to adjust the right y-axis 
             var yRightAxisTranslate = width/2 +150;
 
+
+            //Appending the right y-axis to the SVG element
+            //Setting the color of the right y-axis to be blue as well
             svg.append("g")
                 .attr("transform", "translate(" + yRightAxisTranslate + ", 20)")
-                .attr("class", "axisColor")
+                // .attr("text", "blue")
+                // .attr("path", "blue")
+                // .attr("line", "blue")
+                .attr("color", "blue")
                 .call(y_axisRight);
 
+
+            //Initializing a variable below, to adjust the bottom x-axis 
             var xAxisTranslate = height/2 + 20;
 
+
+            //Appending the bottom x-axis to the SVG element
             svg.append("g")
                 .attr("transform", "translate(50, " + xAxisTranslate +")")
                 .call(x_axis);
+            
 
+            //Initializing a variable below, to adjust the bottom x-axis
             var xAxisTranslateTop = height/10 - 10;    
             
+            
+            //Appending the top x-axis to the SVG element
+            //Setting the color of the top x-axis to be blue as well
             svg.append("g")
                 .attr("transform", "translate(50, " + xAxisTranslateTop +")")
-                .attr("class", "axisColor")
+                .attr("color", "blue")
                 .call(x_axisTop);
 
         </script>
