@@ -1,0 +1,316 @@
+<!-- REFERENCES -->
+
+<!-- 
+1) Dude, El (2017). How to draw the triangle symbol? [online] Stack Overflow. 
+Available at: https://stackoverflow.com/questions/43174396/how-to-draw-the-triangle-symbol.
+
+-->
+
+
+<!-- Exercise 28 -->
+
+<!DOCTYPE html>
+
+<html lang = "en">
+    <head>
+        <script src='https://d3js.org/d3.v7.min.js'></script>
+    </head>
+
+    <body>
+        <script src='https://d3js.org/d3.v7.min.js'></script>
+
+        <!-- Creating a class triangle to add the color purple to the markers -->
+        <style>
+            .triangle {
+                    fill: purple;
+                }
+        </style>
+
+        <script>
+
+            //The .csv file which consists of the data, is hosted on GitHub
+            //Storing the path of the GitHub file in a variable 
+            let randPointsCSV = "https://raw.githubusercontent.com/ayushiiamin/csvfileimp/main/data23.csv";
+
+            
+            const xSize = 600; const ySize = 600;     ///Defining the width and height of the SVG
+            const margin = 40;
+            const xMax = xSize - margin*2;
+            const yMax = ySize - margin*2;
+
+            // var xd = 0;
+            // var yd = 0;
+
+
+            //Creating two arrays
+            //Each of these arrays consists of certain values that are present in the CSV file
+            //The numbers are stored in arrays so that we can use them to mark which point on the 2 waves represents 
+            //which data value
+            //On the line chart, we want to print the text values of only the below given points
+            //and not all the points on the two waves, so that it doesnt get too overcrowded on the line chart
+
+            //Array points1 - values on the sin wave
+            //Array points2 - values on the cos wave
+            var points1 = [0.05, 0.15, 0.25, 0.35, 0.45, 0.55, 0.65, 0.75, 0.85, 0.95];
+            var points2 = [0.10, 0.20, 0.30, 0.40, 0.50, 0.60, 0.70, 0.80, 0.90];
+
+
+            //Function to generate the sin and cos wave
+            function mathTrig(data, trig1, trig2){
+
+                //We check if a csv file has been provided as input
+                //since this function only takes in a csv file as the input
+                if(data.includes(".csv") == true){
+
+                    //Initializing two object arrays to store the number as well as the sin and cos values of the 
+                    //data points present in the csv file
+                    var arr1 = [];
+                    var arr2 = [];
+
+                    //Loading the csv file
+                    //The callback function is used for appending the elements into the object array
+                    d3.csv(data, function(d, i){
+
+                        //The if statement checks whether the user has provided sin and cos as the arguments to the 
+                        //function mathTrig 
+                        if( (trig1 == "sin" && trig2 == "cos") || (trig1 == "cos" && trig2 == "sin") || (trig1 == "cosine" && trig2 == "sine") || (trig1 == "sine" && trig2 == "cosine") ){
+                            
+                            //If the user has provided sin and cos as arguments to the function
+                            //then push the values to the following arrays 
+
+                            //arr1 is meant for the sin vlaues and has two keys - x and y
+                            //x key has the data values from the .csv file
+                            //y key consists the sin values of the product between 6.2 and the data values
+                            arr1.push({
+                                x: d.Number, y: Math.sin(6.2 * d.Number)
+                            });
+
+                            //arr2 is meant for the cos vlaues and has two keys - x and y
+                            //x key has the data values from the .csv file
+                            //y key consists the cos values of the product between 8.5 and the data values
+                            arr2.push({
+                                x: d.Number, y: Math.cos(8.5 * d.Number)
+                            });
+                        }
+                        else{
+
+                            //If the user provides tan/cot/sec/cosec or any other value other
+                            //than sin and cos, the below message wil be displayed on the console
+                            console.log("Only sin and cos combo allowed!");
+                        }
+                        
+                    }).then(function(data){
+
+                        //xExtent and yExtent calculates the limits (min & max) of the data values
+                        const xExtent = d3.extent( arr1, d=>{ 
+                            return d.x 
+                        });
+                        const yExtent = d3.extent( arr1, d=>{
+                            return d.y 
+                        });
+
+                        //Creating the SVG element, which has a width of 600 and a 
+                        //height of 600, along with a green border of 1 pixel
+                        //Along to the SVG element, we append the group container as well,
+                        //so that we can group the line chart elements
+                        const svg = d3.select("body")
+                                        .append("svg")
+                                        .attr('width', xSize )
+                                        .attr('height', ySize )
+                                        .append("g")
+                                        .attr("transform","translate(" + margin + "," + margin + ")");
+
+                        //Defining the x-axis for the line chart
+                        const x = d3.scaleLinear()
+                                    .domain([ xExtent[0], xExtent[1] ])    //x-axis consists of decimal values between 0-1
+                                    .range([0, xMax]);
+
+                        
+                        //Creating the horizontal bottom x-axis for the line chart, which consists of the values generated above
+                        var xaxisBottom = d3.axisBottom()
+                                            .scale(x);
+
+
+                        //Appending the bottom x-axis to the SVG element
+                        svg.append("g")
+                            .attr("transform", "translate(0," + yMax + ")")
+                            .call(xaxisBottom);
+
+                        
+                        //Creating the horizontal top x-axis for the line chart, which consists of the values generated above
+                        var xaxisTop = d3.axisTop()
+                                        .scale(x);
+
+
+                        //Appending the top x-axis to the SVG element
+                        svg.append("g")
+                            .call(xaxisTop);
+
+
+
+                        //Defining the y-axis for the line chart
+                        const y = d3.scaleLinear()
+                                    .domain([ yExtent[0], yExtent[1] ])   //y-axis consists of decimal values (both positive and negative values)
+                                    .range([ yMax, 0]);
+
+                        //Creating the vertical left y-axis for the line chart, which consists of the values generated above            
+                        var yaxisLeft = d3.axisLeft()
+                                            .scale(y);
+        
+        
+                        //Appending the left y-axis to the SVG element                    
+                        svg.append("g")
+                            .call(yaxisLeft);
+
+
+                        //Creating the vertical right y-axis for the line chart, which consists of the values generated above      
+                        var yaxisRight = d3.axisRight()
+                                            .scale(y);
+
+                   
+                        //Appending the right y-axis to the SVG element
+                        svg.append("g")
+                            .attr("transform", `translate(${yMax},0)`)
+                            .call(yaxisRight);
+
+
+                        //The below code generates the sine wave based on the array we provided
+                        //as input to datum
+                        svg.append("path")
+                            .datum(arr1)
+                            .attr("fill", "none")
+                            .attr("stroke", "steelblue")
+                            .attr("stroke-width", 1.5)
+                            .attr("d", d3.line()
+                            .x(function(d) { 
+                                return x(d.x) 
+                            })
+                            .y(function(d) { 
+                                return y(d.y) 
+                            })
+                        );
+
+
+                        //The below code generates the cosine wave based on the array we provided
+                        //as input to datum
+                        svg.append("path")
+                            .datum(arr2)
+                            .attr("fill", "none")
+                            .attr("stroke", "green")
+                            .attr("stroke-width", 1.5)
+                            .attr("d", d3.line()
+                            .x(function(d) { 
+                                //console.log(x(d.x) )
+                                return x(d.x) 
+                            })
+                            .y(function(d) { 
+                                return y(d.y) 
+                            })
+                        );
+
+
+                        //The below code generates markers for the sine wave
+                        //these markers are placed on the sine wave based on position
+                        //of each of the data values
+                        svg.selectAll("dot")
+                            .data(arr1)
+                            .enter()
+                            .append("circle")
+                            .attr("cx", function (d) { 
+                                return x(d.x) 
+                            } )
+                            .attr("cy", function (d) { 
+                                return y(d.y) 
+                            } )
+                            .attr("r", 5)
+                            .style("fill", "orange");      //Made the color of the markers as Orange
+                        
+                            
+                        //The below code generates the triangle markers for the cosine wave
+                        //these markers are placed on the cosine wave based on position
+                        //of each of the data values
+                        svg.selectAll("dot")            
+                           .data(arr2)
+                           .enter()
+                           .append("path")
+                           .attr("d", d3.symbol().type(d3.symbolTriangle))     //(El Dude, 2017)
+                           .attr("transform", function(d){
+                               return "translate(" + x(d.x) + "," + y(d.y) + ")";
+                           })
+                           .attr("fill", "purple");        //Made the color of the markers as Orange
+                        
+
+                        //The below code adds text to certain points on the sine wave
+                        //These certain points are defined above in the array - points1
+                        //The text appears next to the marker of the data value
+                        svg.selectAll("dot")
+                            .data(arr1)
+                            .enter()
+                            .append("text")
+                            .attr("transform", function(d){
+                                return "translate(" + (x(d.x)+5) + "," + y(d.y) + ")"; 
+                            })
+                            .attr("stroke", "blue")
+                            .attr("font-size", "30 px")
+                            .text(function(d){
+                                
+                                //This for loops iterates through the points1 array
+                                for(let i = 0; i<points1.length; i++){
+
+                                    //This if statement is used for checking whether the current value in arr1 (object array consisting of the data values and sine values) is
+                                    //equal to the current value of the points1 array
+
+                                    //If this is true, then print out the data value next to its respective point
+                                    //on the sine wave
+                                    if(d.x == points1[i]){
+                                        return d.x;
+                                    }
+                                }
+                            });
+                        
+                        
+                        //The below code adds text to certain points on the cosine wave
+                        //These certain points are defined above in the array - points2
+                        //The text appears next to the marker of the data value
+                        svg.selectAll("dot")
+                            .data(arr2)
+                            .enter()
+                            .append("text")
+                            .attr("transform", function(d){
+                                return "translate(" + (x(d.x)+5) + "," + y(d.y) + ")"; 
+                            })
+                            .attr("stroke", "black")
+                            .attr("font-size", "30 px")
+                            .text(function(d){
+
+                                //This for loops iterates through the points2 array
+                                for(let i = 0; i<points2.length; i++){
+
+                                    //This if statement is used for checking whether the current value in arr2 (object array consisting of the data values and cosine values) is
+                                    //equal to the current value of the points2 array
+
+                                    //If this is true, then print out the data value next to its respective point
+                                    //on the cosine wave
+                                    if(d.x == points2[i]){
+                                        return d.x;
+                                    }
+                                }
+                            });
+
+                    });
+
+                }
+                else{
+
+                        //If the user provides an array or any other file, the below message appears on the console
+                        console.log("Only csv file is accepted as input!");
+                    }
+                
+            }
+
+            mathTrig(randPointsCSV, "cos", "sin");    //Sending the csv file to the function
+
+        </script>
+
+    </body>
+</html>
