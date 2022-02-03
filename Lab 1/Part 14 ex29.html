@@ -1,3 +1,6 @@
+<!-- Exercise 29 -->
+
+
 <!DOCTYPE html>
 
 <html lang = "en">
@@ -10,29 +13,48 @@
 
         <script>
 
-        // Set Dimensions
-        const xSize = 600; const ySize = 600;
+        
+        const xSize = 600; const ySize = 600;        ////Defining the width and height of the SVG
         const margin = 40;
         const xMax = xSize - margin*2;
         const yMax = ySize - margin*2;
 
         
 
-        // Create Random Points
+        //To print the sin wave, we have generated 100 random points 
+        //Each of these points will be stored in an object array
         const numPoints = 100;
         const data = [];
         for (let i = 0; i < numPoints; i++) { 
-            data.push( {x: i/100, y: Math.sin( 6.2 * i/100 ) } ); 
+            data.push( {
+
+                //The data array acts as an object array having keys - x and y
+                //x key has the random points
+                //y key consists the sin values of the product between 6.2 and the random points
+                x: i/100, y: Math.sin(6.2 * i/100)         
+            } ); 
         }
 
-        // Get the 'limits' of the data - the full extent (mins and max)
-        // so the plotted data fits perfectly
-        const xExtent = d3.extent( data, d=>{ return d.x } );
-        const yExtent = d3.extent( data, d=>{ return d.y } );
 
+        //xExtent and yExtent calculates the limits (min & max) of the random points
+        //and the sin values
+        const xExtent = d3.extent( data, d=>{ 
+            return d.x 
+        } );
+        const yExtent = d3.extent( data, d=>{ 
+            return d.y 
+        } );
+
+
+        //Defining the categorical scale of colors, that has a range of 12 colors generated from 
+        //d3.schemeSet3
         var myColor4 = d3.scaleOrdinal().domain(data).range(d3.schemeSet3);
 
-        // Append SVG Object to the Page
+
+        //Creating the SVG element, which has a width of 600 and a 
+        //height of 600, along with a green border of 1 pixel
+        //Along to the SVG element, we append the group container as well,
+        //so that we can group the line chart elements
         const svg = d3.select("body")
                         .append("svg")
                         .attr('width', xSize )
@@ -40,36 +62,64 @@
                         .append("g")
                         .attr("transform","translate(" + margin + "," + margin + ")");
 
-        // X Axis
+
+        //Defining the x-axis for the line chart
         const x = d3.scaleLinear()
-                    .domain([ xExtent[0], xExtent[1] ])
+                    .domain([ xExtent[0], xExtent[1] ])   //x-axis consists of decimal values between 0-1
                     .range([0, xMax]);
 
-        // bottom
+
+        //Creating the horizontal bottom x-axis for the line chart, which consists of the values generated above
+        var xaxisBottom = d3.axisBottom()
+                            .scale(x);
+
+
+        //Appending the bottom x-axis to the SVG element
         svg.append("g")
             .attr("transform", "translate(0," + yMax + ")")
-            .call(d3.axisBottom(x))
-            .attr('color', 'green'); // make bottom axis green
+            .call(xaxisBottom);
 
-        // top
+        
+        //Creating the horizontal top x-axis for the line chart, which consists of the values generated above
+        var xaxisTop = d3.axisTop()
+                            .scale(x);
+
+
+        //Appending the top x-axis to the SVG element
         svg.append("g")
-            .call(d3.axisTop(x));
+            .call(xaxisTop);
 
-        // Y Axis
+
+
+        //Defining the y-axis for the line chart
         const y = d3.scaleLinear()
-                    .domain([ yExtent[0], yExtent[1] ])
+                    .domain([ yExtent[0], yExtent[1] ])         //y-axis consists of decimal values (both positive and negative values)
                     .range([ yMax, 0]);
 
-        // left y axis
-        svg.append("g")
-            .call(d3.axisLeft(y));
 
-        // right y axis
+        //Creating the vertical left y-axis for the line chart, which consists of the values generated above            
+        var yaxisLeft = d3.axisLeft()
+                            .scale(y);
+        
+        
+        //Appending the left y-axis to the SVG element                    
+        svg.append("g")
+            .call(yaxisLeft);
+
+
+        //Creating the vertical right y-axis for the line chart, which consists of the values generated above      
+        var yaxisRight = d3.axisRight()
+                            .scale(y);
+
+                   
+        //Appending the right y-axis to the SVG element
         svg.append("g")
                 .attr("transform", `translate(${yMax},0)`)
-                .call(d3.axisRight(y));
+                .call(yaxisRight);
 
-        // Add the line
+
+        //The below code generates the sine wave based on the array we provided
+        //as input to datum
         svg.append("path")
             .datum(data)
             .attr("fill", "none")
@@ -77,26 +127,30 @@
             .attr("stroke-width", 1.5)
             .attr("d", d3.line()
                 .x(function(d) { 
-                    return x(d.x) 
+                    return x(d.x)          
                 })
                 .y(function(d) { 
                     return y(d.y) 
                 })
             );
 
-            svg.selectAll("dot")
+
+        //The below code generates markers for the sine wave
+        //these markers are placed on the sine wave based on position
+        //of each of the data values
+        svg.selectAll("dot")
                 .data(data)
                 .enter()
                 .append("circle")
                 .attr("cx", function (d) { 
                     return x(d.x) 
-                } )
+                })
                 .attr("cy", function (d) { 
                     return y(d.y) 
-                } )
+                })
                 .attr("r", 5)
                 .style("fill", function(d){
-                        return myColor4(d);
+                        return myColor4(d);      //This colors each of the markers on the sine wave based on the color scale defined above
                     });
 
         </script>
