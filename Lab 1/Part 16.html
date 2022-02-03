@@ -6,6 +6,7 @@ Available at: https://www.educative.io/edpresso/how-to-create-a-bar-chart-using-
 
 -->
 
+<!-- Exercise 32 -->
 
 <!DOCTYPE html>
 
@@ -17,6 +18,8 @@ Available at: https://www.educative.io/edpresso/how-to-create-a-bar-chart-using-
 
     <body>
         <script src='https://d3js.org/d3.v7.min.js'></script>
+
+        <!-- Creating a class barChart to add the colors pink to the bars -->
     
         <style>
             .barChart {
@@ -25,70 +28,100 @@ Available at: https://www.educative.io/edpresso/how-to-create-a-bar-chart-using-
         </style>
 
         <script>
-            var width = 400;
-            var height = 300;
-            var scaleFactor = 12.5;
-            var barWidth = 34;
+            var width = 400;                //Defining the width of the SVG
+            var height = 300;               //Defining the height of the SVG
+            var scaleFactor = 12.5;         //Initializing the scaleFactor so that we can adjust the height of the bar according to the given data
+            var barWidth = 34;            //Initializing the width of the bar  
 
-            var data = [5, 6, 10, 12];
+            var data = [5, 6, 10, 12];              //The data for the bar chart  
 
+
+            //Creating the SVG element, which has a width of 400 and a 
+            //height of 300, along with a green border of 1 pixel
             var svg = d3.select("body")
                         .append("svg")
                         .attr("width", width)
                         .attr("height", height)
                         .style("border", '1px solid green');
 
-            var g = svg.append("g");
+            var g = svg.append("g");            //Creating the container to group the background picture with the bar chart 
             
+
+            //The below code adds a background picture to the bar chart
+            //The width and height of the picture is 400 and 300 respectively (similar to the height and width of the SVG)
+            //The reason why the width and height of the picture is the same as the SVG height and width, is to ensure the 
+            //picture can fit properly within the SVG element
+            
+            //The .png picture is located in a local parent folder called 'icons', and this 'icons' folder is located in another 
+            //local parent folder called 'img'
             g.append("svg:image")
-                            .attr("xlink:href", "img/icons/sun.png")
+                            .attr("xlink:href", "img/icons/sun.png")           
                             .attr("width", width)
                             .attr("height", height)
                             .attr("x", 10)
                             .attr("y",10);
 
-            var xscale = d3.scaleBand()              //(Team, 2020)
-                            .domain(data)
-                            .range([0, width - 100])
-                            .padding(0.5);
+
+            //Defining the x-axis for the bar chart
+            var xscale = d3.scaleBand()                     //(Team, 2020)
+                            .domain(data)                //The x-axis only consists of numbers from the data array
+                            .range([0, width - 100])        
+                            .padding(0.5);                  //Since the data array consists of discrete values, we add a gap of 0.5 between each bars so that the bar chart does not appear like a histogram
             
+
+            //Defining the y-axis for the bar chart
             var yscale = d3.scaleLinear()
-                            .domain([0, d3.max(data)])
+                            .domain([0, d3.max(data)])          //Only numbers from 0-12 will appear on the y-axis
                             .range([height/2, 0]);
 
-            var xAxis = d3.axisBottom()
+
+            //Creating a horizontal x-axis using the data generated for the x-axis above
+            var xAxis = d3.axisBottom()                         
                             .scale(xscale);
 
-            var yAxis = d3.axisLeft()
+
+            ////Creating a vertical y-axis using the data generated for the y-axis above                
+            var yAxis = d3.axisLeft()                           
                             .scale(yscale);
 
+            
+            //Creating the container to group the axes and the bar chart
             var groupSVG = svg.append("g")           //(Team, 2020)
-                                .attr("transform", "translate(50, 50)");
+                                .attr("transform", "translate(50, 50)");       
 
-            var xAxis_height = height/2;
 
-            groupSVG.append("g")
+            //The below variable xAxis_height is initialized so that the x-axis appears in the middle of the SVG element
+            var xAxis_height = height/2;                                        
+
+
+            //Adding the x-axis to the group created for the axes and bar chart
+            groupSVG.append("g")                                                
                     .attr("transform", "translate(0, " + xAxis_height + ")")
-                    .call(xAxis);
+                    .call(xAxis);             //Displaying the x-axis on the SVG       
 
-            groupSVG.append("g")
+
+            //Adding the y-axis to the group created for the axes and bar chart
+            groupSVG.append("g")                                                
                     .attr("transform", "translate(0, 0)")
-                    .call(yAxis);
+                    .call(yAxis);               //Displaying the y-axis on the SVG 
 
-            groupSVG.selectAll(".barChart")
+            
+            //The below code is for creating the bar chart
+            groupSVG.selectAll(".barChart")                             
                     .data(data)
                     .enter()
-                    .append("rect")
+                    .append("rect")                      //As we are reading the array, we are also dynamically creating the bars with the help of the rect element 
                     .attr("class", "barChart")
-                    .attr("x", function(d){
-                        return xscale(d);              //(Team, 2020)
+                    .attr("x", function(d){             //Using the xscale (defined above), we are assiginig the position of each of the bars on the x-axis
+                        return xscale(d);          //(Team, 2020)
                     })
-                    .attr("y", function(d){
-                        return yscale(d);             //(Team, 2020)
+                    .attr("y", function(d){             //Using the yscale (defined above), we are assiginig the position of each of the bars on the y-axis               
+                        return yscale(d);          //(Team, 2020)
                     })
-                    .attr("width", barWidth - 1)
+                    .attr("width", barWidth - 1)        //The width of each bar remains the same, hence we dont define a function
                     .attr("height", function(d){
-                        return d * scaleFactor;
+                        return d * scaleFactor;         //Since each of the bars will have varying heights, we multiply the current value with the scaleFactor, to 
+                                                        //adjust the bars according to their value
                     }); 
             
         </script>
