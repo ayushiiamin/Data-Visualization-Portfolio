@@ -1,3 +1,6 @@
+<!-- Exercise 24 -->
+
+
 <!DOCTYPE html>
 
 <html lang = "en">
@@ -9,66 +12,78 @@
         <script src='https://d3js.org/d3.v7.min.js'></script>
 
         <script>
+
+            //The .csv file which consists of the data, is hosted on GitHub
+            //Storing the path of the GitHub file in a variable 
             let randPointsCSV = "https://raw.githubusercontent.com/ayushiiamin/csvfileimp/main/data23.csv";
 
-            // Set Dimensions
-            const xSize = 600; const ySize = 600;
+            
+            const xSize = 600; const ySize = 600;     ///Defining the width and height of the SVG
             const margin = 40;
             const xMax = xSize - margin*2;
             const yMax = ySize - margin*2;
 
 
+            //Function to generate the sin and cos wave
             function mathTrig(data, trig1, trig2){
 
+
+                //We check if a csv file has been provided as input
+                //since this function only takes in a csv file as the input
                 if(data.includes(".csv") == true){
 
+
+                    //Initializing two object arrays to store the number as well as the sin and cos values of the 
+                    //number present in the csv file
                     var arr1 = [];
                     var arr2 = [];
 
+                    //Loading the csv file
+                    //The callback function is used for appending the elements into the object arrays
                     d3.csv(data, function(d, i){
+
+                        //The if statement checks whether the user has provided sin and cos as the arguments to the 
+                        //function mathTrig 
                         if( (trig1 == "sin" && trig2 == "cos") || (trig1 == "cos" && trig2 == "sin") || (trig1 == "cosine" && trig2 == "sine") || (trig1 == "sine" && trig2 == "cosine") ){
+                            
+                            //If the user has provided sin and cos as arguments to the function
+                            //then push the values to the following arrays 
+
+                            //arr1 is meant for the sin vlaues and has two keys - x and y
+                            //x key has the data values from the .csv file
+                            //y key consists of the sin values of the product between 6.2 and the data values
                             arr1.push({
-                                x: d.Number, y: Math.sin( 6.2 * d.Number )
+                                x: d.Number, y: Math.sin(6.2 * d.Number)
                             });
 
+                            //arr2 is meant for the cos vlaues and has two keys - x and y
+                            //x key has the data values from the .csv file
+                            //y key consists of the cos values of the product between 8.5 and the data values
                             arr2.push({
-                                x: d.Number, y: Math.cos( 8.5 * d.Number)
+                                x: d.Number, y: Math.cos(8.5 * d.Number)
                             });
                         }
-                        // else if( (trig1 == "cos" && trig2 == "tan") || (trig1 == "tan" && trig2 == "cos") || (trig1 == "cosine" && trig2 == "tangent") || (trig1 == "tangent" && trig2 == "cosine") ){
-                        //     arr1.push({
-                        //         x: d.Number, y: Math.cos( 8.5 * d.Number)
-                        //     });
-
-                        //     arr2.push({
-                        //         x: d.Number, y: Math.tan(9.0 * d.Number)
-                        //     });
-                        // }
-                        // else if( (trig1 == "sin" && trig2 == "tan") || (trig1 == "tan" && trig2 == "sin") || (trig1 == "sine" && trig2 == "tangent") || (trig1 == "tangent" && trig2 == "sine") ){
-                        //     arr1.push({
-                        //         x: d.Number, y: Math.sin( 6.2 * d.Number )
-                        //     });
-
-                        //     arr2.push({
-                        //         x: d.Number, y: Math.tan(9.0 * d.Number)
-                        //     });
-                        // }
                         else{
-                            console.log("Only sin/cos/tan combo allowed!");
+
+                            //If the user provides tan/cot/sec/cosec or any other value other
+                            //than sin and cos, the below message wil be displayed on the console
+                            console.log("Only sin and cos combo allowed!");
                         }
                         
                     }).then(function(data){
 
-                        // Get the 'limits' of the data - the full extent (mins and max)
-                        // so the plotted data fits perfectly
+                        //xExtent and yExtent calculates the limits (min & max) of the data values
                         const xExtent = d3.extent( arr1, d=>{ 
                             return d.x 
-                        } );
+                        });
                         const yExtent = d3.extent( arr1, d=>{
                             return d.y 
-                            } );
+                        });
 
-                        // Append SVG Object to the Page
+                        //Creating the SVG element, which has a width of 600 and a 
+                        //height of 600, along with a green border of 1 pixel
+                        //Along to the SVG element, we append the group container as well,
+                        //so that we can group the line chart elements
                         const svg = d3.select("body")
                                         .append("svg")
                                         .attr('width', xSize )
@@ -76,36 +91,61 @@
                                         .append("g")
                                         .attr("transform","translate(" + margin + "," + margin + ")");
 
-                        // X Axis
+                        //Defining the x-axis for the line chart
                         const x = d3.scaleLinear()
-                                    .domain([ xExtent[0], xExtent[1] ])
+                                    .domain([ xExtent[0], xExtent[1] ])    //x-axis consists of decimal values between 0-1
                                     .range([0, xMax]);
 
-                        // bottom
+                        //Creating the horizontal bottom x-axis for the line chart, which consists of the values generated above
+                        var xaxisBottom = d3.axisBottom()
+                                            .scale(x);
+
+
+                        //Appending the bottom x-axis to the SVG element
                         svg.append("g")
                             .attr("transform", "translate(0," + yMax + ")")
-                            .call(d3.axisBottom(x))
-                            .attr('color', 'green'); // make bottom axis green
+                            .call(xaxisBottom);
 
-                        // top
+
+                        //Creating the horizontal top x-axis for the line chart, which consists of the values generated above
+                         var xaxisTop = d3.axisTop()
+                                        .scale(x);
+
+
+                        //Appending the top x-axis to the SVG element
                         svg.append("g")
-                            .call(d3.axisTop(x));
+                            .call(xaxisTop);
 
-                        // Y Axis
+
+
+                        //Defining the y-axis for the line chart
                         const y = d3.scaleLinear()
-                                    .domain([ yExtent[0], yExtent[1] ])
+                                    .domain([ yExtent[0], yExtent[1] ])   //y-axis consists of decimal values (both positive and negative values)
                                     .range([ yMax, 0]);
 
-                        // left y axis
+                        //Creating the vertical left y-axis for the line chart, which consists of the values generated above            
+                        var yaxisLeft = d3.axisLeft()
+                                            .scale(y);
+        
+        
+                        //Appending the left y-axis to the SVG element                    
                         svg.append("g")
-                            .call(d3.axisLeft(y));
+                            .call(yaxisLeft);
 
-                        // right y axis
+
+                        //Creating the vertical right y-axis for the line chart, which consists of the values generated above      
+                        var yaxisRight = d3.axisRight()
+                                            .scale(y);
+
+                   
+                        //Appending the right y-axis to the SVG element
                         svg.append("g")
                             .attr("transform", `translate(${yMax},0)`)
-                            .call(d3.axisRight(y));
+                            .call(yaxisRight);
 
-                        // Add the line
+
+                        //The below code generates the sine wave based on the array we provided
+                        //as input to datum
                         svg.append("path")
                             .datum(arr1)
                             .attr("fill", "none")
@@ -119,7 +159,10 @@
                                 return y(d.y) 
                             })
                         );
-
+                        
+                        
+                        //The below code generates the cosine wave based on the array we provided
+                        //as input to datum
                         svg.append("path")
                             .datum(arr2)
                             .attr("fill", "none")
@@ -138,53 +181,14 @@
 
                 }
                 else{
+                        //If the user provides an array or any other file, the below message appears on the console
                         console.log("Only csv file is accepted as input");
                     }
                 
             }
 
-            mathTrig(randPointsCSV, "cos", "sin");
+            mathTrig(randPointsCSV, "cos", "sin");     //Sending the csv file to the function, as well as cos and sin as the arguments
 
-            // Create Random Points
-            // const numPoints = 100;
-
-            // const dataSine = [];
-            // for (let i = 0; i < numPoints; i++) { 
-            //     console.log(i/100);
-            //     dataSine.push( {
-            //         x: i/100, y: Math.sin( 6.2 * i/100 ) 
-            //     } ); 
-            // }
-
-            // mathTrig(dataSine);
-            
-            // const dataCosine = [];
-            // for (let i = 0; i < numPoints; i++) { 
-            //     dataCosine.push( {
-            //         x: i/100, y: Math.cos( 8.5 * i/100)
-            //     } ); 
-            // }
-            
-            // mathTrig(dataCosine);
-
-            // const dataTan = [];
-            // for (let i = 0; i < numPoints; i++) { 
-            //     dataTan.push( {
-            //         x: i/100, y: Math.tan(9.0 * i/100)
-            //     } ); 
-            // }
-            
-            // mathTrig(dataTan);
-
-            // const dataCot = [];
-            // for (let i = 0; i < numPoints; i++) { 
-            //     tan = Math.tan(5.0 * i/100)
-            //     dataCot.push( {
-            //         x: i/100, y: 1/tan
-            //     } ); 
-            // }
-            
-            // mathTrig(dataCot);
 
         </script>
 
