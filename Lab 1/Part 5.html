@@ -1,3 +1,6 @@
+<!-- Exercise 9 and 10 -->
+
+
 <!DOCTYPE html>
 
 <html lang="en">
@@ -9,78 +12,128 @@
     <body>
 
         <!-- Exercise 9 -->
-        <!-- <script src='https://d3js.org/d3.v7.min.js'></script>
+
+        <script src='https://d3js.org/d3.v7.min.js'></script>
 
         <script>
+
+            //The .csv file which consists of the data, is hosted on GitHub
+            //Storing the path of the GitHub file in a variable
             let titaniccsv = 'https://raw.githubusercontent.com/dsindy/kaggle-titanic/master/data/test.csv';
 
-            /*
-                PassengerId,Pclass,Name,Sex,Age,SibSp,Parch,Ticket,Fare,Cabin,Embarked
-                892,3,"Kelly, Mr. James",male,34.5,0,0,330911,7.8292,,Q
-                893,3,"Wilkes, Mrs. James (Ellen Needs)",female,47,1,0,363272,7,,S
-                894,2,"Myles, Mr. Thomas Francis",male,62,0,0,240276,9.6875,,Q
-                895,3,"Wirz, Mr. Albert",male,27,0,0,315154,8.6625,,S
-            */
+            var mr = 0;                 //Counter to count how many names have the prefix - Mr.
+            var mrs = 0;                //Counter to count how many names have the prefix - Mrs.                                                                                       
+            var otherCount = 0;         //Counter to count how many names have other prefixes like Dr., Miss., etc.
 
-            var mr = 0;
-            var mrs = 0;
-            var otherCount = 0;
 
-            var male = 0;
-            var female = 0;
+            var male = 0;              //Counter to count how many passenegers were male
+            var female = 0;            //Counter to count how many passenegers were female
 
-            var zeroNine = 0;
-            var tenNineteen = 0;
-            var twenty29 = 0;
-            var thirty39 = 0;
-            var thirty39 = 0;
-            var fourty49 = 0;
-            var fifty59 = 0;
-            var sixtyAbove = 0;
 
+            var zeroNine = 0;          //Counter to count how many passenegers were within the age group -> 0-9
+            var tenNineteen = 0;       //Counter to count how many passenegers were within the age group -> 10-19
+            var twenty29 = 0;          //Counter to count how many passenegers were within the age group -> 20-29
+            var thirty39 = 0;          //Counter to count how many passenegers were within the age group -> 30-39         
+            var fourty49 = 0;          //Counter to count how many passenegers were within the age group -> 40-49
+            var fifty59 = 0;           //Counter to count how many passenegers were within the age group -> 50-59
+            var sixtyAbove = 0;        //Counter to count how many passenegers were within the age group -> 60 and above
+
+
+            //Loading the csv file
+            //The callback function is used to check multiple things such as
+            // -> Checks if the current name has the prefix Mr.or Mrs., or other values liek Dr., Miss, etc
+            // -> Also checks about the gender of the passenger
+            // -> Also checks about the various age groups
             d3.csv(titaniccsv, function(data){
 
+                //If statement to check if the current passenger has the prefix - Mr.
                 if(data.Name.includes("Mr.") == true){
+
+                    //If this is true, then increment the mr counter
                     mr++;
                 }
+                //Else check whether the current passenger has the prefix - Mrs.
                 else if(data.Name.includes("Mrs.") == true){
+
+                    //If this is true, then increment the mrs counter
                     mrs++;
                 }
+                //If neither of the above statements are true, then increment the otherCount counter
                 else{
                     otherCount++;
                 }
 
+
+
+                //If statement to check if the current passenger is male
                 if(data.Sex == "male"){
+
+                    //If this is true, then increment the male counter
                     male++;
                 }
+                //Else check whether the current passenger is female
                 else if(data.Sex == "female"){
+
+                    //If this is true, then increment the female counter
                     female++;
                 }
 
+
+
+
+                //This if statement checks if the current passenger
+                //is between 0 to 9
+                //If yes, then increment the 0-9 age group counter
                 if(data.Age>=0 && data.Age<10){
                     zeroNine++;
                 }
+
+                //Else check if the current passenger
+                //is between 10 to 19
+                //If yes, then increment the 10-19 age group counter
                 else if(data.Age>=10 && data.Age<20){
                     tenNineteen++;
                 }
+
+                //Else check if the current passenger
+                //is between 20 to 29
+                //If yes, then increment the 20-29 age group counter
                 else if(data.Age>=20 && data.Age<30){
                     twenty29++;
                 }
+
+                //Else check if the current passenger
+                //is between 30 to 39
+                //If yes, then increment the 30-39 age group counter
                 else if(data.Age>=30 && data.Age<40){
                     thirty39++;
                 }
+
+                //Else check if the current passenger
+                //is between 40 to 49
+                //If yes, then increment the 40-49 age group counter
                 else if(data.Age>=40 && data.Age<50){
                     fourty49++;
                 }
+
+                //Else check if the current passenger
+                //is between 50 to 59
+                //If yes, then increment the 50-59 age group counter
                 else if(data.Age>=50 && data.Age<60){
                     fifty59++;
                 }
+
+                //Else check if the current passenger
+                //is 60 or above
+                //If yes, then increment the 60 or above age group counter
                 else if(data.Age>=60){
                     sixtyAbove++;
                 }
 
 
             }).then(function(data){
+
+                //Print out the final values of each of these counters on the console
                 console.log("Mr. count " + mr);
                 console.log("Mrs. count " + mrs);
                 console.log("Other count " + otherCount);
@@ -101,161 +154,127 @@
                 console.log("Age Group 60 and Above: " + sixtyAbove);
             });
 
+        </script>
 
 
-             // while( data.Name.includes("Mr.") == true){
-                //      mr++;
-                //      //console.log( mr ); 
-                //      //console.log( data.Name ); 
-                //      console.log( "Mr count: " + mr );  
-                //      console.log( data.Name );
-                // }
-
-                // for( let i=0; i<data.length; i++){
-                //     if(data.Name.includes("Mr.") == true){
-                //         mr++;
-                //     }
-                // }
-
-                // //console.log(typeof data.length); 
-                // //return typeof data.length;
-                
-                // console.log( "Mr count: " + mr ); 
-
-                // while (data.Name.includes("Mrs.") == true){
-                //     mrs++;
-                // }
-                // //console.log( data.Name );
-                // console.log( "Mrs count: " + mrs ); 
-
-                // for (let i in data){
-                    
-                // }
-
-                // if(data.Sex == "male"){
-                //     male++;
-                // } 
-                // else if(data.Sex == "female"){
-                //     female++;
-                //  }  
-                 
-                 //console.log("Male count" + male);
-                 //console.log("Female count" + female);
-
-                // console.log( data.Sex );
-
-        </script> -->
 
         <!-- Exercise 10 -->
         <script src='https://d3js.org/d3.v7.min.js'></script>
 
-        <!-- <i/div><div></div>
-        <div></div>
-        <dv></div>
-        <div> -->
-
         <script>
 
+            //The .csv file which consists of the data, is hosted on GitHub
+            //Storing the path of the GitHub file in a variable
             let heartfailurecsv = 'https://raw.githubusercontent.com/akmand/datasets/master/heart_failure.csv';
 
-            /*
-            age,anaemia,creatinine_phosphokinase,diabetes,ejection_fraction,high_blood_pressure,platelets,serum_creatinine,serum_sodium,sex,smoking,time,DEATH_EVENT
-            75,0,582,0,20,1,265000,1.9,130,1,0,4,1
-            55,0,7861,0,38,0,263358.03,1.1,136,1,0,6,1
-            65,0,146,0,20,0,162000,1.3,129,1,1,7,1
-            50,1,111,0,20,0,210000,1.9,137,1,0,7,1
-            */
+            // var over50 = 0;
 
-            var over50 = 0;
 
-            var one30 = 0;
-            var thirtyone40 = 0;
-            var fourtyone60 = 0;
-            var sixtyone100 = 0;
+            var one30 = 0;             //Counter to count how many patients within the age range 1-30 died of heart failure
+            var thirtyone40 = 0;       //Counter to count how many patients within the age range 31-40 died of heart failure
+            var fourtyone60 = 0;       //Counter to count how many patients within the age range 41-60 died of heart failure
+            var sixtyone100 = 0;       //Counter to count how many patients within the age range 61-100 died of heart failure
 
+
+            //Initializing an array, which will help in storing the final values
+            //of the above counters
             var heartFail = [];
 
+
+            //Loading the csv file
+            //The callback function is used to check if the current element the function is
+            //reading, belongs to one of the age ranges
+            //If yes, then increment the counter
             d3.csv(heartfailurecsv, function(data) {
 
-                //console.log( data.age);
-                // todo
-
-                // if(data.age > 50){
-                //     over50++;
-                // }
+                //This if statement checks if the current data value
+                //is between 1 to 30
+                //If yes, then increment the 1-30 age group counter
                 if(data.age>=1 && data.age<=30){
                     one30++;
                 }
+
+                //Else check if the current data value
+                //is between 31 to 40
+                //If yes, then increment the 31-40 age group counter
                 else if(data.age>=31 && data.age<=40){
                     thirtyone40++;
                 }
+
+                //Else check if the current data value
+                //is between 41 to 60
+                //If yes, then increment the 41-60 age group counter
                 else if(data.age>=41 && data.age<=60){
                     fourtyone60++;
                 }
+
+                //Else check if the current data value
+                //is between 61 to 100
+                //If yes, then increment the 61-100 age group counter
                 else if(data.age>=61 && data.age<=100){
                     sixtyone100++;
                 }
 
-                // if(data.age>=1 && data.age<=30){
-
-                //     let p1 = d3.select("body")
-                //             .selectAll("div")
-                //             .data(heartFail.push({
-
-                //             }))
-                // }
 
 
             }).then(function(data){
-                //console.log("Heart failure over 50: " + over50);
+                
+                //To the array that we defined above,
+                //create an object array having keys - oneThirty, thirtyoneFourty, foutyoneSixty, sixtyoneHundred 
+                //and each of the keys, has one of the counters as its value
                 heartFail=[
                                 {oneThirty: one30},
                                 {thirtyoneFourty: thirtyone40},
                                 {foutyoneSixty: fourtyone60},
                                 {sixtyoneHundred: sixtyone100}]
+
+
+                //Creating a placeholder for the <p> tag
+                //This is done so that we can display the below items
                 let arr = d3.select("body")
-                            .selectAll("div")
+                            .selectAll("p")
                             .data(heartFail)
                             .enter()
-                            .append('div');  
-                            
+                            .append('p');  
+
+                //We want to print out the results on the page            
                 let arr1 = d3.select("body")
-                             .selectAll("div")
+                             .selectAll("p")
                              .data(heartFail)
                              .text(function (d, i){
+
+                                //If the function is reading the first element
+                                //then return the final value of the counter used for the age group
+                                //1-30
                                 if (i ==0){
                                     return "Heart failure 1-30: " +d.oneThirty;
                                 }
+
+                                //Else if the function is reading the second element
+                                //then return the final value of the counter used for the age group
+                                //31-40
                                 else if(i==1){
                                     return "Heart failure 31-40: " +d.thirtyoneFourty;
                                 }
+
+                                //Else if the function is reading the third element
+                                //then return the final value of the counter used for the age group
+                                //41-60
                                 else if(i==2){
                                     return "Heart failure 41-60: " +d.foutyoneSixty;
                                 }
+
+                                //Else if the function is reading the fourth element
+                                //then return the final value of the counter used for the age group
+                                //61-100
                                 else if(i==3){
                                     return "Heart failure 61-100: " +d.sixtyoneHundred;
                                 }
                                 //console.log(i)
-                            });  
-                            
-                // let arr1 = d3.select("body")
-                //              .selectAll("div")
-                //              .data(heartFail)
-                //              .text(function (d, i) {
-                //                  //console.log(d)
-                //                  //return "helo" + d;
-                //                  "1-30 " + d.oneThirty
-                //              }); 
-
-                // console.log("Heart failure 1-30: " + one30);
-                // console.log("Heart failure 31-40: " + thirtyone40);
-                // console.log("Heart failure 41-60: " + fourtyone60);
-                // console.log("Heart failure 61-100: " + sixtyone100);
-
-                // console.log(heartFail)
+                            }); 
             });
 
-            //console.info(heartFail);
+            
 
         </script>
     </body>
