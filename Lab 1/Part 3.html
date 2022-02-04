@@ -1,3 +1,6 @@
+<!-- Exercise 6 and 7 -->
+
+
 <!DOCTYPE html>
 
 <html lang="en">
@@ -7,55 +10,47 @@
     </head>
 
     <body>
-        <!-- <script src='https://d3js.org/d3.v7.min.js'></script>
-
-        <div></div>
-        <div></div>
-        <div></div>
-
-        <script>
-            let nums = [10, 50, 200];
-
-            let paragraph = d3.select("body")
-                    .selectAll("div")
-                    .data(nums)
-                    .text(function (d, i) {
-                        console.log("d: " + d);
-                        console.log("i: " + i);
-                        console.log("this: " + this);
-                    return 'cont:' + d; // return value is used to set the 'text'
-                });
-        </script> -->
         
-
         <!-- Exercise 6 -->
-        <!-- <script src='https://d3js.org/d3.v7.min.js'></script>
+
+        <script src='https://d3js.org/d3.v7.min.js'></script>
 
         <div></div>
         <div></div>
         <div></div>
 
         <script>
-            let otherdata = [ {name:'test', val:1, color: "Blue"},
+
+            //Creating an object array which has 3 keys - name, val, color
+            //Each of these keys has their own values
+            let otherdata = [ 
+                            {name:'test', val:1, color: "Blue"},
                             {name:'other', val:2, color: "Green"},
                             {name:'b', val:3, color: "Red"}
                         ];
 
+            
             let paragraph2 = d3.select("body")
-                    .selectAll("div")
+                    .selectAll("div")          //Selecting the 3 div tags above to display the color on the screen
                     .data(otherdata)
                     .text(function (d, i) {
+
+                        //Displaying some information about the object array on the console
                         console.log("d.name: " + d.name);
                         console.log("d.val: " + d.val);
-                        console.log("d.color: " + d.color);  //CHECK IF U CAN MAKE THIS TO BE THAT COLOR
+                        console.log("d.color: " + d.color);
                         console.log("i: " + i);
                         console.log("this: " + this);
 
-                        // return 'cont:' + d.name; // return value is used to set the 'text'
+                        //We want to print out the multiple values of the 'color' key
+                        //hence, returning it
+                        //Using the div tags, the 3 different color values will be displayed on the screen
                         return 'cont:' + d.color;
                     });
-        </script>  -->
+        </script> 
         
+        <!-- Exercise 7 -->
+
         <script src='https://d3js.org/d3.v7.min.js'></script>
 
         <div></div>
@@ -65,20 +60,34 @@
 
         <script>
 
+            //The array which consists of the values
             let num = [10, 50, 100, 200];
 
             let paragraph = d3.select("body")
-                    .selectAll("div")
+                    .selectAll("div")          //Selecting the 4 div tags above to display the values we want on the screen
                     .data(num)
                     .text(function (d, i) {
-                        return 'cont:' + d; // return value is used to set the 'text'
+
+                        //We want to print out the values of the array
+                        //hence, returning it
+                        //Using the div tags, the different array values will be displayed on the screen
+                        return 'cont:' + d;    
                     })
                     .style("color", function(d, i) {
+
+                        //If statement to check whether the current element is between
+                        //50 and 100
                         if ( d>=50 && d<=100 ) {
+
+                            //If the above statement is true, then make the full text red in color
                             return "red";
-                        } else {
+                        } 
+
+                        //Else make the full text yellow in color
+                        else {
                             return "yellow";
                         }
+                        //The default color is set to blue
                             return 'blue';
                     });
 
