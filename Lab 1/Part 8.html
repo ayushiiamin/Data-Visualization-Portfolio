@@ -7,12 +7,12 @@ Available at: https://stackoverflow.com/questions/67908866/dynamically-change-th
 -->
 
 
-
+<!-- Exercise 16 -->
 
 
 <!DOCTYPE html>
 
-<html langh = "en">
+<html lang = "en">
 
     <head>
         <script src='https://d3js.org/d3.v7.min.js'></script>
@@ -22,27 +22,31 @@ Available at: https://stackoverflow.com/questions/67908866/dynamically-change-th
         <script src='https://d3js.org/d3.v7.min.js'></script>
 
         <script>
-            const width = 500;
-            const height = 500;
+            const width = 500;            //Defining the width of the SVG
+            const height = 500;           //Defining the height of the SVG  
 
-            var c = -1;
-            var w = -1;
+            var c = -1;                  //Initializing the counter to -1 as we want to increment it to 0 and above
 
-            const shapeArr = [
-                {shape: "square", num: 10},
-                {shape: "circle", num: 15},
-                {shape: "square", num: 20},
-                {shape: "circle", num: 25},
-                {shape: "square", num: 30},
-            ]
-            // Note different valid ways of specifying color
+
+            //Creating the array which contains the length of the square's side and the radius
+            //Even numbers - length of the square's side
+            //Odd numbers - radius
+            const shapeArr = [10, 15, 20, 25, 30];        
+
+
+            //Storing the hex value of multiple colors in an array
             const colors = ['#008080','#BB3242','#B80454','#348AC0','#838BC2'];
 
+
+            //Creating the SVG element, which has a width of 500 and a 
+            //height of 500
             const svg = d3.select("body")
                             .append("svg")
                             .attr("width", width)
                             .attr("height", height);
 
+
+            //Creating the container to group the shapes in the SVG
             const g = svg.selectAll("g")
                             .data(shapeArr)
                             .enter()
@@ -52,47 +56,64 @@ Available at: https://stackoverflow.com/questions/67908866/dynamically-change-th
                             })
                             .append(drawShape)
 
-            function drawShape(d){                 //(djo, 2021)
-                c++;
-                //alert(d.shape)
-               if (d.shape == "square"){
-                   //alert("entered square")
-                   return d3.select("g")
-                            .append("rect")
-                            .attr("x",  c*100 + 50)
-                            .attr("y", 100)
-                            .attr("width", d.num*1.5)
-                            .attr("height", d.num*1.5)
-                            .attr("fill", colors[c])
-                            .append("text")
-                            .attr("x",c * 100 + 54)
-                            .attr("y",115)
-                            .attr("stroke", "white")
-                            .attr("font-size", "9px")
-                            .attr("font-family", "sans-serif")
-                            .text(d.num)
-                            .node()                 //(djo, 2021)
-                           
-               }
-               else{
-                   //alert("entered circle")
-                   //alert(d.shape)
-                return d3.select("g")                   //(djo, 2021)
+
+            //Function which draws the square and circle dynamically                
+            function drawShape(d){
+
+                //Incrementing the counter everytime the function is called
+                //This counter will act as an index for the colors array
+                //and can help in adjusting the x coordinates of the shapes and text
+                //accordingly
+                c++;  
+
+                //If statement to check if the current value is an even number              
+                if(d % 2 == 0){
+                    //alert("entered rect");
+
+
+                    //If the current value is an even number
+                    //then draw a square
+                    return d3.select("g")                //(djo, 2021)
+                                .append("rect")
+                                .attr("x",  c*100 + 50)          //Positioning the square accordingly
+                                .attr("y", 100)
+                                .attr("width", d*1.5)           //Since all the sides of a square are equal, we set the same value as the width and height (current value * 1.5)
+                                .attr("height", d*1.5)
+                                .attr("fill", colors[c])        //Color the square accordingly
+                                .append("text")
+                                .attr("x", c * 100 + 54)           //Positioning the text accordingly
+                                .attr("y", 115)
+                                .attr("stroke", "white")
+                                .attr("font-size", "9px")
+                                .attr("font-family", "sans-serif")
+                                .text(d)       //Add the current value as the text itself
+                                //We use the .node() is used to return the square on the screen
+                                .node()                  //(djo, 2021)
+                }
+
+                //Else if the current value is not an even number
+                //then draw a circle
+                else {
+                    //alert("entered circle");
+
+                    //If the current value is an odd number
+                    //then draw a circle
+                    return d3.select("g")                   //(djo, 2021)
                             .append("circle")
-                            .attr("cx", c*100 + 50)
+                            .attr("cx", c*100 + 50)        //Positioning the circle accordingly
                             .attr("cy", 100)
-                            .attr("r", d.num*1.5)
-                            .attr("fill",colors[c])
+                            .attr("r", d*1.5)             //To calculate the radius, we multiply the current value with 1.5
+                            .attr("fill",colors[c])          //Color the square accordingly
                             .append("text")
-                            .attr("x",c * 100 + 40)
+                            .attr("x",c * 100 + 40)          //Positioning the text accordingly
                             .attr("y",105)
                             .attr("stroke", "white")
                             .attr("font-size", "12px")
                             .attr("font-family", "sans-serif")
-                            .text(d.num)
-                            .node()                         //(djo, 2021)
-                            
-               }
+                            .text(d)               //Add the current value as the text itself
+                            //We use the .node() is used to return the circle on the screen
+                            .node()             //(djo, 2021)
+                }
             }
 
         </script>
