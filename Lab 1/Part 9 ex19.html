@@ -4,10 +4,11 @@
 1) W3schools.com. (2015). JavaScript Functions. [online] 
 Available at: https://www.w3schools.com/js/js_functions.asp.   
 
-
+2) Codegrepper.com. (2020). javascript Convert an array of strings to numbers Code Example. [online] 
+Available at: https://www.codegrepper.com/code-examples/javascript/javascript+Convert+an+array+of+strings+to+numbers.
 -->
 
-
+<!-- Exercise 19 -->
 
 <!DOCTYPE html> 
 
@@ -22,25 +23,46 @@ Available at: https://www.w3schools.com/js/js_functions.asp.
         <script src='https://d3js.org/d3.v7.min.js'></script>
 
         <script>
-            const arrTest = [50, 400, 300, 900, 255, 1000, 87];
-            var c =0;
+            const arrTest = [50, 400, 300, 900, 255, 1000, 87];      //This array is initialized just for testing the function
+            
+            var c =0;    //Couter to keep track of the number times the function is called
+
+            //The .csv files consists of different data for the two bar charts
+            //These files are hosted on GitHub, so we store the path of the GitHub file in a variable
             let arrayCSV = "https://raw.githubusercontent.com/ayushiiamin/csvfileimp/main/data9.csv";
             let fileCSV = "https://raw.githubusercontent.com/ayushiiamin/csvfileimp/main/data19.csv";
 
+            //Function to display the bar chart
             function barChart(data){       //(W3schools.com, 2015)
-                c++;
+
+            //As soon the function is called, increment the counter by 1
+                c++;   
+
+            //This if statement checks whether the function has been called twice or less
+            ///than 2 times
+
+            //This if statement is there, so that we can ensure the function is only called 
+            //twice and no more than 2 bar charts are dispalyed on the screen 
             if(c <=2 ){
 
+                //We check if a csv file has been provided as input
+                //since this function only takes in a csv file as the input
                 if(data.includes(".csv") == true){
 
-                    const width = 500;
-                    const barHeight = 20;
-                    const margin = 1;
+                    const width = 500;              //Defining width of the SVG
+                    const barHeight = 20;           //Defining height of the bar                            
+                    const margin = 1;               //Defining the margin of the bar chart
 
-                    var arr = [];
+                    var arr = [];              //Initializing an array so that we can store the values from the CSV in this array                         
 
+
+                    //Loading the csv file
+                    //The callback function is used for appending the elements into the array
                     d3.csv(data, function(d, i){
                         //console.log(data);
+
+                        //Reading the values present in the column 'Number'
+                        //While reading it, append it to the array
                         arr.push(d.Number);
 
                         // console.log(" ");
@@ -48,75 +70,125 @@ Available at: https://www.w3schools.com/js/js_functions.asp.
                 
                     }).then(function(data){
                         //console.log(arr);
-                        var arrNum = arr.map((i) => Number(i));
+
+                        //While reading the CSV file and adding the values into the array
+                        //the values are assumed to be of type "String" instead of type "Number"
+                        //Hence we convert the array of strings to an array of numbers
+                        //by converting each string to type "Number"
+                        var arrNum = arr.map((i) => Number(i));         //(Codegrepper.com, 2020)
+
                         //console.log(arrNum);
 
+
+                        //Defining the scale for the bars
+                        //so that they scale according to their value
                         var scale = d3.scaleLinear()
                                     .domain([d3.min(arrNum), d3.max(arrNum)])
                                     .range([50, 500]);
 
 
+                        //Creating the SVG element, which has a width of 500 and the 
+                        //height is adjusted according to the number of values present in the
+                        //CSV file provided as input to the function
                         var svg = d3.select("body")
                                     .append("svg")
                                     .attr("width", width)
                                     .attr("height", barHeight * arrNum.length);
 
+
+                        //Creating the container to group the bar chart elements and the text on each of the bars
                         var g = svg.selectAll("g")
                                     .data(arrNum)
                                     .enter()
                                     .append("g")
                                     .attr("transform", function (d, i) {
-                                    return "translate(0," + i * barHeight + ")";
+                                        return "translate(0," + i * barHeight + ")";
                                     });
 
+
+                        //The below code is for creating the bar chart            
                         g.append("rect")
                             .attr("width", function (d) {
+
+                                //As the bar chart is horizontal, each of the bars will have varying widths
+                                //So we scale it according to their value using the scale, that is defined
+                                //above 
                                 return scale(d);
                             })
-                            .attr('fill', function(d){
+                            .attr("fill", function(d){
+
+                                //Defining certain thresholds
+
+                                //If statement to check if the current value is less than 100
                                 if(d<100){
+
+                                    //If this statement is true, then make the bar green in color
                                     return "green";
                                 }
+
+                                //Else if the current value is not less than 100
+                                //then we check if it is greater than 500
                                 else if(d>500){
+
+                                    //If this statement is true, then make the bar red in color
                                     return "red";
                                 }
+
+                                //Else if none of the above if statements are true,
+                                //then make the bar blue in color
                                 else{
                                     return "blue";
                                 }
                             })
-                            .attr("height", barHeight - margin)
+                            //The height of each bar remains the same, hence we dont define a function 
+                            //However, to keep a gap between each bar, we subtract the margin from the barHeight variable
+                            .attr("height", barHeight - margin)         
 
+                        //The below code is for writing text to the bars    
                         g.append("text")
-                            .attr("x", function (d) { 
+                            .attr("x", function (d) {
+
+                                //As the bar chart is horizontal, each of the bars will have varying widths
+                                //so we adjust the text's x coordinate position according to the current value
+                                //using the scale, that is defined above
                                 return (scale(d)); 
                             })
+                            //The height of each bar remains the same, hence we dont define a function
+                            //For the y coordinate, we take the half of the barHeight
                             .attr("y", barHeight / 2)
-                            .attr("dy", ".35em")
-                            .style('text-anchor', 'end')
+                            .attr("dy", ".35em")         //Setting the offset
+                            .style('text-anchor', 'end')      //Setting the text to be placed at the end of the bar
                             .text(function (d) { 
+
+                                //Returns the current value that the function is reading
                                 return d; 
                             });
                         });                                 
                     }
                     else{
+
+                        //If the user provides an array or any other file, the below message appears on the console
                         console.log("Only csv file is accepted as input");
                     }
                 }
                 
                 else{
+
+                    //If the user tries to display more than 2 graphs, then the below message is 
+                    //displayed on the console
                     console.log("Only two bar charts can be displayed on the screen!");
                 }    
             
             }
 
-            barChart(arrayCSV);
-            console.log(c);
+            barChart(arrayCSV);           //Passing the first CSV file to the function
+            //console.log(c);
 
-            barChart(fileCSV);
-            console.log(c);
+            barChart(fileCSV);            //Passing the second CSV file to the function
+            //console.log(c);
 
-            barChart(arrTest);
-            console.log(c);
+            barChart(arrTest);           //Passing an array to test the function, and see if it prints a third bar chart
+            //console.log(c);
                    
         </script>
     </body>
