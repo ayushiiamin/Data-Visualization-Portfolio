@@ -1,0 +1,143 @@
+<!-- REFERENCES -->
+
+<!-- 
+1) Mozilla.org. (2021). transform - SVG: Scalable Vector Graphics | MDN. [online] 
+Available at: https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/transform.
+
+
+-->
+
+<!-- Exercise 12 -->
+
+<!DOCTYPE html>
+
+<html lang = "en">
+    <head>
+        <script src='https://d3js.org/d3.v7.min.js'></script>
+    </head>
+
+    <body>
+        <script src='https://d3js.org/d3.v7.min.js'></script>
+
+        <script>
+
+            //The .csv file which consists of the data, is hosted on GitHub
+            //Storing the path of the GitHub file in a variable
+            let arrayCSV = "https://raw.githubusercontent.com/ayushiiamin/csvfileimp/main/data12-671.csv";
+
+
+            //Initializing an array, which will help in storing the contents of
+            //the csv file
+            var shapeArr = [];
+            // var e = 0; 
+
+
+            //Loading the csv file
+            //The callback function is used for appending the elements into the array
+            d3.csv(arrayCSV, function(d, i){
+                shapeArr.push(d)
+            }
+            ).then(function(data, i){
+                        
+                            //Creating the SVG element, which has a width of 400 and a 
+                            //height of 400, along with a green border of 1 pixel
+                            var svg = d3.select("body")
+                                        .append("svg")
+                                        .attr("width", 400)
+                                        .attr("height", 400)
+                                        .style("border", '1px solid green');
+
+                             //Creating the container to group the shapes for the SVG scene
+                            var g = svg.selectAll("g")
+                                                .data(shapeArr)
+                                                .enter()
+                                                .append("g")
+                                                .attr("transform", function(d, i) {
+                                                    return "translate(0,0)";
+                                                })
+                                                .append(shapeFunc)
+
+
+                            //Function which draws the shape dynamically
+                            function shapeFunc(d){
+                                
+                                //alert(d.Shape)
+                                //alert(d.Width)
+
+                                //If statement to check whether the current shape that the function is reading is a 
+                                //Rectangle
+                                if(d.Shape == "Rectangle"){
+                                    //alert("entered Rectangle")
+
+                                    //If the current shape is a Rectangle, then draw a rectangle
+                                    //based on what values are provided for each of its attribute
+                                    return d3.select("g")
+                                            .append("rect")
+                                            .attr("x",d.x)
+                                            .attr("y",d.y)
+                                            .attr("width",d.Width)
+                                            .attr("height",d.Height)
+                                            .attr("fill", d.Color)
+                                            //We use the .node() is used to return the rectangle on the screen
+                                            .node()
+                                }
+                                //Else to check whether the current shape that the function is reading is an 
+                                //Ellipse
+                                else if(d.Shape == "Ellipse"){
+                                    //alert("entered ellipse")
+
+                                    //If the current shape is an Ellipse, then draw an Ellipse
+                                    //based on what values are provided for each of its attribute
+                                    return d3.select("g")
+                                            .append("ellipse")
+                                            .attr("cx",d.cx)
+                                            .attr("cy",d.cy)
+                                            .attr("rx",d.rx)
+                                            .attr("ry",d.ry)
+                                            //To make the eyes of the smiley figure, we rotate the 
+                                            //ellipse vertically
+                                            .attr("transform", "rotate(-90 170 150)")    //(Mozilla.org, 2021)
+                                            .attr("fill", d.Color)
+                                            //We use the .node() is used to return the ellipse on the screen
+                                            .node()
+                                }
+                                //Else to check whether the current shape that the function is reading is a 
+                                //Circle
+                                else if(d.Shape == "Circle"){
+                                    //alert("entered circle")
+
+                                    //If the current shape is a Circle, then draw a Circle
+                                    //based on what values are provided for each of its attribute
+                                    return d3.select("g")
+                                            .append("circle")
+                                            .attr("cx",d.cx)
+                                            .attr("cy",d.cy)
+                                            .attr("r",d.Radius)
+                                            .attr("fill", d.Color)
+                                            //We use the .node() is used to return the circle on the screen
+                                            .node()
+                                }
+                                //Else to check whether the current shape that the function is reading is a 
+                                //Line
+                                else if(d.Shape == "Line"){
+                                    //alert("entered line")
+
+                                    //If the current shape is a line, then draw a line
+                                    //based on what values are provided for each of its attribute
+                                    return d3.select("g")
+                                            .append("line")
+                                            .attr("x1",d.x1)
+                                            .attr("y1",d.y1)
+                                            .attr("x2",d.x2)
+                                            .attr("y2",d.y2)
+                                            .attr("stroke", d.Stroke)
+                                            //We use the .node() is used to return the line on the screen
+                                            .node()
+                                }
+                            }
+                        });
+
+        </script>
+
+    </body>
+</html>
