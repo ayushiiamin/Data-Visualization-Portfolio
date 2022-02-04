@@ -1,3 +1,6 @@
+<!-- Exercise 14 and 15 -->
+
+
 <!DOCTYPE html>
 
 <html lang="en">
@@ -10,10 +13,12 @@
         <script src='https://d3js.org/d3.v7.min.js'></script>
 
         <style>
+            /* Providing Blue color to the "fill" property, so that the bars by deafult are blue in color */
            svg rect {
                 fill: blue;
             }
 
+            /* Using CSS, we make the text black in color, size 10 pixels, sans-serif type, and we add it to the end of the bar chart */
             svg text {
                 fill:black;
                 font: 10px sans-serif;
@@ -23,30 +28,55 @@
         </style>
 
         <script id = "dv">
+
+            //The .csv file which consists of the data, is hosted on GitHub
+            //Storing the path of the GitHub file in a variable
             let heartfailurecsv = 'https://raw.githubusercontent.com/akmand/datasets/master/heart_failure.csv';
 
             //var data = [5, 10, 12, 6];
 
 
-            var one30 = 0;
-            var thirtyone40 = 0;
-            var fourtyone60 = 0;
-            var sixtyone100 = 0;
+            
+            var one30 = 0;            //Counter to count how many patients within the age range 1-30 died of heart failure
+            var thirtyone40 = 0;            //Counter to count how many patients within the age range 31-40 died of heart failure
+            var fourtyone60 = 0;            //Counter to count how many patients within the age range 41-60 died of heart failure
+            var sixtyone100 = 0;              //Counter to count how many patients within the age range 61-100 died of heart failure
 
+            //Initializing an array, which will help in storing the final values
+            //of the above counters
             var heartFail = [];
 
-            
 
+            //Loading the csv file
+            //The callback function is used to check if the current element the function is
+            //reading, belongs to one of the age ranges
+            //If yes, then increment the counter
             d3.csv(heartfailurecsv, function(data) {
+
+                //This if statement checks if the current data value
+                //is between 1 to 30
+                //If yes, then increment the 1-30 age group counter
                 if(data.age>=1 && data.age<=30){
                     one30++;
                 }
+
+                //Else check if the current data value
+                //is between 31 to 40
+                //If yes, then increment the 31-40 age group counter
                 else if(data.age>=31 && data.age<=40){
                     thirtyone40++;
                 }
+
+                //Else check if the current data value
+                //is between 41 to 60
+                //If yes, then increment the 41-60 age group counter
                 else if(data.age>=41 && data.age<=60){
                     fourtyone60++;
                 }
+
+                //Else check if the current data value
+                //is between 61 to 100
+                //If yes, then increment the 61-100 age group counter
                 else if(data.age>=61 && data.age<=100){
                     sixtyone100++;
                 }
@@ -54,6 +84,10 @@
 
             }).then(function(data){
                 //console.log("Heart failure over 50: " + over50);
+
+                //To the array that we defined above,
+                //create an object array having keys - 0,1,2,3
+                //and each of the keys, has one of the counters as its value
                 heartFail=[
                                 {0: one30},
                                 {1: thirtyone40},
@@ -61,15 +95,19 @@
                                 {3: sixtyone100}
                           ]
 
-            var width = 200;
-            var scaleFactor = 1;
-            var barHeight = 20;
+            var width = 200;                //Defining width of the SVG
+            var scaleFactor = 1;             //Defining the scale factor as 1       
+            var barHeight = 20;                //Defining height of the bar 
+            
 
+            //Creating the SVG element, which has a width of 200 and the 
+            //height is adjusted according to the length of the object array
             var graph = d3.select("body")
                         .append("svg")
                         .attr("width", width)
                         .attr("height", barHeight * heartFail.length);
 
+            //Creating the container to group the bar chart elements and the text on each of the bars    
             var bar = graph.selectAll("g")
                             .data(heartFail)
                             .enter()
@@ -78,52 +116,104 @@
                                 return "translate(0," + i * barHeight + ")";
                             });
             
+            //The below code is for creating the bar chart
             bar.append("rect")
                 .attr("width", function(d, i) {
+
+                    //As the bar chart is horizontal, each of the bars will have varying widths
+                    //So we multiply the current value (counter) with the scale factor
+                    //to adjust the bars accordingly
                     return d[i] * scaleFactor;
                 })
-                .style("fill", function(d,i){     //exercise 15
+                .style("fill", function(d,i){
+
+                    //Defining a threshold
+
+                    //If statement to check if the current value (counter) is greater tha or equal to 100
                     if(d[i] >= 100){
+
+                        //If this statement is true, then make the bar red in color
                         return "red"
                     }
+
+                    //If the above if statement is not true, then the bar color by deafult is blue (defined above in the style tag)
                 })
+                //The height of each bar remains the same, hence we dont define a function 
+                //However, to keep a gap between each bar, we subtract the 1 from the barHeight variable
                 .attr("height", barHeight - 1);
 
+            //The below code is for writing text to the bars    
             bar.append("text")
                 .attr("x", function(d, i) {
+
+                    //As the bar chart is horizontal, each of the bars will have varying widths
+                    //so we adjust the text's x coordinate position according to the product of
+                    //the current value (counter) with the scaleFactor
+
+                    //If statement to check if the function is reading the first element
+                    //in the array
+                    //This statement is done to ensure we can view the value "0" on the screen
+                    //alongside the other values
                     if(i==0){
+
+                        //If the above statement is true, then add 5 to the product of the current value and scaleFactor
                         return (d[i]*scaleFactor +5);
                     }
                     else{
+
+                        //Else just return the product of the current value and scaleFactor
                         return (d[i]*scaleFactor);
                     }
                 })
+                //The height of each bar remains the same, hence we dont define a function
+                //For the y coordinate, we take the half of the barHeight
                 .attr("y", barHeight / 2)
-                .attr("dy", ".35em")
+                .attr("dy", ".35em")         //Setting the offset
                 .text(function(d, i ) {
+
+                    //Returns the current value that the function is reading
                     return d[i];
                 });
 
-                
-                let arr = d3.select("body")
+
+            //Creating a placeholder for the <p> tag
+            //This is done so that we can display the below items  
+            let arr = d3.select("body")
                             .selectAll("p")
                             .data(heartFail)
                             .enter()
                             .append('p');  
-                            
-                let arr1 = d3.select("body")
+
+            //Below the bar chart, we want to print out each of the counter's final value                
+            let arr1 = d3.select("body")
                              .selectAll("p")
                              .data(heartFail)
                              .text(function (d, i){
+
+                                //If the function is reading the first element
+                                //then return the final value of the counter used for the age group
+                                //1-30
                                 if (i ==0){
                                     return "Heart failure 1-30: " +d[i];
                                 }
+
+                                //Else if the function is reading the second element
+                                //then return the final value of the counter used for the age group
+                                //31-40
                                 else if(i==1){
                                     return "Heart failure 31-40: " +d[i];
                                 }
+
+                                //Else if the function is reading the third element
+                                //then return the final value of the counter used for the age group
+                                //41-60
                                 else if(i==2){
                                     return "Heart failure 41-60: " +d[i];
                                 }
+
+                                //Else if the function is reading the fourth element
+                                //then return the final value of the counter used for the age group
+                                //61-100
                                 else if(i==3){
                                     return "Heart failure 61-100: " +d[i];
                                 }
