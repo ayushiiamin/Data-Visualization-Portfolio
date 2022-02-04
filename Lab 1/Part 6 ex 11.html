@@ -1,0 +1,73 @@
+<!-- Exercise 11 -->
+
+
+<!DOCTYPE html>
+
+<html lang="en">
+
+    <head>
+        <script src='https://d3js.org/d3.v7.min.js'></script>
+    </head>
+
+    <body>
+        
+        <script src='https://d3js.org/d3.v7.min.js'></script>
+
+        <script>
+            
+            //Creating the SVG element, which has a width of 400 and a 
+            //height of 400, along with a green border of 1 pixel
+            var svg = d3.select("body")
+                        .append("svg")
+                        .attr("width", 400)
+                        .attr("height", 400)
+                        .style("border", '1px solid green');
+
+
+            //Drawing the line element inside the 
+            //SVG, and adjusting the position accordingly so that the 
+            //line forms the right side of the square
+            svg.append("line") 
+                .attr("x1", 200)
+                .attr("x2", 200)
+                .attr("y1", 50)
+                .attr("y2", 150)
+                .attr("stroke", "blue")      //Setting the right side of the square as Blue in color
+            
+
+            //Drawing the line element inside the 
+            //SVG, and adjusting the position accordingly so that the 
+            //line forms the bottom side of the square
+            svg.append("line")
+                .attr("x1", 100)
+                .attr("x2", 200)
+                .attr("y1", 150)
+                .attr("y2", 150)
+                .attr("stroke", "red")         //Setting the bottom side of the square as Red in color
+
+
+            //Drawing the line element inside the 
+            //SVG, and adjusting the position accordingly so that the 
+            //line forms the left side of the square
+            svg.append("line")
+                .attr("x1", 100)
+                .attr("x2", 100)
+                .attr("y1", 150)
+                .attr("y2", 50)
+                .attr("stroke", "black")        //Setting the left side of the square as Black in color
+
+
+            //Drawing the line element inside the 
+            //SVG, and adjusting the position accordingly so that the 
+            //line forms the top side of the square    
+            svg.append("line")
+                .attr("x1", 100)
+                .attr("x2", 200)
+                .attr("y1", 50)
+                .attr("y2", 50)
+                .attr("stroke", "orange")        //Setting the top side of the square as Orange in color
+            
+        </script>
+
+    </body>
+</html>
