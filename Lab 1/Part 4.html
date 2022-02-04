@@ -1,3 +1,6 @@
+<!-- Exercise 8 -->
+
+
 <!DOCTYPE html>
 
 <html lang="en">
@@ -7,26 +10,39 @@
     </head>
 
     <body>
+        
         <script src='https://d3js.org/d3.v7.min.js'></script>
 
         <script>
+
+            //Creating a list to store the data
+            //We used a list here for storing the data, so that we can store characters, as well as numbers
             var myData = ['a', 4, 1, 'b', 6, 2, 8, 9, 'z' ];
 
+
+
             var p = d3.select("body")
-                    .selectAll("span")
+                    .selectAll("span")          //We will be using a span tag to display the output on the screen
                     .data(myData)
                     .enter()
-                    .append('span')
-                    .style("color", function(d, i) {
-                        if ( typeof d == "number"){
+                    .append("span")
+                    .style("color", function(d, i) {  //Setting the color of the lemengt
+
+                        //If statement to check if the current element is
+                        //of type "Number"
+                        if (typeof d == "number"){
+
+                            //If the element is a number, then make the element green in color
                             return "green";
                         }
+
+                        //Else make the character blue in color
                         else{
                             return "blue"
                         }
                     })
                     .text(function (d, i) {
-                        return d;
+                        return d;            //Print the element on the screen
                     });
 
         </script>
