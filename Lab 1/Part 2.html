@@ -1,3 +1,6 @@
+<!-- Exercise 1, 2, 3, 4, and 5 -->
+
+
 <!DOCTYPE html>
 
 <html lang="en">
@@ -10,45 +13,69 @@
 
     <!-- Exercise 1 -->
     <script>
-        // write your d3 code here..
+
+        //Statement to print out the version of D3.js on the console
         console.log('d3.version:', d3.version);
     </script>
+
+
+
     
     <!-- Exercise 2 -->
     <script src='https://d3js.org/d3.v7.min.js'></script>
 
+
+        <!-- Writing two different sentences using the paragraph tags -->
         <p>First paragraph</p>
         <p>Second paragraph</p>
 
         <script>
+
+            //Selecting only the first <p> tag, and making it red
             d3.select("p").style("color", "red");
+
+            //Selecting only the first <p> tag, and making the font size 65 pixels
             d3.select("p").style("font-size", "65px");
+
+            //Selecting only the first <p> tag, and underlining the text
             d3.select("p").style("text-decoration", "underline");
+
+            //Selecting only the first <p> tag, and making the font cursive
             d3.select("p").style("font-family", "cursive");
         </script>
     
     <script src='https://d3js.org/d3.v7.min.js'></script>
 
         <style>
+            /* Creating a class test, and setting the color red */
             .test {
                 color:'red'
             }
         </style>
+
+        <!-- Writing two different sentences using the paragraph tags, and adding it under the test class -->
         <p class="test">First paragraph</p>
         <p>Second paragraph</p>
         <p class="test">Third paragraph</p>
 
         <script>
+
+            //Which ever <p> tags are under the class "test", set the font color to be blue in color
             d3.selectAll(".test").style('color','blue');
         </script>
+
+
 
     <!-- Exercise 3 -->
 
     <script src='https://d3js.org/d3.v7.min.js'></script>
-
+    
+    <!-- Creating a span tag with some text  -->
     <span>Test</span>
 
     <script>
+
+        //To the span tag, we are appending "hello"
         let newspan = d3.select("body").append('span');
         newspan.text('hello');
     </script>
@@ -56,33 +83,50 @@
     <script src='https://d3js.org/d3.v7.min.js'></script>
 
     <script>
+
+        //The below loop adds 10 div tags and prints out the number on the screen starting from 1 till 10
         for(let i=1; i<11; i++){
             let div10 = d3.select("body").append("div");
             div10.text(i);
 
+            //If statement to check if the current number is less than 6
             if(i < 6){
+
+                //If this is true, then make the text red in color
                 div10.text(i).style("color", "red");
             }
+            //Else chcek if the current number is 6 or above
             else if (i >= 6){
+
+                //If this is true, then make the text green in color
                 div10.text(i).style("color", "green");
             }
 
-            // Exercise - 4
+            /////////////////////////Exercise - 4
 
+
+            //Changing the first div tag text to the new text "start", make this new text, purple in color
             d3.select("div").text("start").style("color", "purple");
         }
     </script>
+
+
+
 
     <!-- Exercise 5 -->
 
     <script src='https://d3js.org/d3.v7.min.js'></script>
 
     <script>
+
+        //To a <div> tag, we are adding the text "Hello World!"
+        //this will print "Hello World!" on the screen
         var bodyElement = d3.select("body");
         var div = bodyElement.append("div");
         div.text("Hello World!");
 
-        // same as
+        //In this below code, we are implementing the similar thing as above,
+        //but we are making the text, green in color
         d3.select("body").append("div").text("Hello World!").style("color", "green");
     </script>
     
