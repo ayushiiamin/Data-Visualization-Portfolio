@@ -1,0 +1,62 @@
+<!-- REFERENCES -->
+
+<!-- 
+1) mousavi (2016). a perfect circle div (Example). Coderwall. [online]  
+Available at: https://coderwall.com/p/yfccow/a-perfect-circle-div
+
+-->
+
+
+
+
+<!DOCTYPE html>
+
+<html lang = "en">
+    <head>
+        <script src='https://d3js.org/d3.v7.min.js'></script>
+    </head>
+
+    <body>
+        <script type='text/javascript' src='https://d3js.org/d3.v7.min.js'></script>
+
+        <script>
+            d3.select('body')
+                .append('div')
+                .style('width', '100px')
+                .style('height', '20px')
+                .style('background-color', 'green');
+
+            d3.selectAll("div")
+                .on("mouseover", function(event){
+                    d3.select(this)
+                        .style("background-color", "orange")
+                        .style('width', '50px')
+                        .style('height', '50px')
+                        .style("border-width", "2px")
+                        .style("border-color", "purple")
+                        .style("border-style", "dashed")
+                        .style("border-width", "thick")
+                        .style("border-radius", "0px");           //(mousavi, 2016)
+                        // Get current event info
+                        // Note: d3.event (event) passed as the first argument to all listeners
+                        console.log(event);
+
+                        // Get x & y co-ordinates
+                        // Note: d3.mouse was removed in d3v6, you should use d3.pointer(event)
+                        console.log(d3.pointer(event));
+                })
+                .on("mouseout", function(){
+                    d3.select(this)
+                        .style("background-color", "steelblue")
+                        .style("width", "80px")
+                        .style("height", "80px")
+                        .style("border-width", "2px")
+                        .style("border-color", "red")
+                        .style("border-style", "solid")
+                        .style("border-width", "medium")
+                        .style("border-radius", "40px");        //(mousavi, 2016)   
+                });
+                
+        </script>
+    </body>
+</html>
