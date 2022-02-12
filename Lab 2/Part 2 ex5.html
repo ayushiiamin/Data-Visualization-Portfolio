@@ -1,0 +1,76 @@
+<!-- REFERENCES -->
+
+<!-- 
+1) Volochkov (2019). d3 text directly on mouse pointer. Stack Overflow. [online]
+Available at: https://stackoverflow.com/questions/57644512/d3-text-directly-on-mouse-pointer
+
+-->
+
+
+
+
+<!DOCTYPE html>
+
+<html lang = "en">
+    <head>
+        <script src='https://d3js.org/d3.v7.min.js'></script>
+    </head>
+
+    <body>
+        <script type='text/javascript' src='https://d3js.org/d3.v7.min.js'></script>
+
+        <script>
+            var svg = d3.select("body")
+                        .append("svg")
+                        .attr("width", 400)
+                        .attr("height", 400)
+                        .style("border", '1px solid green')
+
+            // svg.append("text")
+            //     .attr("x", 0)
+            //     .attr("y", 0)
+            //     .text("helo")
+
+            var c = 0;
+
+            d3.selectAll("svg")
+                .on("mouseover", function(event){
+                    if (c == 0){
+                        c++;
+                        //alert("ENTERED C0");
+                       d3.select(this)
+                            .append("text")
+                            .attr("x", d3.pointer(event)[0])     //(Volochkov, 2019)
+                            .attr("y", d3.pointer(event)[1])     //(Volochkov, 2019)
+                            .text("helo")
+                    }
+                    else if(c == 1){
+                        //alert("ENTERED C1");
+                        d3.select("text")
+                            .attr("x", d3.pointer(event)[0])    //(Volochkov, 2019)
+                            .attr("y", d3.pointer(event)[1])    //(Volochkov, 2019)
+                    }
+                    //alert(xMove(event))
+                    // d3.select(this)
+                    //     .append("text")
+                    //     // .attr("x", d3.pointer(event)[0])
+                    //     // .attr("y", d3.pointer(event)[1])
+                    //     .attr("x", xMove(event))
+                        
+                    //     .attr("y", 150)
+                    //     .text("helo")
+                })
+                 
+            // function xMove(para){
+            //     d3.select("text")
+            //         .on("mousemove", function(para){
+            //             d3.pointer(para)[0]
+            //         })
+            // }    
+
+                
+            
+                
+        </script>
+    </body>
+</html>
