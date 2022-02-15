@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+
+<html lang = "en">
+    <head>
+        <script src='https://d3js.org/d3.v7.min.js'></script>
+    </head>
+
+    <body>
+        <script type='text/javascript' src='https://d3js.org/d3.v7.min.js'></script>
+
+        <script>
+            var svg = d3.select("body")
+                        .append("svg")
+                        .attr("width", 400)
+                        .attr("height", 400)
+                        .style("border", '1px solid green');
+
+            svg.append("text")
+                .attr("x", 150)
+                .attr("y", 150)
+                .attr("fill", "#B80454")
+                .attr("font-size", "40px")
+                .attr("font-family", "sans-serif")
+                .text("Hello!")
+
+            d3.selectAll("text")
+                .on("mouseover", function(event){
+                    d3.select(this)
+                        .transition()
+                        .ease(d3.easeBounce)
+                        .duration(1000)
+                        .attr("fill", "#348AC0")
+                        .attr("font-size", "60px")
+                })
+                .on("mouseout", function(event){
+                    d3.select(this)
+                        .transition()
+                        .ease(d3.easeBounce)
+                        .duration(1000)
+                        .attr("fill", "#B80454")
+                        .attr("font-size", "40px")
+                })
+        </script>
+    </body>
+</html>

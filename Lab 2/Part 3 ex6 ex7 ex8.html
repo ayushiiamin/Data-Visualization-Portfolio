@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+
+<html lang = "en">
+    <head>
+        <script src='https://d3js.org/d3.v7.min.js'></script>
+    </head>
+
+    <body>
+        <script type='text/javascript' src='https://d3js.org/d3.v7.min.js'></script>
+
+        <script>
+            d3.select('body')
+                .append("div")
+                .style('width', '100px')
+                .style('height', '100px')
+                .style('background-color', 'blue')
+
+            d3.selectAll("div")
+                .on("mouseover", function(event){
+                    d3.select(this)
+                        .transition()
+                        .duration(1000)
+                        .style('width', '50px')
+                        .style('height', '50px')
+                        .style("background-color", "red")
+                        .transition()
+                        .duration(2000)
+                        .style('width', '150px')
+                        .style('height', '150px')
+                        .style("background-color", "green");
+
+                })
+                .on("mouseout", function(event){
+                    d3.select(this)
+                        .transition()
+                        .duration(1000)
+                        .style('width', '100px')
+                        .style('height', '100px')
+                        .style('background-color', 'blue') 
+                })
+                
+
+        </script>
+    </body>
+
+</html>
