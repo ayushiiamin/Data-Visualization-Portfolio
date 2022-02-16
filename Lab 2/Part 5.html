@@ -9,12 +9,17 @@
         <script type='text/javascript' src='https://d3js.org/d3.v7.min.js'></script>
 
         <!-- Add buttons -->
-        <button onclick="update(data1)">Variable 1</button>
-        <button onclick="update(data2)">Variable 2</button>
-        <button onclick="update(data3)">Variable 3</button>
+        <button onclick="update(data1, color1)">Variable 1</button>
+        <button onclick="update(data2, color2)">Variable 2</button>
+        <button onclick="update(data3, color3)">Variable 3</button>
 
         <script>
             // create 2 data_set
+
+            const color1 = "#7F8FA3";
+            const color2 = "#D95980";
+            const color3 = "#36D6E7";
+
             const data1 = [
                 {group: "A", value: 5},
                 {group: "B", value: 20},
@@ -32,6 +37,8 @@
                 {group: "B", value: 14},
                 {group: "C", value: 6}
             ];
+
+            
 
             // set the dimensions and margins of the graph
             const margin = {top: 30, right: 30, bottom: 70, left: 60};
@@ -68,9 +75,12 @@
                 .call(d3.axisLeft(y));
 
             // A function that create / update the plot for a given variable:
-            function update(data) {
+            function update(data, color) {
+                console.log("entered func");
                 var u = svg.selectAll("rect")
                             .data(data)
+
+                // console.log(color);
 
                 u.enter()
                     .append("rect")
@@ -87,10 +97,11 @@
                     .attr("height", function(d) { 
                         return height - y(d.value); 
                     })
-                    .attr("fill", "#69b3a2")
+                    // console.log(color)
+                    .attr("fill", color)
             }
             // Initialize the plot with the first dataset
-            update(data1)
+            update(data1, color1)
         </script>
     </body>
 </html>
