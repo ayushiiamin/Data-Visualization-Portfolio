@@ -60,23 +60,47 @@
                         .range([ 0, width ])
                         .domain(data1.map(function(d) { return d.group; }))
                         .padding(0.2);
+            
+            var xBottomAxis = d3.axisBottom()
+                                .scale(x)
 
             svg.append("g")
                 .attr("transform", "translate(0," + height + ")")
-                .call(d3.axisBottom(x))
+                .call(xBottomAxis)
+
+            var xTopAxis = d3.axisTop()
+                                .scale(x)
+            
+            // alert(height)
+            svg.append("g")
+                // .attr("transform", "translate(0," + (height-300) + ")")
+                .call(xTopAxis)
 
             // Add Y axis
             var y = d3.scaleLinear()
                         .domain([0, 20])
                         .range([ height, 0]);
 
+            var yLeftAxis = d3.axisLeft()
+                                .scale(y)
+
             svg.append("g")
                 .attr("class", "myYaxis")
-                .call(d3.axisLeft(y));
+                .call(yLeftAxis);
+
+            var yRightAxis = d3.axisRight()
+                                .scale(y)
+
+            svg.append("g")
+                .attr("class", "myYaxis")
+                .attr("transform", "translate(" + width + ", 0)")
+                .call(yRightAxis);
+
+            
 
             // A function that create / update the plot for a given variable:
             function update(data, color) {
-                console.log("entered func");
+                // console.log("entered func");
                 var u = svg.selectAll("rect")
                             .data(data)
 
@@ -99,6 +123,33 @@
                     })
                     // console.log(color)
                     .attr("fill", color)
+                    .on("mouseover", onMouseOver)
+                    // .on("mouseout", onMouseOut)
+
+                // d3.selectAll("rect")
+                //     .on("mouseover", function(event){
+                //         d3.select(this)
+                //             .append("text")
+                //             .attr("x", 150)
+                //             .attr("y", 150)
+                //             .text("helo")
+                //     })
+            }
+
+            function onMouseOver(d, i){
+                console.log("helo")
+                d3.select(this)
+                    .append("text")
+                    .class("class", "val")
+                    .attr("x", function(){
+                        return x(i.group);
+                    })
+                    .attr("y", function(){
+                        return y(i.value) - 15;
+                    })
+                    .text(function(){
+                        return i.value;
+                    })
             }
             // Initialize the plot with the first dataset
             update(data1, color1)
