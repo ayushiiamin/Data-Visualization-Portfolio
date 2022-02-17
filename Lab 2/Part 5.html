@@ -1,3 +1,11 @@
+<!-- REFERENCES -->
+
+<!--   
+1) Holtz, Y. (2022). Update X axis limits in d3.js scatterplot. D3-graph-gallery.com. [online] 
+Available at: https://www.d3-graph-gallery.com/graph/scatter_buttonXlim.html
+-->
+
+
 <!DOCTYPE html>
 
 <html lang = "en">
@@ -12,6 +20,7 @@
         <button onclick="update(data1, color1)">Variable 1</button>
         <button onclick="update(data2, color2)">Variable 2</button>
         <button onclick="update(data3, color3)">Variable 3</button>
+        <button onclick="update(data4, color4)">Variable 4</button>
 
         <script>
             // create 2 data_set
@@ -19,11 +28,13 @@
             const color1 = "#7F8FA3";
             const color2 = "#D95980";
             const color3 = "#36D6E7";
+            const color4 = "#9571AB";
 
             const data1 = [
                 {group: "A", value: 5},
                 {group: "B", value: 20},
-                {group: "C", value: 9}
+                {group: "C", value: 9},
+                {group: "D", value: 16}
             ];
 
             const data2 = [
@@ -38,7 +49,12 @@
                 {group: "C", value: 6}
             ];
 
-            
+            const data4 = [
+                {group: "A", value: 19},
+                {group: "B", value: 3}
+            ];
+
+            // alert(data3.length)
 
             // set the dimensions and margins of the graph
             const margin = {top: 30, right: 30, bottom: 70, left: 60};
@@ -55,56 +71,80 @@
                         .attr("transform",
                         "translate(" + margin.left + "," + margin.top + ")");
 
-            // X axis
+
+            // Add X axis
             var x = d3.scaleBand()
-                        .range([ 0, width ])
-                        .domain(data1.map(function(d) { return d.group; }))
-                        .padding(0.2);
-            
+                        .range([0, width])
+                        .padding(0.2)
+
             var xBottomAxis = d3.axisBottom()
                                 .scale(x)
 
-            svg.append("g")
-                .attr("transform", "translate(0," + height + ")")
-                .call(xBottomAxis)
+            var x_bottom = svg.append("g")
+                                .attr("transform", "translate(0," + height + ")")
+                                .call(xBottomAxis)  
 
             var xTopAxis = d3.axisTop()
-                                .scale(x)
-            
-            // alert(height)
-            svg.append("g")
-                // .attr("transform", "translate(0," + (height-300) + ")")
-                .call(xTopAxis)
+                              .scale(x)
+                        
+            var x_top = svg.append("g")
+                            .call(xTopAxis)                  
+
 
             // Add Y axis
             var y = d3.scaleLinear()
-                        .domain([0, 20])
+                        .domain([0, 22])
                         .range([ height, 0]);
 
             var yLeftAxis = d3.axisLeft()
                                 .scale(y)
 
-            svg.append("g")
-                .attr("class", "myYaxis")
-                .call(yLeftAxis);
+            var y_left = svg.append("g")
+                            .attr("class", "myYaxis")
+                            .call(yLeftAxis);
 
             var yRightAxis = d3.axisRight()
                                 .scale(y)
 
-            svg.append("g")
-                .attr("class", "myYaxis")
-                .attr("transform", "translate(" + width + ", 0)")
-                .call(yRightAxis);
+            var y_right = svg.append("g")
+                            .attr("class", "myYaxis")
+                            .attr("transform", "translate(" + width + ", 0)")
+                            .call(yRightAxis);
+
+
+            function axes(data){
+                        
+                        x.domain(data.map(function(d) {            //(Holtz, 2022)
+                            return d.group; 
+                        }))
+                        
+                        xBottomAxis = d3.axisBottom()
+                                            .scale(x)
+
+                        x_bottom.transition()                  //(Holtz, 2022)
+                            .duration(1000)
+                            .call(xBottomAxis)
+
+                        xTopAxis = d3.axisTop()
+                                      .scale(x)
+                        
+                        // alert(height)
+                        x_top.transition()               //(Holtz, 2022)
+                            .duration(1000)
+                            .call(xTopAxis)
+                
+            }
+            
 
             
 
             // A function that create / update the plot for a given variable:
             function update(data, color) {
-                // console.log("entered func");
+
+                axes(data);
+
                 var u = svg.selectAll("rect")
                             .data(data)
-
-                // console.log(color);
 
                 u.enter()
                     .append("rect")
@@ -121,36 +161,28 @@
                     .attr("height", function(d) { 
                         return height - y(d.value); 
                     })
-                    // console.log(color)
+                    
                     .attr("fill", color)
-                    .on("mouseover", onMouseOver)
-                    // .on("mouseout", onMouseOut)
 
-                // d3.selectAll("rect")
-                //     .on("mouseover", function(event){
-                //         d3.select(this)
-                //             .append("text")
-                //             .attr("x", 150)
-                //             .attr("y", 150)
-                //             .text("helo")
-                //     })
+                u.exit().remove()
+                
             }
 
-            function onMouseOver(d, i){
-                console.log("helo")
-                d3.select(this)
-                    .append("text")
-                    .class("class", "val")
-                    .attr("x", function(){
-                        return x(i.group);
-                    })
-                    .attr("y", function(){
-                        return y(i.value) - 15;
-                    })
-                    .text(function(){
-                        return i.value;
-                    })
-            }
+            // function onMouseOver(d, i){
+            //     console.log("helo")
+            //     d3.select(this)
+            //         .append("text")
+            //         .class("class", "val")
+            //         .attr("x", function(){
+            //             return x(i.group);
+            //         })
+            //         .attr("y", function(){
+            //             return y(i.value) - 15;
+            //         })
+            //         .text(function(){
+            //             return i.value;
+            //         })
+            // }
             // Initialize the plot with the first dataset
             update(data1, color1)
         </script>
