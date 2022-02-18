@@ -1,0 +1,82 @@
+<!-- REFERENCES -->
+
+<!--   
+1) GeeksforGeeks. (2020). How to use Particle.js in JavaScript project ? - GeeksforGeeks. [online] 
+Available at: https://www.geeksforgeeks.org/how-to-use-particle-js-in-javascript-project/
+
+2) Kg123 (2017). How to align two buttons in the middle with a certain margin in html. Stack Overflow. [online] 
+Available at: https://stackoverflow.com/questions/43965881/how-to-align-two-buttons-in-the-middle-with-a-certain-margin-in-html
+-->
+
+
+<!DOCTYPE html>
+
+<html lang = "en">
+    <head>
+        <script src='https://d3js.org/d3.v7.min.js'></script>
+    </head>
+
+    <style>
+        /* .buttons {
+            text-align: center;
+            margin: auto;
+            width: 50%;
+            padding: 10px;
+        } */
+
+        /* (Kg123, 2017) */
+        .flex {
+            display: flex;
+            justify-content: center;
+        }
+
+        /* (Kg123, 2017) */
+        .flex-item + .flex-item {
+            margin-left: 10px;
+        }
+
+        /* (Kg123, 2017) */
+        .buttons {
+            margin-top: 15px;
+            background-color: #B6737C;
+            border: none;
+            color: #F9F6F0;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 20px;
+            cursor: pointer;
+        }
+        .buttons:hover {
+            padding: 20px 30px;
+            font-size: 30px;
+        }
+        #particles-js {
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            background: black;          /* (GeeksforGeeks, 2020) */
+            color: black;
+            
+        }
+    </style>
+
+    <body>
+        <div id="particles-js">          <!-- (GeeksforGeeks, 2020) -->
+            <div class="flex">           <!-- (Kg123, 2017) --> 
+                <div class="flex-item">
+                    <button class="buttons" onclick="window.location.href='Part 5 ex18 ex19 ex21 ex22.html'">Click for Bar Chart</button>
+                    <button class="buttons" onclick="window.location.href='Part 5 ex23.html'">Click for Line Chart</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- (GeeksforGeeks, 2020) -->
+        <script src = "particles.js-master/particles.js"></script>
+
+        <script src="/particles.js-master/demo/js/app.js"></script>
+    </body>
+</html>
