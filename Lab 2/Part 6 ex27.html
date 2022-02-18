@@ -1,0 +1,100 @@
+<!-- REFERENCES -->
+
+<!--   
+1) GeeksforGeeks. (2019). How to get the first key name of a JavaScript object ? - GeeksforGeeks. [online] 
+Available at: https://www.geeksforgeeks.org/how-to-get-the-first-key-name-of-a-javascript-object/
+-->
+
+
+
+
+<!DOCTYPE html>
+
+<html lang = "en">
+    <head>
+        <script src='https://d3js.org/d3.v7.min.js'></script>
+    </head>
+
+    <body>
+        <script type='text/javascript' src='https://d3js.org/d3.v7.min.js'></script>
+
+        
+        <button onclick="showPie()">Click to reveal Pie Chart</button>
+
+        <script>
+            var dataset = {
+                apples: [5345, 2879, 1997, 2437, 4045],
+                oranges: [6400, 4116, 5589, 4278, 3664]
+            };
+
+            var c = -1;
+
+            var width = 460,
+                height = 300,
+                radius = Math.min(width, height) / 2;
+
+            var color = d3.scaleOrdinal().range(d3.schemeSet3);
+
+            var pie = d3.pie()
+                        .sort(null);
+
+            var arc = d3.arc()
+                        .innerRadius(radius - 100)
+                        .outerRadius(radius - 50);
+
+            var svg = d3.select("body").append("svg")
+                        .attr("width", width)
+                        .attr("height", height)
+                        .append("g")
+                        .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+
+            // console.log(Object.keys(dataset)[1])
+
+            // Object.keys(dataset).forEach((res) => {
+            //     console. log(dataset[res]);
+            // })
+                // console.log(Object.keys(dataset).length)
+
+            // for(let i = 0; i < Object.keys(dataset).length; i++){
+            //     console.log(Object.keys(dataset)[i])
+            // }
+
+
+            function showPie(){
+                c++;
+
+                // for(let i = 0; i < Object.keys(dataset).length; i++){
+                    if(c < Object.keys(dataset).length){
+                        console.log("ENTERED LOOP")
+                        console.log(" ")
+                        console.log(Object.keys(dataset)[c])
+
+                        var path = svg.selectAll("path")
+                                    .data(pie(dataset[Object.keys(dataset)[c]]))     //(GeeksforGeeks, 2020)
+
+                            path.enter()
+                                .append("path")
+                                .merge(path)
+                                .transition()
+                                .duration(1000)
+                                .attr("fill", function(d, i){
+                                    return color(i);
+                                })
+                                .attr("d", arc)
+                                
+                                .attrTween("d", function(d){
+                                    var i = d3.interpolate(d.endAngle, d.startAngle);
+                                            return function (t) {
+                                                d.startAngle = i(t);
+                                                return arc(d);
+                                            }
+                                });
+                                console.log("EXIT LOOP")
+                                console.log(" ")
+
+                            path.exit().remove()
+                    } 
+            }
+            </script>
+    </body>
+</html>
