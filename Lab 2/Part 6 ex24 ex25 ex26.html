@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+
+<html lang = "en">
+    <head>
+        <script src='https://d3js.org/d3.v7.min.js'></script>
+    </head>
+
+    <body>
+        <script type='text/javascript' src='https://d3js.org/d3.v7.min.js'></script>
+
+        <script>
+            let intr = d3.interpolate( [20, 40, 4], [1, 12, 10])
+
+            console.log("Type of returned function is: ", typeof (intr) );
+            console.log( intr(0.2) )
+
+            let cc = d3.interpolate('red', 'green')
+            console.log( cc(0.5) );
+
+            let dat = d3.interpolate(new Date("2021-01-18"), new Date("2022-01-18"))
+            console.log(dat(0.4));
+        </script>
+    </body>
+</html>
