@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+
+<html lang = "en">
+    <head>
+        <script src='https://d3js.org/d3.v7.min.js'></script>
+    </head>
+
+    <body>
+        <script type='text/javascript' src='https://d3js.org/d3.v7.min.js'></script>
+
+        <script>
+            var width = 400, height = 400;
+
+            d3.select("body")
+                .append("svg")
+                .attr("width", width)
+                .attr("height", height);
+
+
+            var arr = [
+                {radius:7.4937583242},
+                {radius:18.2743750150},
+                {radius:27.4494606486},
+                {radius:29.5242529766},
+                {radius:1.6094024530},
+                {radius:8.7695586108},
+                {radius:27.6026174889},
+                {radius:24.8639738212},
+                {radius:12.5830246624},
+                {radius:13.3282150510},
+                {radius:3.6696460294},
+                {radius:16.1565893970},
+                {radius:12.4033968103},
+                {radius:21.8180863839},
+                {radius:11.3992716110},
+                {radius:5.8103663971},
+                {radius:21.5389066846},
+                {radius:29.3917130534},
+                {radius:11.2059221104},
+                {radius:8.1285166315},
+                {radius:2.7463449376},
+                {radius:13.6778269552},
+                {radius:27.2434957272},
+                {radius:25.8595027781},
+                {radius:14.4323773860},
+                {radius:14.7989355057},
+                {radius:24.3089975083},
+                {radius:5.8167123914},
+                {radius:1.3529579903},
+                {radius:15.9293348489},
+                {radius:23.7229632665},
+                {radius:29.8554984065},
+                {radius:12.5501134402},
+                {radius:7.6936222600},
+                {radius:24.8912459445},
+                {radius:24.0968847902},
+                {radius:16.8880351957},
+                {radius:6.1445121224},
+                {radius:11.0014055626}
+            ];
+
+            console.log(arr);
+
+            var colorSet = new Set();
+
+            for(let i = 0; i<arr.length; i++){
+                var str = '#'+Math.floor(Math.random()*16777215).toString(16);        //(Codegrepper.com, 2020)
+                colorSet.add(str);
+            }
+
+            var colorArr = Array.from(colorSet);        //(GeeksforGeeks, 2019)
+
+            var simulation = d3.forceSimulation(arr)
+                                .force('charge', d3.forceManyBody().strength(5))
+                                .force('center', d3.forceCenter(width / 2, height / 2))
+                                .force('collision', d3.forceCollide().radius(function(d) {
+                                    return d.radius
+                                    // return d
+                                }))
+                                .on('tick', ticked);
+
+            function ticked() {
+                var u = d3.select('svg')
+                            .selectAll('circle')
+                            .data(arr)
+                            .join('circle')
+                            .attr('fill', function(d, i){
+                                return colorArr[i];
+                            })
+                            .attr('r', function(d) {
+                                return d.radius;
+                            })
+                            .attr('cx', function(d,i) {
+                                return d.x
+                                // return d.x
+                            })
+                            .attr('cy', function(d,i) {
+                                return d.y
+                                // return d.y
+                            })
+            }
+        </script>
+    </body>
+</html>
