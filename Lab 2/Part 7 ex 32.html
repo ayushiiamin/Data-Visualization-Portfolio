@@ -1,8 +1,8 @@
 <!-- REFERENCES -->
 
 <!--   
-1) Codegrepper.com. (2020). how to get a random color in javascript Code Example. [online] 
-Available at: https://www.codegrepper.com/code-examples/javascript/how+to+get+a+random+color+in+javascript
+1) Ocks.org. (2021). Radial Force. [online] 
+Available at: https://bl.ocks.org/mbostock/cd98bf52e9067e26945edd95e8cf6ef9
 
 2) GeeksforGeeks. (2019). How to convert Set to Array in JavaScript? - GeeksforGeeks. [online] 
 Available at: https://www.geeksforgeeks.org/how-to-convert-set-to-array-in-javascript/
@@ -28,11 +28,12 @@ Available at: https://www.geeksforgeeks.org/how-to-convert-set-to-array-in-javas
         <h1>Random Data</h1>
 
         <script>
-            var width = 600, height = 600;
+            var width = 960, height = 500;         //(Ocks.org, 2021)
 
             // setup svg
             var svg = d3.select('body')
                         .append('svg')
+                        .attr("viewBox", "-480 -250 960 500")           //(Ocks.org, 2021)
                         .attr('width',width)
                         .attr('height',height);
 
@@ -46,19 +47,6 @@ Available at: https://www.geeksforgeeks.org/how-to-convert-set-to-array-in-javas
                 return {radius: Math.random() * 25}
             })
 
-            // console.log(nodes)
-
-            // console.log(nodes.radius)
-
-            // var myColor5 = d3.scaleOrdinal().domain(data).range(d3.schemeSet3);
-            // var arr = [130, 4, 134, 135, 8, 11, 12, 16, 148, 150, 26, 32, 38, 41, 42, 49, 50, 55, 60, 63, 71, 76, 79, 82, 86, 90, 92, 94, 105, 109, 112, 113, 114, 116, 118, 119, 122, 126, 127]    
-           
-            // var arr = [
-            // 13.396,
-            // 103.190,
-            // 34.222
-            // ]
-
             var colorSet = new Set();
 
             for(let i = 0; i<101; i++){
@@ -71,16 +59,20 @@ Available at: https://www.geeksforgeeks.org/how-to-convert-set-to-array-in-javas
             var g = svg.append("g")
 
             var simulation = d3.forceSimulation(nodes)
-                                .force('charge', d3.forceManyBody().strength(5))
-                                .force('center', d3.forceCenter(width / 2, height / 2))
-                                .force('collision', d3.forceCollide().radius(function(d) {
+                                .force("charge", d3.forceCollide().radius(function(d){       //(Ocks.org, 2021)
                                     return d.radius
-                                    // return d
+                                }))
+                                .force("r", d3.forceRadial(function(d){       //(Ocks.org, 2021)
+                                    if(d.radius < 12.5){
+                                        return 100
+                                    }
+                                    else{
+                                        return 200
+                                    }
                                 }))
                                 .on('tick', ticked);
             
-            // // console.log(colorArr[0])
-            // // console.log(nodes)                   
+                               
             function ticked() {
                 var u = g.selectAll('circle')
                             .data(nodes)
