@@ -44,7 +44,7 @@ Available at: https://www.geeksforgeeks.org/how-to-convert-set-to-array-in-javas
             // generate some random data
             var numNodes = 100;
             var nodes = d3.range(numNodes).map(function(d) {
-                return {radius: Math.random() * 25}
+                return {radius: Math.random() * 25};
             })
 
             var colorSet = new Set();
@@ -58,16 +58,22 @@ Available at: https://www.geeksforgeeks.org/how-to-convert-set-to-array-in-javas
 
             var g = svg.append("g")
 
+            var xScale = d3.scaleLinear().domain([0, 1]).range([0, 600]);
+
             var simulation = d3.forceSimulation(nodes)
-                                .force("charge", d3.forceCollide().radius(function(d){       //(Ocks.org, 2021)
+                                .force("collision", d3.forceCollide().radius(function(d){       //(Ocks.org, 2021)
                                     return d.radius
                                 }))
                                 .force("r", d3.forceRadial(function(d){       //(Ocks.org, 2021)
-                                    if(d.radius < 12.5){
+                                    if(d.radius >= 14){
+                                        return 200
+                                    }
+                                    else if(d.radius >= 8){
                                         return 100
                                     }
+                               
                                     else{
-                                        return 200
+                                        return 50
                                     }
                                 }))
                                 .on('tick', ticked);
