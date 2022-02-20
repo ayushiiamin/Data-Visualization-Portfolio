@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+
+<html lang = "en">
+    <head>
+        <script src='https://d3js.org/d3.v7.min.js'></script>
+    </head>
+
+    <body>
+        <script type='text/javascript' src='https://d3js.org/d3.v7.min.js'></script>
+        
+        <h1>CSV Data</h1>
+
+        <script>
+            var width = 800, height = 800;
+
+            
+
+            let arrayCSV = "https://raw.githubusercontent.com/ayushiiamin/csvfileimp/main/ex29.csv"
+
+            var circleArr = []
+
+            d3.csv(arrayCSV, function(d, i){
+                circleArr.push(d)
+            }).then(function(data,i){
+
+
+                d3.select("body")
+                    .append("svg")
+                    .attr("width", width)
+                    .attr("height", height);
+
+                var colorSet = new Set();
+
+                for(let i = 0; i<circleArr.length; i++){
+                    var str = '#'+Math.floor(Math.random()*16777215).toString(16);        //(Codegrepper.com, 2020)
+                    colorSet.add(str);
+                }
+
+                var colorArr = Array.from(colorSet);        //(GeeksforGeeks, 2019)
+
+                console.log(circleArr)
+
+                var simulation = d3.forceSimulation(circleArr)
+                                .force('charge', d3.forceManyBody().strength(5))
+                                .force('center', d3.forceCenter(width / 2, height / 2))
+                                .force('collision', d3.forceCollide().radius(function(d) {
+                                    return d.radius
+                                    // return d
+                                }))
+                                .on('tick', ticked);
+                
+                function ticked() {
+                    var u = d3.select('svg')
+                                .selectAll('circle')
+                                .data(circleArr)
+                                .join('circle')
+                                .attr('fill', function(d, i){
+                                    return colorArr[i];
+                                })
+                                .attr('r', function(d) {
+                                    return d.radius;
+                                })
+                                .attr('cx', function(d,i) {
+                                    return d.x
+                                    // return d.x
+                                })
+                                .attr('cy', function(d,i) {
+                                    return d.y
+                                    // return d.y
+                                })
+                }
+            })    
+        </script>
+    </body>
+</html>
