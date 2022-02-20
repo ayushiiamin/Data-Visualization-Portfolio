@@ -16,11 +16,11 @@ Available at: https://www.geeksforgeeks.org/how-to-convert-set-to-array-in-javas
         <script src='https://d3js.org/d3.v7.min.js'></script>
     </head>
 
-    <!-- <style>
-        .textVal {
-            background-color: lightblue; 
+    <style>
+        circle:hover {
+            fill: #870A30; 
         }
-    </style> -->
+    </style>
 
     <body>
         <script type='text/javascript' src='https://d3js.org/d3.v7.min.js'></script>
@@ -28,7 +28,7 @@ Available at: https://www.geeksforgeeks.org/how-to-convert-set-to-array-in-javas
         <h1>Random Data</h1>
 
         <script>
-            var width = 800, height = 800;
+            var width = 600, height = 600;
 
             // setup svg
             var svg = d3.select('body')
@@ -47,6 +47,8 @@ Available at: https://www.geeksforgeeks.org/how-to-convert-set-to-array-in-javas
             })
 
             console.log(nodes)
+
+            // var myColor5 = d3.scaleOrdinal().domain(data).range(d3.schemeSet3);
             // var arr = [130, 4, 134, 135, 8, 11, 12, 16, 148, 150, 26, 32, 38, 41, 42, 49, 50, 55, 60, 63, 71, 76, 79, 82, 86, 90, 92, 94, 105, 109, 112, 113, 114, 116, 118, 119, 122, 126, 127]    
            
             // var arr = [
@@ -82,6 +84,7 @@ Available at: https://www.geeksforgeeks.org/how-to-convert-set-to-array-in-javas
                             .data(nodes)
                             .join('circle')
                             .attr('fill', function(d, i){
+                                // console.log(i)
                                 return colorArr[i];
                             })
                             .attr('r', function(d) {
@@ -97,17 +100,6 @@ Available at: https://www.geeksforgeeks.org/how-to-convert-set-to-array-in-javas
                             })
                             .on("mouseover", onMouseOver)
                             .on("mouseout", onMouseOut)
-                // d3.selectAll("circle")
-                //   .on("mouseover", function(event){
-                //       d3.select(this)
-                //         .append("text")
-                //         .attr("x", 150)
-                //         .attr("y", 112)
-                //         .attr("stroke", "black")
-                //         .attr("font-size", "9px")
-                //         .attr("font-family", "sans-serif")
-                //         .text("helo")
-                //   })
             }
 
             console.log('ready..');
@@ -147,7 +139,7 @@ Available at: https://www.geeksforgeeks.org/how-to-convert-set-to-array-in-javas
                 
             }
 
-            function onMouseOut(d, i){
+            function onMouseOut(){
                 d3.select(this)
                    .transition()
                    .duration(400)
