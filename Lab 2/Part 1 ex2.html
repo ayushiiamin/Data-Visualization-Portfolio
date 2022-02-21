@@ -19,204 +19,50 @@ Available at: https://www.tutorialspoint.com/css/css_animation_pulse.htm
     </head>
 
     <style>
-            /* (Ocks.org, 2015) */
-            circle{
-                 fill: purple;
-                /* -webkit-transform: scale(1); */
-                -webkit-transform-origin: 50% 50%;
-                /* transform: scale(1); */
-                transform-origin: 50% 50%; 
-                
-                /* display: none; */
-                
-                /* -webkit-animation-name: pulse;
-                -webkit-animation-duration: 0.2s;
-                -webkit-animation-iteration-count: infinite;
-                -webkit-animation-direction: alternate;
-                animation-name: pulse;
-                animation-duration: 0.2s;
-                animation-iteration-count: infinite;
-                animation-direction: alternate;
-                -webkit-transform-origin: 50% 50%;
-                transform-origin: 50% 50%; */
-               
-            }
-            /* (Ocks.org, 2015) */
-            circle:hover{
-                
-                -webkit-animation-name: pulse;
-                -webkit-animation-duration: 0.2s;
-                -webkit-animation-iteration-count: infinite;
-                -webkit-animation-direction: alternate;
-                animation-name: pulse;
-                animation-duration: 0.2s;
-                animation-iteration-count: infinite;
-                animation-direction: alternate;
-                -webkit-transform-origin: 50% 50%;
-                transform-origin: 50% 50%;
-             }
-             /* (Tutorialspoint.com, 2021) */
-            @keyframes pulse {
-                0% {
-                    fill: purple;
-                    /* transform: scale(1); */
-                    
-                }
-                50% {
-                    fill: purple;
-                    /* transform: scale(1.1); */
-                    r: 8
-                }
-                100% {
-                    fill: purple;
-                    /* transform: scale(1); */
-                    /* transform-origin: 50% 50%; */
-                }
-  
-            }
-            /* #test {
-                /* background-color: green; */
-                /* display: inline-block;
+        #rect1 {
+            fill:green
+        }
+        #rect2 {
+            fill:blue
+        }
+    </style>
 
-            } */ 
-            /* text {
-                display: none;
-            } */
-            g {
-                display: none;
-            }
-            rect:hover + g{
-                /* fill: red; */
-                /* position: absolute; */
-        display: inline-block;
-            }
-
-            /* svg {
-                display: none;
-            }
-            span:hover + svg {
-                position: absolute;
-                display: inline-block; 
-            } */
-        </style>
-
-        <!-- <dot class='pulse'></dot> -->
-
-        <!-- <span>Hover over me!</span> -->
-
-        <body>
+    <body>
             
-            <script src='https://d3js.org/d3.v7.min.js'></script>
+        <script src='https://d3js.org/d3.v7.min.js'></script>
 
-            <script>
-             
-                var arr = [0.0, 0.05, 0.14, 0.20, 0.25, 0.35, 0.55, 0.80];
+        <script>
+            const width = 600;
+            const height = 600;
+            const margin = 40;                //Setting the margin  
+            const xMax = width - margin*2;
+            const yMax = height - margin*2;
 
-                const width = 600; 
-                const height = 600;
-                const margin = 40;
-                const xMax = width - margin*2;
-                const yMax = height - margin*2;
-
-                // const xExtent = d3.extent( arr, d=>{ 
-                //     return d.x 
-                // });
-                // const yExtent = d3.extent( arr, d=>{ 
-                //     return d.y 
-                // });
-
-                const svgTemp = d3.select("body")
-                                    .append("svg")
-                                    .attr("width", 300)
-                                    .attr("height", 300)
-                                    .style("border", '1px solid green');
-
-                // const gr = svgTemp.append("g");
-
-                // gr.append("rect")
-                //         .attr("x", 100)
-                //         .attr("y", 100)
-                //         .attr("width", 30)
-                //         .attr("height", 30);
-
-                // gr.append("text")
-                //     .attr("x", 10)
-                //     .attr("y", 10)
-                //     .attr("stroke", "black")
-                //     .attr("font-size", "9px")
-                //                 .attr("font-family", "sans-serif")
-                //                 .text("a")
-
-                svgTemp.append("rect")
-                        .attr("x", 100)
-                        .attr("y", 100)
-                        .attr("width", 30)
-                        .attr("height", 30);
-
-                const svg = d3.select("body")
+            var svg = d3.select("body")
+                        .append("div")
                         .append("svg")
-                        .attr('width', width )
-                        .attr('height', height )
-                        .append("g")
-                        .attr("transform","translate(" + margin + "," + margin + ")");
+                        .attr("width", width)
+                        .attr("height", height)
+                        .style("border", '1px solid green');
+                        
+                        
+            svg.append("g")
+                .append("rect")
+                .attr("id", "rect1")
+                .attr("x", 40)
+                .attr("y", 100)
+                .attr("width", 50)
+                .attr("height", 50)
+                // .attr("fill", "red")
 
-                
+            svg.append("g")
+                .append("rect")
+                .attr("id", "rect2")
+                .attr("x", 50)
+                .attr("y", 200)
+                .attr("width", 50)
+                .attr("height", 50)
 
-                const x = d3.scaleLinear()
-                            .range([0, xMax]);
-
-
-                //Creating the horizontal bottom x-axis for the line chart, which consists of the values generated above
-                var xaxisBottom = d3.axisBottom()
-                                    .scale(x);
-
-
-                //Appending the bottom x-axis to the SVG element
-                svg.append("g")
-                    .attr("transform", "translate(0," + yMax + ")")
-                    .call(xaxisBottom);
-
-                
-                const y = d3.scaleLinear()
-                            .range([ yMax, 0]);
-
-                //Creating the vertical left y-axis for the line chart, which consists of the values generated above            
-                var yaxisLeft = d3.axisLeft()
-                                   .scale(y);
-
-
-                        //Appending the left y-axis to the SVG element                    
-                svg.append("g")
-                    .call(yaxisLeft);
-
-                svg.append("path")
-                    .datum(arr)
-                    .attr("fill", "none")
-                    .attr("stroke", "steelblue")
-                    .attr("stroke-width", 1.5)
-                    .attr("d", d3.line()
-                    .x(function(d){
-                        //console.log(x(d))
-                        return x(d)
-                    })
-                    .y(function(d){
-                        return y(d)
-                    })
-                  );
-                
-                svg.selectAll("dot")
-                   .data(arr) 
-                   .enter()
-                   .append("circle")
-                   .attr("cx", function(d){
-                       //alert(x(d))
-                       return x(d)
-                   })
-                   .attr("cy", function(d){
-                       return y(d)
-                   })
-                   .attr("r", 5);
-
-            </script>
-        </body>
+        </script>
+    </body>
 </html>
