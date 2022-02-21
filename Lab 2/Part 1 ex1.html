@@ -6,10 +6,11 @@ Available at: https://bl.ocks.org/lwhitaker3/a24f5ba9d2d84d29cc4b
 
 2) Tutorialspoint.com. (2021). CSS - Pulse Effect. [online] 
 Available at: https://www.tutorialspoint.com/css/css_animation_pulse.htm
-
 -->
 
 
+
+<!-- Exercise 1 -->
 
 <!DOCTYPE html>
 
@@ -21,126 +22,115 @@ Available at: https://www.tutorialspoint.com/css/css_animation_pulse.htm
     <style>
             /* (Ocks.org, 2015) */
             circle{
-                 fill: purple;
-                /* -webkit-transform: scale(1); */
-                -webkit-transform-origin: 50% 50%;
-                /* transform: scale(1); */
-                transform-origin: 50% 50%; 
+                /* This statement adds the color "purple" to the markers of the line chart */
+                fill: purple;     
                 
-                
-                /* -webkit-animation-name: pulse;
-                -webkit-animation-duration: 0.2s;
-                -webkit-animation-iteration-count: infinite;
-                -webkit-animation-direction: alternate;
-                animation-name: pulse;
-                animation-duration: 0.2s;
-                animation-iteration-count: infinite;
-                animation-direction: alternate;
+                /* Setting the point around which the transformation of the marker will be applied */
                 -webkit-transform-origin: 50% 50%;
-                transform-origin: 50% 50%; */
+                transform-origin: 50% 50%;
                
             }
             /* (Ocks.org, 2015) */
             circle:hover{
                 
+                /* The below statements helps in adding the animation "pulse" to each of the markers, so that the markers
+                can "pulse" whne the mouse pointer is hovering over it */
                 -webkit-animation-name: pulse;
-                -webkit-animation-duration: 0.2s;
-                -webkit-animation-iteration-count: infinite;
-                -webkit-animation-direction: alternate;
+                -webkit-animation-duration: 0.2s;                 /* Setting the duration of the animation */
+                -webkit-animation-iteration-count: infinite;      /* Setting the iteration count to be "infinite" so that the animation doesnt stop until the mouse stops hovering over the marker */
+                -webkit-animation-direction: alternate;           /* Setting the direction of the animation to be alternating back and forth */
                 animation-name: pulse;
-                animation-duration: 0.2s;
-                animation-iteration-count: infinite;
-                animation-direction: alternate;
+                animation-duration: 0.2s;                         /* Setting the duration of the animation */
+                animation-iteration-count: infinite;              /* Setting the iteration count to be "infinite" so that the animation doesnt stop until the mouse stops hovering over the marker */
+                animation-direction: alternate;                   /* Setting the direction of the animation to be alternating back and forth */
+
+                /* Setting the point around which the transformation of the marker will be applied */
                 -webkit-transform-origin: 50% 50%;
                 transform-origin: 50% 50%;
              }
              /* (Tutorialspoint.com, 2021) */
             @keyframes pulse {
                 0% {
-                    fill: red;
-                    transform: scale(1);
+                    fill: purple;            /* At the 0% keyframe, let the marker color be purple */
+                    
                 }
                 50% {
-                    fill: pink;
-                    transform: scale(1.1);
+                    fill: purple;           /* At the 50% keyframe, let the marker color be purple */
+                    r: 8                      /* At the 50% keyframe, also set the radius of the marker to be 8*/
                 }
                 100% {
-                    fill: black;
-                    transform: scale(1);
-                    /* transform-origin: 50% 50%; */
+                    fill: purple;           /* At the 100% keyframe, let the marker color be purple */ 
                 }
-
-                /* 0% { transform: scale(1); }
-  50% { transform: scale(1.1);}
-  100% { transform: scale(1.2); } */
   
             }
         </style>
-
-        <!-- <dot class='pulse'></dot> -->
 
         <body>
             <script src='https://d3js.org/d3.v7.min.js'></script>
 
             <script>
-             
+                
+                //The data for the line chart
                 var arr = [0.0, 0.05, 0.14, 0.20, 0.25, 0.35, 0.55, 0.80];
 
-                const width = 600; 
-                const height = 600;
-                const margin = 40;
+                const width = 600;                //Defining the width of the SVG
+                const height = 600;               //Defining the height of the SVG
+                const margin = 40;                //Setting the margin  
                 const xMax = width - margin*2;
                 const yMax = height - margin*2;
 
-                // const xExtent = d3.extent( arr, d=>{ 
-                //     return d.x 
-                // });
-                // const yExtent = d3.extent( arr, d=>{ 
-                //     return d.y 
-                // });
 
+                //Creating the SVG element, which has a width of 600 and a 
+                //height of 600
                 const svg = d3.select("body")
                         .append("svg")
-                        .attr('width', width )
-                        .attr('height', height )
+                        .attr('width', width)
+                        .attr('height', height)
                         .append("g")
                         .attr("transform","translate(" + margin + "," + margin + ")");
 
                 
-
+                //Defining the x-axis for the line chart 
                 const x = d3.scaleLinear()
                             .range([0, xMax]);
 
 
-                //Creating the horizontal bottom x-axis for the line chart, which consists of the values generated above
+                //Creating a horizontal x-axis using the data generated for the x-axis above 
                 var xaxisBottom = d3.axisBottom()
                                     .scale(x);
 
 
-                //Appending the bottom x-axis to the SVG element
+                //Adding the x-axis to the group created for the axes and line chart
                 svg.append("g")
                     .attr("transform", "translate(0," + yMax + ")")
-                    .call(xaxisBottom);
+                    .call(xaxisBottom);              //Displaying the x-axis on the SVG
 
-                
+
+
+                //Defining the y-axis for the line chart 
                 const y = d3.scaleLinear()
-                            .range([ yMax, 0]);
+                            .range([yMax, 0]);
 
-                //Creating the vertical left y-axis for the line chart, which consists of the values generated above            
+
+                //Creating a vertical y-axis using the data generated for the y-axis above          
                 var yaxisLeft = d3.axisLeft()
                                    .scale(y);
 
 
-                        //Appending the left y-axis to the SVG element                    
+                //Adding the y-axis to the group created for the axes and line chart                    
                 svg.append("g")
-                    .call(yaxisLeft);
+                    .call(yaxisLeft);           //Displaying the y-axis on the SVG  
 
+
+                //The below code is for creating the line chart
                 svg.append("path")
-                    .datum(arr)
+                    .datum(arr)                         //Getting the data for the line chart from the "arr" array
                     .attr("fill", "none")
-                    .attr("stroke", "steelblue")
-                    .attr("stroke-width", 1.5)
-                    .attr("d", d3.line()
+                    .attr("stroke", "orange")           //Setting the line color to be orange    
+                    .attr("stroke-width", 1.5)          //Setting the width of the line to be 1.5
+                    .attr("d", d3.line()                //Calling D3's line() function to draw the line
+
+                    //Setting the x and y coordinates using the linear scales defined above
                     .x(function(d){
                         //console.log(x(d))
                         return x(d)
@@ -150,17 +140,22 @@ Available at: https://www.tutorialspoint.com/css/css_animation_pulse.htm
                     })
                   );
                 
+
+                //The below code generates markers for the line chart
+                //these markers are placed on the chart based on position
+                //of each of the data values
                 svg.selectAll("dot")
-                   .data(arr) 
+                   .data(arr)                   //Getting the data for the markers from the "arr" array
                    .enter()
-                   .append("circle")
+                   .append("circle")            //As we are reading the array, we are also dynamically creating the markers with the help of the circle element
                    .attr("cx", function(d){
-                       return x(d)
+                       //alert(x(d))
+                       return x(d)              //Positioning the x-coordinate of the marker based on the current data element and the linear scale defined above
                    })
                    .attr("cy", function(d){
-                       return y(d)
+                       return y(d)             //Positioning the y-coordinate of the marker based on the current data element and the linear scale defined above
                    })
-                   .attr("r", 5);
+                   .attr("r", 5);              //Setting the radius of the circle to be 5
 
             </script>
         </body>
