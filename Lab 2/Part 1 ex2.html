@@ -1,13 +1,19 @@
 <!-- REFERENCES -->
 
-<!-- 
-1) Ocks.org. (2015). Dot Plot with D3. [online] 
-Available at: https://bl.ocks.org/lwhitaker3/a24f5ba9d2d84d29cc4b
+<!--   
+1) Holtz, Y. (2022). Choropleth map with hover effect in d3.js. D3-graph-gallery.com. [online]  
+Available at: https://www.d3-graph-gallery.com/graph/choropleth_hover_effect.html
 
-2) Tutorialspoint.com. (2021). CSS - Pulse Effect. [online] 
-Available at: https://www.tutorialspoint.com/css/css_animation_pulse.htm
+2) Angelica Lo Duca (2021). Getting Started with D3.js Maps - DataDrivenInvestor. Medium. [online]  
+Available at: https://medium.datadriveninvestor.com/getting-started-with-d3-js-maps-e721ba6d8560
 
+3) Stophface (2016). Tooltip on mouseover d3. Stack Overflow. [online]
+Available at: https://stackoverflow.com/questions/35623333/tooltip-on-mouseover-d3
+
+4) ozil (2017). Equivalent method of “.getComputedTextLength()” in d3.js. Stack Overflow. [online] 
+Available at: https://stackoverflow.com/questions/42718803/equivalent-method-of-getcomputedtextlength-in-d3-js
 -->
+
 
 
 
@@ -15,54 +21,110 @@ Available at: https://www.tutorialspoint.com/css/css_animation_pulse.htm
 
 <html lang = "en">
     <head>
-        <script src='https://d3js.org/d3.v7.min.js'></script>
+        <script src='https://d3js.org/d3.v7.min.js'></script> 
     </head>
 
-    <style>
-        #rect1 {
-            fill:green
-        }
-        #rect2 {
-            fill:blue
-        }
-    </style>
-
     <body>
-            
-        <script src='https://d3js.org/d3.v7.min.js'></script>
+        <script type='text/javascript' src='https://d3js.org/d3.v7.min.js'></script>
+
+        <!-- (Holtz, 2022) -->
+        <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+        <script src="https://d3js.org/d3-geo-projection.v2.min.js"></script>
 
         <script>
-            const width = 600;
-            const height = 600;
-            const margin = 40;                //Setting the margin  
-            const xMax = width - margin*2;
-            const yMax = height - margin*2;
 
-            var svg = d3.select("body")
-                        .append("div")
+            const margin = {top: 30, right: 30, bottom: 70, left: 150};
+            const width = 1050 - margin.left - margin.right;
+            const height = 800 - margin.top - margin.bottom;
+
+
+            var svg = d3.select('body')
+                        .append('div')
                         .append("svg")
-                        .attr("width", width)
-                        .attr("height", height)
-                        .style("border", '1px solid green');
-                        
-                        
-            svg.append("g")
-                .append("rect")
-                .attr("id", "rect1")
-                .attr("x", 40)
-                .attr("y", 100)
-                .attr("width", 50)
-                .attr("height", 50)
-                // .attr("fill", "red")
+                        .attr("width", width + margin.left + margin.right)
+                        .attr("height", height + margin.top + margin.bottom)
+                        .append("g")
+                        .attr("transform",
+                        "translate(" + margin.left + "," + margin.top + ")");
 
-            svg.append("g")
-                .append("rect")
-                .attr("id", "rect2")
-                .attr("x", 50)
-                .attr("y", 200)
-                .attr("width", 50)
-                .attr("height", 50)
+            
+            var mapProjection = d3.geoMercator()            //(Holtz, 2022)
+                                    .scale(100)
+                                    .center([0,55])
+                                    .translate([185, 150])
 
+            //(Holtz, 2022)
+            let mapJSON = "https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson";
+
+            d3.json(mapJSON).then(function(data){
+                // console.log(Object.keys(data))
+                var map = svg.append("g")
+                                .selectAll("path")
+                                .data(data.features)
+                                .enter()
+                                .append("path")
+                                .attr("class", "map")
+                                .attr("fill", "#0490AE")
+                                .attr("d", d3.geoPath()
+                                              .projection(mapProjection)        //(Holtz, 2022)
+                                )
+                                .style("opacity", 0.75)
+                                .on("mouseover", onMouseOver)
+                                .on("mouseout", onMouseOut)
+
+                var tooltipRect = d3.select("svg")
+                                    .append("g")
+                                    .append("rect")
+                                    .style("position", "absolute")
+                                    .style("visibility", "hidden")        //(Stophface, 2016)
+                                    .attr("x", 610)
+                                    .attr("y", 15)
+                                    .attr("fill", "#695E93")  
+
+                var tooltip = d3.select("svg")
+                                .append("g")
+                                .append("text")
+                                .style("position", "absolute")
+                                .style("visibility", "hidden")         //(Stophface, 2016)
+                                .attr("x", 610)
+                                .attr("y", 40)
+                                .attr("fill", "#EFDCF9")
+                                .attr("font-size", "30px")
+             
+
+                function onMouseOver(d, i){
+                    d3.select(this)
+                       .transition()
+                       .duration(400)
+                       .attr("fill", "#CD0046")
+                       .style("stroke", "black")       //(Angelica Lo Duca, 2021)
+
+                    tooltip.style("visibility", "visible")         //(Stophface, 2016)
+                            .text(function(){
+                                return i.properties.name
+                            })
+
+                    tooltipRect.style("visibility", "visible")
+                                .attr("width", function(){
+                                    return d3.select("text").node().getComputedTextLength()      //(ozil, 2017)
+                                })
+                                .attr("height", 35)
+                    
+                }
+
+                function onMouseOut(){
+                    d3.selectAll(".map")
+                        .transition()
+                        .duration(400)
+                        .attr("fill", "#0490AE")
+                        .style("stroke", "transparent")         //(Angelica Lo Duca, 2021)
+                        .style("opacity", 0.75)
+
+                    tooltip.style("visibility", "hidden")        //(Stophface, 2016)
+                    tooltipRect.style("visibility", "hidden")
+                }
+            })
+            
         </script>
     </body>
 </html>
