@@ -1,0 +1,208 @@
+<!-- REFERENCES -->
+
+<!--   
+1) Codegrepper.com. (2020). how to get a random color in javascript Code Example. [online] 
+Available at: https://www.codegrepper.com/code-examples/javascript/how+to+get+a+random+color+in+javascript
+
+2) GeeksforGeeks. (2019). How to convert Set to Array in JavaScript? - GeeksforGeeks. [online] 
+Available at: https://www.geeksforgeeks.org/how-to-convert-set-to-array-in-javascript/
+
+3) Ocks.org. (2020). Using d3-tip to add tooltips to a d3 bar chart. [online] 
+Available at: http://bl.ocks.org/Caged/6476579
+
+4) Kg123 (2017). How to align two buttons in the middle with a certain margin in html. Stack Overflow. [online] 
+Available at: https://stackoverflow.com/questions/43965881/how-to-align-two-buttons-in-the-middle-with-a-certain-margin-in-html
+-->
+
+
+<!-- Exercise 29 - CSV File -->
+
+<!DOCTYPE html>
+
+<html lang = "en">
+    <head>
+        <script src='https://d3js.org/d3.v7.min.js'></script>
+    </head>
+
+    <style>
+        h1 {
+            /* The below statement modifies the color of the heading */
+            color: #13344C
+        }
+
+        /* (Ocks.org, 2020) */
+        circle:hover {          
+            /* When the mouse hovers over any one of the speheres, the below statement makes the spehere
+            "Burgundy" in color */
+            fill: #870A30; 
+        }
+
+        /* (Kg123, 2017) */
+        .topButtons {
+
+            /* The below statements are used for designing the buttons, which are present at the bottom of the page */
+            background-color: #4D4C60;
+            border: none;
+            color: #FADCDC;
+            padding: 5px 15px;
+            text-align: center;
+            display: inline-block;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+
+    <body>
+        <script type='text/javascript' src='https://d3js.org/d3.v7.min.js'></script>
+        
+        <!-- The heading of the page -->
+        <h1>CSV Data</h1>
+
+        <script>
+
+            //Defining the width and height of the SVG
+            var width = 800, height = 650;
+
+            //The .csv file which consists of the data, is hosted on GitHub
+            //Storing the path of the GitHub file in a variable 
+            let arrayCSV = "https://raw.githubusercontent.com/ayushiiamin/csvfileimp/main/ex29.csv"
+
+            //Initializing an array to store the data from the CSV file
+            var circleArr = []
+
+            //Loading the csv file, and appending its elements to the empty array
+            d3.csv(arrayCSV, function(d, i){
+                circleArr.push(d)
+            }).then(function(data,i){
+
+                //Creating the SVG element, which has a width of 800 and a 
+                //height of 650
+                var svg = d3.select("body")
+                            .append("div")
+                            .append("svg")
+                            .attr("width", width)
+                            .attr("height", height);
+
+                //Initializing a set for storing the different hex values of colors
+                var colorSet = new Set();
+
+                // console.log(circleArr.length);
+
+                //This loop is used for generating 90 random colors
+                for(let i = 0; i<circleArr.length; i++){
+
+                    //Generating a random floating point number and converting it to a hexadecimal value
+                    //After this, we then round off the value, and convert it to a string of base 16 (hexadecimal)
+                    //The final value is then stored in the set
+                    var str = '#'+Math.floor(Math.random()*16777215).toString(16);        //(Codegrepper.com, 2020)
+                    colorSet.add(str);
+                }
+
+                //Converting the set to an array, for the iteration
+                var colorArr = Array.from(colorSet);        //(GeeksforGeeks, 2019)
+
+                //Creating the container to group the spheres and the popup text
+                var g = svg.append("g")
+
+
+                //The below code is used for managing the force
+                var simulation = d3.forceSimulation(circleArr)
+                                .force('charge', d3.forceManyBody().strength(5))                 //This will simulate gravity between the spheres as strength is positive
+                                .force('center', d3.forceCenter(width / 2, height / 2))         //This positions the spheres in the center
+                                .force('collision', d3.forceCollide().radius(function(d) {      //This creates a collision force, helps in preventing the spheres from overlapping
+                                    return d.radius
+                                    // return d
+                                }))
+                                .on('tick', ticked);           //Listening for tick events
+                
+                function ticked() {
+
+                    //Creating the spheres using the array (contains the csv file data) from above
+                    var u = g.selectAll('circle')
+                                .data(circleArr)
+                                .join('circle')
+                                .attr('fill', function(d, i){
+                                    return colorArr[i];       //Using the array of colors generated above, we are setting the colors of each sphere
+                                })
+                                .attr('r', function(d) {
+                                    return d.radius;            //Setting the radius of the sphere using the inline array from above
+                                })
+                                .attr('cx', function(d,i) {
+                                    return d.x              //Setting the x-coordinate of the spheres
+                                    // return d.x
+                                })
+                                .attr('cy', function(d,i) {
+                                    return d.y              //Setting the y-coordinate of the spheres
+                                    // return d.y
+                                })
+                                .on("mouseover", onMouseOver)        //Listening for any mouseover events
+                                .on("mouseout", onMouseOut)          //Listening for any mouseout events
+                }
+
+
+                //When the mouse cursor moves over the sphere, the below function is called
+                function onMouseOver(d, i){
+                    // console.log("entered mouseover")
+                    d3.select(this)
+                        .transition()
+                        .duration(400)      //Setting the duration of the transition
+                    
+
+                    //Creating the rectangle for the text
+                    g.append("rect")
+                        .attr("class", "rectVal")
+                        .attr("x", function(){
+                            return i.x         //Setting the x-coordinate of the rectangle based on the data generated above
+                        })
+                        .attr("y", function(){
+                            return i.y - 15         //Setting the y-coordinate of the rectangle
+                        })
+                        .attr("width", 90)         //Setting the width of the rectangle
+                        .attr("height", 20)         //Setting the height of the rectangle    
+                        .attr("fill", "#36D6E7")
+
+
+                    //Creating the text which will apppear on hovering over the sphere   
+                    g.append("text")
+                        .attr("class", "textVal")
+                        .attr("x", function(){
+                            // console.log(i.x)
+                            return i.x + 2         //Setting the x-coordinate of the text
+                        })
+                        .attr("y", function(){
+                            return i.y             //Setting the y-coordinate of the text
+                        })
+                        .text(function(){
+                            // console.log(i.radius)
+                            return i.radius        //The radius of the sphere will appear as a text, when hovering over the respective sphere 
+                        })
+                        .attr("stroke", "#D95980")
+                    
+                }
+
+                //When the mouse cursor moves away the sphere, the below function is called
+                function onMouseOut(){
+                    d3.select(this)
+                    .transition()
+                    .duration(400)          //Setting the duration of the transition
+
+                    d3.selectAll(".textVal") 
+                        .remove()              //After the cursor moves away from the sphere, the text disappears
+                    d3.selectAll(".rectVal")
+                        .remove()              //After the cursor moves away from the sphere, the rectangle box disappears
+                }
+            })    
+        </script>
+
+
+        <!-- Creating the buttons present at the bottom of the page -->
+
+        <!-- On clicking this button, the page leads the user to another HTML page, which 
+        displays the randomly generated data  -->
+        <button class="topButtons" onclick="window.location.href='Part 7 ex28 ex30 ex31.html'">Click to display the randomly generated data</button>
+
+        <!-- On clicking this button, the page leads the user to another HTML page, which 
+        displays the data from an array -->
+        <button class="topButtons" onclick="window.location.href='Part 7 ex29 array.html'">Click to display data from Inline Array</button>
+    </body>
+</html>
