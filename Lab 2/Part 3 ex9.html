@@ -1,3 +1,6 @@
+<!-- Exercise 9 -->
+
+
 <!DOCTYPE html>
 
 <html lang = "en">
@@ -9,40 +12,44 @@
         <script type='text/javascript' src='https://d3js.org/d3.v7.min.js'></script>
 
         <script>
+
+            //Creating a square with the help of the div tag
             d3.select('body')
                 .append("div")
-                .style('width', '100px')
-                .style('height', '100px')
-                .style('background-color', 'blue')
+                .style('width', '100px')       //Setting the width of the sqaure
+                .style('height', '100px')      //Setting the height of the sqaure
+                .style('background-color', 'blue')      //Setting the color of the sqaure to be blue
                 .style('transform', 'scale(1.0)')
                 .transition()
-                .ease( d3.easeBounce )
-                .duration(1000)
-                .style("background-color", "red")
+                .ease(d3.easeBounce)        //Adding the "bounce" easing type
+                .duration(1000)        //Setting the duration of the transition to be 1s       
+                .style("background-color", "red")     //Change the color of the box to be red
                 .style('transform', 'scale(0.5)')
 
-                d3.select('body')
+            //Creating another square with the help of the div tag
+            d3.select('body')
                 .append("div")
-                .style('width', '100px')
-                .style('height', '100px')
-                .style('background-color', 'purple')
+                .style('width', '100px')         //Setting the width of the sqaure
+                .style('height', '100px')        //Setting the height of the sqaure
+                .style('background-color', 'purple')        //Setting the color of the sqaure to be purple
                 .style('transform', 'scale(1.0)')
                 .transition()
-                .ease(d3.easeBack)
-                .duration(1000)
-                .style("background-color", "#008080")
+                .ease(d3.easeBack)          //Adding the "back" easing type
+                .duration(1000)             //Setting the duration of the transition to be 1s
+                .style("background-color", "#008080")        //Change the color of the box to be teal
                 .style('transform', 'scale(0.5)')
 
-                d3.select('body')
+            //Creating another square with the help of the div tag
+            d3.select('body')
                 .append("div")
-                .style('width', '100px')
-                .style('height', '100px')
-                .style('background-color', 'green')
+                .style('width', '100px')           //Setting the width of the sqaure
+                .style('height', '100px')        //Setting the height of the sqaure
+                .style('background-color', 'green')            //Setting the color of the sqaure to be green
                 .style('transform', 'scale(1.0)')
                 .transition()
-                .ease(d3.easeCubic)
-                .duration(1000)
-                .style("background-color", "#838BC2")
+                .ease(d3.easeCubic)           //Adding the "cubic" easing type
+                .duration(1000)               //Setting the duration of the transition to be 1s
+                .style("background-color", "#838BC2")           //Change the color of the box to be lavender
                 .style('transform', 'scale(0.5)')
         </script>
     </body>

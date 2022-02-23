@@ -1,3 +1,6 @@
+<!-- Exercise 11 -->
+
+
 <!DOCTYPE html>
 
 <html lang = "en">
@@ -9,36 +12,42 @@
         <script type='text/javascript' src='https://d3js.org/d3.v7.min.js'></script>
 
         <script>
+
+            //Creating the SVG of height and width 400
+            //and setting the border of the svg to be green in color
             var svg = d3.select("body")
                         .append("svg")
                         .attr("width", 400)
                         .attr("height", 400)
                         .style("border", '1px solid green');
 
+            //Creating a svg text
             svg.append("text")
-                .attr("x", 150)
-                .attr("y", 150)
-                .attr("fill", "#B80454")
-                .attr("font-size", "40px")
-                .attr("font-family", "sans-serif")
-                .text("Hello!")
+                .attr("x", 150)         //Setting the x-coordinate of the text
+                .attr("y", 150)         //Setting the y-coordinate of the text
+                .attr("fill", "#B80454")        //Setting the color of the text to be dark pink in color
+                .attr("font-size", "40px")      //Setting the font size of the text to be 40px
+                .attr("font-family", "sans-serif")      //Setting the font-family to be sans-serif
+                .text("Hello!")            //Initializing the text
 
             d3.selectAll("text")
+                //This below code listens for any mouseover event and updates the text accordingly
                 .on("mouseover", function(event){
                     d3.select(this)
                         .transition()
-                        .ease(d3.easeBounce)
-                        .duration(1000)
-                        .attr("fill", "#348AC0")
-                        .attr("font-size", "60px")
+                        .ease(d3.easeBounce)        //Adding the "bounce" easing type
+                        .duration(1000)             //Setting the duration of the transition to be 1s
+                        .attr("fill", "#348AC0")    //Updating the color of the text to be light blue in color
+                        .attr("font-size", "60px")     //Increase the font size to 60px
                 })
+                //This below code listens for any mouseout event and updates the text accordingly
                 .on("mouseout", function(event){
                     d3.select(this)
                         .transition()
-                        .ease(d3.easeBounce)
-                        .duration(1000)
-                        .attr("fill", "#B80454")
-                        .attr("font-size", "40px")
+                        .ease(d3.easeBounce)          //Adding the "bounce" easing type
+                        .duration(1000)               //Setting the duration of the transition to be 1s
+                        .attr("fill", "#B80454")      //Changing the color of the text back to its original color - dark pink
+                        .attr("font-size", "40px")    //Changing the font size of the text back to its original size: 40 px
                 })
         </script>
     </body>

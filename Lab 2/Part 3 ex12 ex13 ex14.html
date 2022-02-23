@@ -1,3 +1,7 @@
+<!-- Exercise 12, 13, 14 -->
+
+
+
 <!DOCTYPE html>
 
 <html lang = "en">
@@ -9,74 +13,94 @@
         <script type='text/javascript' src='https://d3js.org/d3.v7.min.js'></script>
 
         <script>
+
+            //Creating the SVG of height and width 500
             var svg = d3.select("body")
                         .append("svg")
                         .attr("width", 500)
                         .attr("height", 500);
 
+            //Creating a container to group the bars
             var g = svg.append("g");
 
+            //Creating the first bar
             var bar1 = g.append("rect")
-                            .attr("fill", "blue")
-                            .attr("x", 100)
-                            .attr("y", 20)
-                            .attr("height", 20)
-                            .attr("width", 10)
+                            .attr("fill", "blue")       //Setting the original bar color to be blue
+                            .attr("x", 100)             //Setting the x-coordinate of the bar
+                            .attr("y", 20)              //Setting the y-coordinate of the bar
+                            .attr("height", 20)         //Setting the height of the bar
+                            .attr("width", 10)          //Setting the width of the bar
 
+            //Creating the second bar
             var bar2 = g.append("rect")
-                            .attr("fill", "blue")
-                            .attr("x", 120)
-                            .attr("y", 20)
-                            .attr("height", 20)
-                            .attr("width", 10)
+                            .attr("fill", "blue")       //Setting the original bar color to be blue
+                            .attr("x", 120)             //Setting the x-coordinate of the bar
+                            .attr("y", 20)              //Setting the y-coordinate of the bar
+                            .attr("height", 20)         //Setting the height of the bar
+                            .attr("width", 10)          //Setting the width of the bar
 
+            //Creating the third bar
             var bar3 = g.append("rect")
-                            .attr("fill", "blue")
-                            .attr("x", 140)
-                            .attr("y", 20)
-                            .attr("height", 20)
-                            .attr("width", 10)
-                    
+                            .attr("fill", "blue")       //Setting the original bar color to be blue
+                            .attr("x", 140)             //Setting the x-coordinate of the bar
+                            .attr("y", 20)              //Setting the y-coordinate of the bar
+                            .attr("height", 20)         //Setting the height of the bar
+                            .attr("width", 10)          //Setting the width of the bar
+            
+                            
+            //Calling the function to animate the bars
             update();
 
+            //The below function is used for animating the bars
             function update() {
                 bar1.transition()
-                    .ease(d3.easeLinear)
-                    .duration(2000)
-                    .attr("height",100)
-                    .attr("fill", "#B80454")
+                    .ease(d3.easeLinear)            //Adding the "linear" easing type
+                    .duration(2000)                 //Setting the duration of the transition to be 2s
+                    .attr("height",100)             //Increasing the height of the bar to 100
+                    .attr("fill", "#B80454")        //Updating the color to be dark pink in color
+
+                    //The below code shrinks the bar height and changes its color back to blue
                     .transition()
-                    .ease(d3.easeLinear)
-                    .duration(2000)
-                    .delay(9000)
-                    .attr("height",20)
-                    .attr("fill", "blue")
+                    .ease(d3.easeLinear)            //Adding the "linear" easing type
+                    .duration(2000)                 //Setting the duration of the transition to be 2s
+                    .delay(9000)                    //Delaying the transition by 9s (this bar will shrink only after the other 2 shrink back to their original size)
+                    .attr("height",20)              //Changing the bar height back to 20    
+                    .attr("fill", "blue")           //Changing the bar color back to its original color - blue
+
+
 
                 bar2.transition()
-                    .ease(d3.easeLinear)
-                    .duration(2000)
-                    .delay(2000)
-                    .attr("height",100)
-                    .attr("fill", "#348AC0")
+                    .ease(d3.easeLinear)            //Adding the "linear" easing type
+                    .duration(2000)                 //Setting the duration of the transition to be 2s        
+                    .delay(2000)                    //Delaying the transition by 2s (this bar will increase its height, only after the previous bar finishes increasing its height to 100)
+                    .attr("height",100)             //Increasing the height of the bar to 100
+                    .attr("fill", "#348AC0")        //Updating the color to be light blue in color
+
+                    //The below code shrinks the bar height and changes its color back to blue
                     .transition()
-                    .ease(d3.easeLinear)
-                    .duration(2000)
-                    .delay(5000)
-                    .attr("height",20)
-                    .attr("fill", "blue")
+                    .ease(d3.easeLinear)            //Adding the "linear" easing type
+                    .duration(2000)                 //Setting the duration of the transition to be 2s
+                    .delay(5000)                    //Delaying the transition by 5s (this bar will shrink only after the third bar to its original size)
+                    .attr("height",20)              //Changing the bar height back to 20
+                    .attr("fill", "blue")           //Changing the bar color back to its original color - blue
+
+
+
 
                 bar3.transition()
-                    .ease(d3.easeLinear)
-                    .duration(2000)
-                    .delay(4000)
-                    .attr("height",100)
-                    .attr("fill", "#838BC2")
+                    .ease(d3.easeLinear)            //Adding the "linear" easing type
+                    .duration(2000)                 //Setting the duration of the transition to be 2s
+                    .delay(4000)                    //Delaying the transition by 4s (this bar will increase its height, only after the previous 2 bars finishes increasing its height to 100)
+                    .attr("height",100)             //Increasing the height of the bar to 100
+                    .attr("fill", "#838BC2")        //Updating the color to be lavender in color
+
+                    //The below code shrinks the bar height and changes its color back to blue
                     .transition()
-                    .ease(d3.easeLinear)
-                    .duration(2000)
-                    .delay(1000)
-                    .attr("height",20)
-                    .attr("fill", "blue")
+                    .ease(d3.easeLinear)            //Adding the "linear" easing type    
+                    .duration(2000)                 //Setting the duration of the transition to be 2s
+                    .delay(1000)                    //Delaying the transition by 1s (this bar will shrink only after 1s)
+                    .attr("height",20)              //Changing the bar height back to 20
+                    .attr("fill", "blue")           //Changing the bar color back to its original color - blue
             }
         </script>
     </body>

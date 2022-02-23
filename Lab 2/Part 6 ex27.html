@@ -6,7 +6,7 @@ Available at: https://www.geeksforgeeks.org/how-to-get-the-first-key-name-of-a-j
 -->
 
 
-
+<!-- Exercise 27 -->
 
 <!DOCTYPE html>
 
@@ -15,74 +15,125 @@ Available at: https://www.geeksforgeeks.org/how-to-get-the-first-key-name-of-a-j
         <script src='https://d3js.org/d3.v7.min.js'></script>
     </head>
 
+    <style>
+        .button {
+            /* The below statements are used for designing the button present on the top of the page */
+            background-color: #4D4C60;
+            border: none;
+            color: #FADCDC;
+            padding: 5px 15px;
+            text-align: center;
+            display: inline-block;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+
     <body>
         <script type='text/javascript' src='https://d3js.org/d3.v7.min.js'></script>
 
-        
-        <button onclick="showPie()">Click for Pie Chart</button>
+        <!-- Creating the button present at the top of the page -->
+        <!-- On clicking this button, the page displays a pie chart -->
+        <button class="button" onclick="showPie()">Click to display the Pie Chart</button>
 
         <script>
+
+            //Initializing the object array of datasets
             var dataset = {
+                //"apples" serves as the first dataset
                 apples: [5345, 2879, 1997, 2437, 4045],
+
+                //"oranges" serves as the second dataset
                 oranges: [6400, 4116, 5589, 428, 1664]
             };
 
+            //Setting the counter to begin from -1
             var c = -1;
 
+            //Defining the width and height of the SVG
             var width = 460;
             var height = 300;
-            var radius = Math.min(width, height) / 2;
 
+
+            //Initializing the radius of the arcs
+            //This is calculated by taking the minimum of the width and height of the SVG
+            //After taking the minimum value of both, we divide the output by 2
+            var radius = Math.min(width, height)/2;
+
+            //Defining the categorical scale of colors, which will be used for coloring the wedges
             var color = d3.scaleOrdinal().range(d3.schemeSet3);
 
+
+            //Generating the pie
+            //This will also help in calculating the start and end angle for each of the arcs    
             var pie = d3.pie()
                         .sort(null);
-
+            
+            //Generating the arcs
+            //Inner radius is not 0 here, as we want to display a donut chart
             var arc = d3.arc()
                         .innerRadius(radius - 100)
                         .outerRadius(radius - 50);
 
+            //Creating the SVG element, which has a width of 560 and a 
+            //height of 300
             var svg = d3.select("body")
                         .append('div')
                         .append("svg")
-                        .attr("width", width)
+                        .attr("width", width + 100)
                         .attr("height", height)
                         .append("g")
                         .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
+            //Function to generate the two pie charts
             function showPie(){
-                c++;
+                c++;            //When the function is called, the counter is incremented
 
+                //Checking to see if the counter value is less than the number of elements in the dataset
+                //object array
                 if(c < Object.keys(dataset).length){
-                    console.log("ENTERED LOOP")
-                    console.log(" ")
-                    console.log(Object.keys(dataset)[c])
+                    // console.log("ENTERED LOOP")
+                    // console.log(" ")
+                    // console.log(Object.keys(dataset)[c])
 
+                    //Generating the groups
+                    //The start and end angles of each of the arcs will also be calculated using the pie (created above)
                     var path = svg.selectAll("path")
                                     .data(pie(dataset[Object.keys(dataset)[c]]))     //(GeeksforGeeks, 2020)
                     
+                    //Drawing arc paths
                     path.enter()
                         .append("path")
                         .merge(path)
                         .transition()
-                        .duration(1000)
+                        .duration(1000)    //Done for smooth transition of the segments
                         .attr("fill", function(d, i){
-                            return color(i);
+                            return color(i);         //Using the categorical scale of colors defined above, we have colored each of the wedges
                         })
                         .attr("d", arc)
                         .attrTween("d", function(d){
+
+                            //The interpolate function uses the start and end angle of the arcs to 
+                            //spin each of the pie chart segments
                             var i = d3.interpolate(d.endAngle, d.startAngle);
-                                            return function (t) {
+                                            return function (t){
                                                 d.startAngle = i(t);
                                                 return arc(d);
                                             }
                         });
 
-                        console.log("EXIT LOOP")
-                        console.log(" ")
+                        // console.log("EXIT LOOP")
+                        // console.log(" ")
 
+                    
+
+                    //Removing the unused elements for the next dataset    
                     path.exit().remove();
+                    
                 }
+                
+                //If the counter is more than the number of elements present in the dataset object array
+                //Then display an alert showing the below message
                 else{
                     alert("NO MORE DATASETS LEFT");
                 }

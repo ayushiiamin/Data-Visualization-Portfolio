@@ -6,7 +6,7 @@ Available at: https://stackoverflow.com/questions/57644512/d3-text-directly-on-m
 
 -->
 
-
+<!-- Exercise 5 -->
 
 
 <!DOCTYPE html>
@@ -20,54 +20,51 @@ Available at: https://stackoverflow.com/questions/57644512/d3-text-directly-on-m
         <script type='text/javascript' src='https://d3js.org/d3.v7.min.js'></script>
 
         <script>
+
+            //Creating the SVG of height and width 400
+            //and setting the border of the svg to be green in color
             var svg = d3.select("body")
                         .append("svg")
                         .attr("width", 400)
                         .attr("height", 400)
                         .style("border", '1px solid green')
 
-            // svg.append("text")
-            //     .attr("x", 0)
-            //     .attr("y", 0)
-            //     .text("helo")
-
-            var c = 0;
+            //This counter is initialized to 0
+            var c = 0; 
 
             d3.selectAll("svg")
+                //This below code listens for any mouseover event and adds the text svg element
                 .on("mouseover", function(event){
+                    
+                    //If statement to check if the counter is 0
                     if (c == 0){
+
+                        //Increment the counter
+                        //This is done so that only one text svg element gets appended to the svg
+                        //and not multiple
                         c++;
+
                         //alert("ENTERED C0");
+
+                       //Add the text element to the svg 
                        d3.select(this)
                             .append("text")
+                            //Set the x and y coordinates according to the position of the cursor
                             .attr("x", d3.pointer(event)[0])     //(Volochkov, 2019)
                             .attr("y", d3.pointer(event)[1])     //(Volochkov, 2019)
-                            .text("helo")
+                            .text("Hello")
                     }
+
+                    //Else if the counter is 1,
+                    //then don't make any changes
                     else if(c == 1){
                         //alert("ENTERED C1");
                         d3.select("text")
                             .attr("x", d3.pointer(event)[0])    //(Volochkov, 2019)
                             .attr("y", d3.pointer(event)[1])    //(Volochkov, 2019)
                     }
-                    //alert(xMove(event))
-                    // d3.select(this)
-                    //     .append("text")
-                    //     // .attr("x", d3.pointer(event)[0])
-                    //     // .attr("y", d3.pointer(event)[1])
-                    //     .attr("x", xMove(event))
-                        
-                    //     .attr("y", 150)
-                    //     .text("helo")
+                    
                 })
-                 
-            // function xMove(para){
-            //     d3.select("text")
-            //         .on("mousemove", function(para){
-            //             d3.pointer(para)[0]
-            //         })
-            // }    
-
                 
             
                 

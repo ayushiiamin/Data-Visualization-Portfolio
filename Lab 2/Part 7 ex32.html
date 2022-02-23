@@ -1,21 +1,22 @@
 <!-- REFERENCES -->
 
 <!--   
-1) Codegrepper.com. (2020). how to get a random color in javascript Code Example. [online] 
-Available at: https://www.codegrepper.com/code-examples/javascript/how+to+get+a+random+color+in+javascript
+1) Ocks.org. (2021). Radial Force. [online] 
+Available at: https://bl.ocks.org/mbostock/cd98bf52e9067e26945edd95e8cf6ef9
 
 2) GeeksforGeeks. (2019). How to convert Set to Array in JavaScript? - GeeksforGeeks. [online] 
 Available at: https://www.geeksforgeeks.org/how-to-convert-set-to-array-in-javascript/
 
-3) Ocks.org. (2020). Using d3-tip to add tooltips to a d3 bar chart. [online] 
-Available at: http://bl.ocks.org/Caged/6476579
-
-4) Kg123 (2017). How to align two buttons in the middle with a certain margin in html. Stack Overflow. [online] 
+3) Kg123 (2017). How to align two buttons in the middle with a certain margin in html. Stack Overflow. [online] 
 Available at: https://stackoverflow.com/questions/43965881/how-to-align-two-buttons-in-the-middle-with-a-certain-margin-in-html
+
+4) Codegrepper.com. (2020). how to get a random color in javascript Code Example. [online] 
+Available at: https://www.codegrepper.com/code-examples/javascript/how+to+get+a+random+color+in+javascript
 -->
 
 
-<!-- Exercise 28, 30, 31 -->
+<!-- Exercise 32 -->
+
 
 <!DOCTYPE html>
 
@@ -25,25 +26,10 @@ Available at: https://stackoverflow.com/questions/43965881/how-to-align-two-butt
     </head>
 
     <style>
-        /* (Ocks.org, 2020) */
-        circle:hover {          
+        circle:hover {
             /* When the mouse hovers over any one of the speheres, the below statement makes the spehere
             "Burgundy" in color */
             fill: #870A30; 
-        }
-
-        /* (Kg123, 2017) */
-        .bottomButtons {
-
-            /* The below statements are used for designing the buttons, which are present at the bottom of the page */
-            background-color: #4D4C60;
-            border: none;
-            color: #FADCDC;
-            padding: 5px 15px;
-            text-align: center;
-            display: inline-block;
-            font-size: 16px;
-            cursor: pointer;
         }
 
         h1 {
@@ -63,6 +49,20 @@ Available at: https://stackoverflow.com/questions/43965881/how-to-align-two-butt
             font-size: 16px;
             cursor: pointer;
         }
+
+        /* (Kg123, 2017) */
+        .bottomButtons {
+
+            /* The below statements are used for designing the buttons, which are present at the bottom of the page */
+            background-color: #4D4C60;
+            border: none;
+            color: #FADCDC;
+            padding: 5px 15px;
+            text-align: center;
+            display: inline-block;
+            font-size: 16px;
+            cursor: pointer;
+        }
     </style>
 
     <body>
@@ -74,26 +74,24 @@ Available at: https://stackoverflow.com/questions/43965881/how-to-align-two-butt
         <!-- Creating the button present at the top of the page -->
         <!-- On clicking this button, the page leads the user to another HTML page, which 
         displays the similar data in a different format -->
-        <button id="topButton" onclick="window.location.href='Part 7 ex32.html'">Click to view the data in a different form</button>
+        <button id="topButton" onclick="window.location.href='Part 7 ex28 ex30 ex31.html'">Click to view data in the original format</button>
 
         <script>
+            var width = 850, height = 450;         
 
-            //Defining the width and height of the SVG
-            var width = 600, height = 400;
-
-            //Creating the SVG element, which has a width of 600 and a 
-            //height of 400
+            //Creating the SVG element, which has a width of 850 and a 
+            //height of 450
             var svg = d3.select('body')
-                        .append("div")
                         .append('svg')
+                        .attr("viewBox", "-480 -250 960 500")           //(Ocks.org, 2021)
                         .attr('width',width)
                         .attr('height',height);
            
-
-            var numNodes = 100;     //As we want 100 random spheres, we set the numNodes to be 100
+            
+            var numNodes = 100;          //As we want 100 random spheres, we set the numNodes to be 100
             var nodes = d3.range(numNodes).map(function(d) {
                 //Generating random floating point values (upper limit is 25) for the radius
-                return {radius: Math.random() * 25}
+                return {radius: Math.random() * 25};            //(Codegrepper.com, 2020)
             })
 
             //Initializing a set for storing the different hex values of colors
@@ -116,20 +114,37 @@ Available at: https://stackoverflow.com/questions/43965881/how-to-align-two-butt
             //Creating the container to group the spheres and the popup text
             var g = svg.append("g")
 
-
+            
             //The below code is used for managing the force
             var simulation = d3.forceSimulation(nodes)
-                                .force('charge', d3.forceManyBody().strength(5))            //This will simulate gravity between the spheres as strength is positive
-                                .force('center', d3.forceCenter(width/2, height/2))         //This positions the spheres in the center
-                                .force('collision', d3.forceCollide().radius(function(d) {    //This creates a collision force, helps in preventing the spheres from overlapping
+                                //This creates a collision force, helps in preventing the spheres from overlapping
+                                .force("collision", d3.forceCollide().radius(function(d){       //(Ocks.org, 2021)
                                     return d.radius
-                                    // return d
                                 }))
-                                .on('tick', ticked);    //Listening for tick events
+                                //This creates a positioning force to place the spheres in a circle
+                                //with varying radii
+                                .force("r", d3.forceRadial(function(d){       //(Ocks.org, 2021)
+                                    
+                                    //If the current sphere's radius is greater than or equal to 14
+                                    //then make the circle's (formed using the radial force) radius 
+                                    //200
+                                    if(d.radius >= 14){         
+                                        return 200
+                                    }
+                                    //Else if the current sphere's radius is greater than or equal to 8
+                                    //then make the circle's (formed using the radial force) radius 
+                                    //100
+                                    else if(d.radius >= 8){
+                                        return 100
+                                    }
+                                    //Else make the circle's (formed using the radial force) radius 50
+                                    else{
+                                        return 50
+                                    }
+                                }))
+                                .on('tick', ticked);         //Listening for tick events
             
-
-            // // console.log(colorArr[0])
-            // // console.log(nodes)                   
+                               
             function ticked() {
 
                 //Creating the spheres using the data generated above
@@ -138,7 +153,7 @@ Available at: https://stackoverflow.com/questions/43965881/how-to-align-two-butt
                             .join('circle')
                             .attr('fill', function(d, i){
                                 // console.log(i)
-                                return colorArr[i];     //Using the array of colors generated above, we are setting the colors of each sphere 
+                                return colorArr[i];     //Using the array of colors generated above, we are setting the colors of each sphere
                             })
                             .attr('r', function(d) {
                                 return d.radius;        //Setting the radius of the sphere using the data generated above
@@ -151,8 +166,8 @@ Available at: https://stackoverflow.com/questions/43965881/how-to-align-two-butt
                                 return d.y              //Setting the y-coordinate of the spheres
                                 // return d.y
                             })
-                            .on("mouseover", onMouseOver)       //Listening for any mouseover events
-                            .on("mouseout", onMouseOut)         //Listening for any mouseout events
+                            .on("mouseover", onMouseOver)         //Listening for any mouseover events
+                            .on("mouseout", onMouseOut)           //Listening for any mouseout events
             }
 
             console.log('ready..');
@@ -163,36 +178,36 @@ Available at: https://stackoverflow.com/questions/43965881/how-to-align-two-butt
                 // console.log("entered mouseover")
                 d3.select(this)
                     .transition()
-                    .duration(400)      //Setting the duration of the transition
-                
+                    .duration(400)         //Setting the duration of the transition
 
-                //Creating the rectangle for the text
+
+                //Creating the rectangle for the text    
                 g.append("rect")
                     .attr("class", "rectVal")
                     .attr("x", function(){
-                        return i.x         //Setting the x-coordinate of the rectangle based on the data generated above
+                        return i.x           //Setting the x-coordinate of the rectangle based on the data generated above
                     })
                     .attr("y", function(){
-                        return i.y - 15         //Setting the y-coordinate of the rectangle
+                        return i.y - 15       //Setting the y-coordinate of the rectangle
                     })
-                    .attr("width", 145)         //Setting the width of the rectangle
-                    .attr("height", 20)         //Setting the height of the rectangle    
+                    .attr("width", 145)       //Setting the width of the rectangle
+                    .attr("height", 20)         //Setting the height of the rectangle
                     .attr("fill", "#36D6E7")
 
 
-                //Creating the text which will apppear on hovering over the sphere   
+                //Creating the text which will apppear on hovering over the sphere    
                 g.append("text")
                     .attr("class", "textVal")
                     .attr("x", function(){
                         // console.log(i.x)
-                        return i.x + 2         //Setting the x-coordinate of the text
+                        return i.x + 2           //Setting the x-coordinate of the text
                     })
                     .attr("y", function(){
-                        return i.y             //Setting the y-coordinate of the text
+                        return i.y               //Setting the y-coordinate of the text
                     })
                     .text(function(){
                         // console.log(i.radius)
-                        return i.radius        //The radius of the sphere will appear as a text, when hovering over the respective sphere 
+                        return i.radius             //The radius of the sphere will appear as a text, when hovering over the respective sphere
                     })
                     .attr("stroke", "#D95980")
                 
@@ -204,8 +219,8 @@ Available at: https://stackoverflow.com/questions/43965881/how-to-align-two-butt
                    .transition()
                    .duration(400)          //Setting the duration of the transition
 
-                d3.selectAll(".textVal") 
-                    .remove()              //After the cursor moves away from the sphere, the text disappears
+                d3.selectAll(".textVal")
+                    .remove()             //After the cursor moves away from the sphere, the text disappears
                 d3.selectAll(".rectVal")
                     .remove()              //After the cursor moves away from the sphere, the rectangle box disappears
             }
@@ -217,7 +232,7 @@ Available at: https://stackoverflow.com/questions/43965881/how-to-align-two-butt
         <!-- On clicking this button, the page leads the user to another HTML page, which 
         displays the data from an array -->
         <button class="bottomButtons" onclick="window.location.href='Part 7 ex29 array.html'">Click to display data from Inline Array</button>
-
+        
         <!-- On clicking this button, the page leads the user to another HTML page, which 
         displays the data from a CSV file -->
         <button class="bottomButtons" onclick="window.location.href='Part 7 ex29 csv.html'">Click to display data from CSV File</button>

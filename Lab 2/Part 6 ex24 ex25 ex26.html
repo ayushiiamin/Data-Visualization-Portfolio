@@ -1,3 +1,6 @@
+<!-- Exercise 24, 25, 26 -->
+
+
 <!DOCTYPE html>
 
 <html lang = "en">
@@ -9,16 +12,90 @@
         <script type='text/javascript' src='https://d3js.org/d3.v7.min.js'></script>
 
         <script>
-            let intr = d3.interpolate( [20, 40, 4], [1, 12, 10])
 
-            console.log("Type of returned function is: ", typeof (intr) );
-            console.log( intr(0.2) )
+            //////////////////////EXERCISE 24
 
+            //Creating the array of values to be interpolated
+            let intr = d3.interpolate([20, 40, 4], [1, 12, 10])
+
+            console.log("Type of returned function is: ", typeof (intr) );    //Output - "Type of returned function is: function"
+            
+
+            //Output - [16.2, 34.4, 5.2]
+            //The output of intr(0.2) is as given above
+            //This is because when the function interpolates two datas, a formula is followed to derive the output
+            //The formula is: a*(1-t)+b*t
+
+            //The value for "a" will be taken from the first array argument - [20, 40, 4]
+            //The value for "b" will be taken from the second array argument - [1, 12, 10]
+            //The "t" value in this case will be 0.2
+
+            //The below calculation shows how the function produces the output - [16.2, 34.4, 5.2]
+
+            //Calculation:
+            //To derive 16.2
+            //the function takes the value of "a" as 20 (from the first array) and "b" as 1 (from the second array)
+            //"t" will be 0.2
+            //Using the formula ( a*(1-t)+b*t ),
+            // 20*(1-0.2) + 1*0.2 = 16.2
+
+            //The remaining elements of the output array - [34.4, 5.2] are also calculated similarly as above
+            console.log(intr(0.2))        //Output - [16.2, 34.4, 5.2]
+
+
+
+
+            //////////////////////EXERCISE 25
+            console.log(" ")
+
+            //Initializing the pair of colors to be interpolated
             let cc = d3.interpolate('red', 'green')
-            console.log( cc(0.5) );
 
+            //Output - rgb(128, 64, 0)
+            //The output of cc(0.5) is as given above
+            //This is because when the function interpolates two datas, a formula is followed to derive the output
+            //The formula is: a*(1-t)+b*t
+
+            //The value for "a" will be taken from the rgb value of "red" - rgb(255, 0, 0)
+            //The value for "b" will be taken from the rgb value of "green" - rgb(0, 255, 0)
+            //The "t" value in this case will be 0.5
+
+            //The below calculation shows how the function produces the output - rgb(128, 64, 0)
+
+            //Calculation:
+            //To derive 128
+            //the function takes the value of "a" as 255 (from the "r" value of rgb(255, 0, 0)) and "b" as 0 (from the "r" value of rgb(0, 255, 0))
+            //"t" will be 0.5
+            //Using the formula ( a*(1-t)+b*t ),
+            // 255*(1-0.5) + 1*0 = 127.5 (will be rounded to 128)
+
+            //The remaining elements of the output rgb value - (64, 0) are also calculated similarly as above
+            console.log(cc(0.5));        //Output - rgb(128, 64, 0)
+
+
+
+
+
+            //////////////////////EXERCISE 26
+            console.log(" ")
+
+            //Initializing the pair of dates to be interpolated
+            //Here, a new date object is created
             let dat = d3.interpolate(new Date("2021-01-18"), new Date("2022-01-18"))
-            console.log(dat(0.4));
+
+            //Output - Sun Jun 13 2021 04:00:00 GMT+0400 (Gulf Standard Time)
+            //The output of dat(0.4) is as given above
+            //This is because when the function interpolates two datas, a formula is followed to derive the output
+            //The formula is: a*(1-t)+b*t
+
+            //The value for "a" will be taken from the first date argument - ("2021-01-18")
+            //The value for "b" will be taken from the second date argument - ("2022-01-18")
+            //The "t" value in this case will be 0.4
+
+            //For dates, the setTime() function is used,
+            //the value derived from the output of the formula ( a*(1-t)+b*t ) is passed as an argument to
+            //setTime(). The function setTime(), then produces an output
+            console.log(dat(0.4));      //Output - Sun Jun 13 2021 04:00:00 GMT+0400 (Gulf Standard Time)
         </script>
     </body>
 </html>

@@ -14,18 +14,51 @@ Available at: https://www.d3-graph-gallery.com/graph/line_change_data.html
         <script src='https://d3js.org/d3.v7.min.js'></script>
     </head>
 
+    <style>
+        .topButtons {
+
+            /* The below statements are used for designing the button, which are present at the top of the page */
+            background-color: #047076;
+            border: none;
+            color: #DBEBED;
+            padding: 5px 15px;
+            text-align: center;
+            display: inline-block;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        #bottomButton {
+
+            /* The below statements are used for designing the buttons, which are present at the bottom of the page */
+            background-color: #4D4C60;
+            border: none;
+            color: #FADCDC;
+            padding: 5px 15px;
+            text-align: center;
+            display: inline-block;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
 
     <body>
         <script type='text/javascript' src='https://d3js.org/d3.v7.min.js'></script>
 
-        <button onclick="showLine(data1, color1)">Line Graph 1</button>
-        <button onclick="showLine(data2, color2)">Line Graph 2</button>
+        <!-- Creating the buttons present at the top of the page -->
+        <!-- On clicking any of the buttons, the page displays a different graph, based
+        on what dataset was passed to the function showLine() -->
+        <button class="topButtons" onclick="showLine(data1, color1)">Line Graph 1</button>
+        <button class="topButtons" onclick="showLine(data2, color2)">Line Graph 2</button>
 
         <script>
 
-            const color1 = "#32B480"
-            const color2 = "#AA1945"
+            //Initializing the colors for each dataset
+            const color1 = "#32B480"        //color for dataset 1
+            const color2 = "#AA1945"        //color for dataset 2
 
+
+            //Creating the first dataset for the bar chart, that has 9 groups
             const data1 = [
                 {group: "Jan", value: 19},
                 {group: "Feb", value: 21},
@@ -38,6 +71,7 @@ Available at: https://www.d3-graph-gallery.com/graph/line_change_data.html
                 {group: "Sep", value: 18}
             ];
 
+            //Creating the second dataset for the bar chart, that has 9 groups
             const data2 = [
                 {group: "Dec", value: 43},
                 {group: "Jan", value: 48},
@@ -50,13 +84,14 @@ Available at: https://www.d3-graph-gallery.com/graph/line_change_data.html
                 {group: "Aug", value: 0}
             ];
 
-            var c = 0;
-            // set the dimensions and margins of the graph
+            
+            //Defining the dimensions and margins of the graph
             const margin = {top: 30, right: 30, bottom: 70, left: 60};
             const width = 460 - margin.left - margin.right;
             const height = 400 - margin.top - margin.bottom;
 
-            // append the svg object to the body of the page
+
+            //Creating the SVG element for the line chart
             var svg = d3.select('body')
                         .append('div')
                         .append("svg")
@@ -66,137 +101,162 @@ Available at: https://www.d3-graph-gallery.com/graph/line_change_data.html
                         .attr("transform",
                         "translate(" + margin.left + "," + margin.top + ")");
 
-            // Add X axis
+
+
+            //Defining the x-axis for the line chart
             var x = d3.scaleBand()
                         .range([0, width])
-                        .padding(0.2)
+                        .padding(0.2)      //Since each of the datasets consists of discrete values, we add a padding of 0.2
 
+            //Creating a horizontal bottom x-axis using the data generated for the x-axis above
             var xBottomAxis = d3.axisBottom()
                                 .scale(x)
 
+            //Adding the bottom x-axis to the svg
             var x_bottom = svg.append("g")
                                 .attr("transform", "translate(0," + height + ")")
                                 .call(xBottomAxis)
 
+            //Creating a horizontal top x-axis using the data generated for the x-axis above
             var xTopAxis = d3.axisTop()
                               .scale(x)
 
+            //Adding the top x-axis to the svg 
             var x_top = svg.append("g")
                             .call(xTopAxis)
 
+
+            //Defining the y-axis for the line chart
             var y = d3.scaleLinear()
-                        .domain([0, 60])
+                        .domain([0, 60])           //Only numbers from 0-60 will appear on the y-axis
                         .range([ height, 0]);
 
+            //Creating a vertical left y-axis using the data generated for the y-axis above
             var yLeftAxis = d3.axisLeft()
                                 .scale(y)
 
+            //Adding the left y-axis to the svg
             var y_left = svg.append("g")
                             .attr("class", "myYaxis")
                             .call(yLeftAxis);
 
+            //Creating a vertical right y-axis using the data generated for the y-axis above
             var yRightAxis = d3.axisRight()
                                 .scale(y)
 
+            //Adding the right y-axis to the svg
             var y_right = svg.append("g")
                             .attr("class", "myYaxis")
                             .attr("transform", "translate(" + width + ", 0)")
                             .call(yRightAxis); 
 
-            // var circle = svg.selectAll("circle")
-            //                 .data(data)
-            //                 .enter()
-            //                 .append("circle")
-            //                 .attr("r", 5)
 
+            //The below function is used for updating x-axis values dynamically
             function axes(data){
-                        
+
+                        //The domain is set according the elements present in the "group" key
+                        //of each of the datasets    
                         x.domain(data.map(function(d) {            //(Holtz, 2022)
                             return d.group; 
                         }))
                         
+                        //Update the bottom x-axis accordingly
                         xBottomAxis = d3.axisBottom()
                                             .scale(x)
 
+                        //Smoothly transform the updated bottom x-axis
                         x_bottom.transition()                  //(Holtz, 2022)
                             .duration(1000)
                             .call(xBottomAxis)
 
+                        //Update the top x-axis accordingly 
                         xTopAxis = d3.axisTop()
                                       .scale(x)
                         
-                        // alert(height)
+                        //Smoothly transform the updated top x-axis
                         x_top.transition()               //(Holtz, 2022)
                             .duration(1000)
                             .call(xTopAxis)
                 
             }
 
+            //The below function updates or generates the line charts based on the dataset provided as input
             function showLine(data, color) {
 
+                //Call the function to update both the x axes accordingly
                 axes(data);
-                // , function(d){           //(Holtz, 2022)
-                //                 return d.group 
-                //             }
+                
+                //Creating the line chart, based on the provided dataset
                 var u = svg.selectAll(".line")
                             .data([data]);
+
 
                 u.enter()
                     .append("path")
                     .attr("class","line")
                     .merge(u)
-                    .transition()
+                    .transition()        //Setting a transition, so that the chart appears smoothly
                     .duration(1000)
                     .attr("fill", "none")
-                    .attr("stroke", color)
+                    .attr("stroke", color)       //Setting the color of the border, based on the color provided as an argument to the function
                     .attr("stroke-width", 1.5)
                     .attr("d", d3.line()
                     .x(function(d){
-                        return x(d.group) + 15;
+                        return x(d.group) + 15;          //Setting the x-coordinate of the line
                     })
                     .y(function(d){
-                        return y(d.value);
+                        return y(d.value);            //Setting the y-coordinate of the line
                     })
                    )
 
-                   showDots(data, color)
+                   showDots(data, color)         //Function which displays the markers
                 
-
+                //Removing the unused elements for the next dataset     
                 u.exit().remove()
                 
                 
             }
 
+            //This function is used to display the markers on the line chart
             function showDots(data, color){
 
+                //Creating the markers, based on the provided dataset
                 var v = svg.selectAll(".point")
                             .data(data)
 
+                //The below code generates markers for the line chart
+                //these markers are placed on the line chart based on position
+                //of each of the data values 
                 v.enter()
                    .append("circle")
                    .attr("class","point")
                    .merge(v)
-                   .transition()
+                   .transition()           //Setting a transition, so that each marker appears smoothly
                     .duration(1000)
                    .attr("cx", function(d){
                        //alert(x(d))
-                       return x(d.group) +15;
+                       return x(d.group) +15;        //Setting the x-coordinate of the marker
                    })
                 //    .transition()
                 //     .duration(500)
                    .attr("cy", function(d){
-                       return y(d.value);
+                       return y(d.value);           //Setting the y-coordinate of the marker
                    })
-                   .attr("r", 5)
-                   
-                   .attr("fill", color);
+                   .attr("r", 5)                //Setting the radius of the marker
+                   .attr("fill", color);          //Setting the marker color based on the argument provided as input to the function
 
+                   //Removing the unused elements for the next dataset
                    v.exit().remove();
             }
 
+            //When the page is loaded, we initially call the first dataset
             showLine(data1 , color1)                                               
         </script>
 
-        <button onclick="window.location.href='Part 5 ex18 ex19 ex21 ex22.html'">Click for Bar Chart</button>
+        <!-- Creating the button present at the bottom of the page -->
+
+        <!-- On clicking this button, the page leads the user to another HTML page, which 
+        displays the data on a bar chart -->
+        <button id="bottomButton" onclick="window.location.href='Part 5 ex18 ex19 ex20 ex21 ex22.html'">Click for Bar Chart</button>
     </body>
 </html>

@@ -11,6 +11,7 @@ Available at: https://stackoverflow.com/questions/22645162/d3-when-i-add-a-trans
 Available at: https://stackoverflow.com/questions/56533254/positioning-text-in-d3
 -->
 
+<!-- Exercise 18, 19, 20, 21, 22 -->
 
 <!DOCTYPE html>
 
@@ -19,23 +20,56 @@ Available at: https://stackoverflow.com/questions/56533254/positioning-text-in-d
         <script src='https://d3js.org/d3.v7.min.js'></script>
     </head>
 
+    <style>
+        .topButtons {
+
+            /* The below statements are used for designing the button, which are present at the top of the page */
+            background-color: #047076;
+            border: none;
+            color: #DBEBED;
+            padding: 5px 15px;
+            text-align: center;
+            display: inline-block;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        #bottomButton {
+
+            /* The below statements are used for designing the buttons, which are present at the bottom of the page */
+            background-color: #4D4C60;
+            border: none;
+            color: #FADCDC;
+            padding: 5px 15px;
+            text-align: center;
+            display: inline-block;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+
     <body>
         <script type='text/javascript' src='https://d3js.org/d3.v7.min.js'></script>
 
-        <!-- Add buttons -->
-        <button onclick="update(data1, color1)">Bar Graph 1</button>
-        <button onclick="update(data2, color2)">Bar Graph 2</button>
-        <button onclick="update(data3, color3)">Bar Graph 3</button>
-        <button onclick="update(data4, color4)">Bar Graph 4</button>
+        
+        <!-- Creating the buttons present at the top of the page -->
+        <!-- On clicking any of the buttons, the page displays a different graph, based
+        on what dataset was passed to the function update() -->
+        <button class="topButtons" onclick="update(data1, color1)">Bar Graph 1</button>
+        <button class="topButtons" onclick="update(data2, color2)">Bar Graph 2</button>
+        <button class="topButtons" onclick="update(data3, color3)">Bar Graph 3</button>
+        <button class="topButtons" onclick="update(data4, color4)">Bar Graph 4</button>
 
         <script>
-            // create 2 data_set
+            
+            //Initializing the colors for each dataset
+            const color1 = "#7F8FA3";       //color for dataset 1
+            const color2 = "#D95980";       //color for dataset 2
+            const color3 = "#36D6E7";       //color for dataset 3
+            const color4 = "#9571AB";       //color for dataset 4
 
-            const color1 = "#7F8FA3";
-            const color2 = "#D95980";
-            const color3 = "#36D6E7";
-            const color4 = "#9571AB";
 
+            //Creating the first dataset for the bar chart, that has 4 groups
             const data1 = [
                 {group: "A", value: 5},
                 {group: "B", value: 20},
@@ -43,18 +77,21 @@ Available at: https://stackoverflow.com/questions/56533254/positioning-text-in-d
                 {group: "D", value: 16}
             ];
 
+            //Creating the second dataset for the bar chart, that has 3 groups
             const data2 = [
                 {group: "A", value: 10},
                 {group: "B", value: 2},
                 {group: "C", value: 22}
             ];
 
+            //Creating the third dataset for the bar chart, that has 3 groups
             const data3 = [
                 {group: "A", value: 1},
                 {group: "B", value: 14},
                 {group: "C", value: 6}
             ];
 
+            //Creating the fourth dataset for the bar chart, that has 2 groups
             const data4 = [
                 {group: "A", value: 19},
                 {group: "B", value: 3}
@@ -62,12 +99,14 @@ Available at: https://stackoverflow.com/questions/56533254/positioning-text-in-d
 
             // alert(data3.length)
 
-            // set the dimensions and margins of the graph
+
+            //Defining the dimensions and margins of the graph
             const margin = {top: 30, right: 30, bottom: 70, left: 60};
             const width = 460 - margin.left - margin.right;
             const height = 400 - margin.top - margin.bottom;
 
-            // append the svg object to the body of the page
+
+            //Creating the SVG element for the bar chart
             var svg = d3.select('body')
                         .append('div')
                         .append("svg")
@@ -78,137 +117,168 @@ Available at: https://stackoverflow.com/questions/56533254/positioning-text-in-d
                         "translate(" + margin.left + "," + margin.top + ")");
 
 
-            // Add X axis
+            //Defining the x-axis for the bar chart
             var x = d3.scaleBand()
                         .range([0, width])
-                        .padding(0.2)
+                        .padding(0.2)             //Since each of the datasets consists of discrete values, we add a padding of 0.2 between each bars so that the bar chart does not appear like a histogram
 
+
+            //Creating a horizontal bottom x-axis using the data generated for the x-axis above
             var xBottomAxis = d3.axisBottom()
                                 .scale(x)
 
+            //Adding the bottom x-axis to the svg
             var x_bottom = svg.append("g")
                                 .attr("transform", "translate(0," + height + ")")
                                 .call(xBottomAxis)  
 
+            //Creating a horizontal top x-axis using the data generated for the x-axis above
             var xTopAxis = d3.axisTop()
                               .scale(x)
-                        
+            
+            //Adding the top x-axis to the svg                  
             var x_top = svg.append("g")
                             .call(xTopAxis)                  
 
 
-            // Add Y axis
-            var y = d3.scaleLinear()
-                        .domain([0, 26])
-                        .range([ height, 0]);
 
+            //Defining the y-axis for the bar chart
+            var y = d3.scaleLinear()
+                        .domain([0, 26])          //Only numbers from 0-26 will appear on the y-axis
+                        .range([height, 0]);
+
+            //Creating a vertical left y-axis using the data generated for the y-axis above
             var yLeftAxis = d3.axisLeft()
                                 .scale(y)
 
+            //Adding the left y-axis to the svg
             var y_left = svg.append("g")
                             .attr("class", "myYaxis")
                             .call(yLeftAxis);
 
+            //Creating a vertical right y-axis using the data generated for the y-axis above
             var yRightAxis = d3.axisRight()
                                 .scale(y)
 
+            //Adding the right y-axis to the svg
             var y_right = svg.append("g")
                             .attr("class", "myYaxis")
                             .attr("transform", "translate(" + width + ", 0)")
                             .call(yRightAxis);
 
+            //Creating the container to elements of the bar chart
             var gr = svg.append("g")
 
+
+
+            //The below function is used for updating x-axis values dynamically
             function axes(data){
                         
+                        //The domain is set according the elements present in the "group" key
+                        //of each of the datasets
                         x.domain(data.map(function(d) {            //(Holtz, 2022)
                             return d.group; 
                         }))
                         
+                        //Update the bottom x-axis accordingly
                         xBottomAxis = d3.axisBottom()
                                             .scale(x)
 
+                        //Smoothly transform the updated bottom x-axis
                         x_bottom.transition()                  //(Holtz, 2022)
                             .duration(1000)
                             .call(xBottomAxis)
 
+                        //Update the top x-axis accordingly    
                         xTopAxis = d3.axisTop()
                                       .scale(x)
                         
-                        // alert(height)
-                        x_top.transition()               //(Holtz, 2022)
+                        //Smoothly transform the updated top x-axis
+                        x_top.transition()               
                             .duration(1000)
-                            .call(xTopAxis)
-                
+                            .call(xTopAxis) 
             }
-            
+             
 
-            
-
-            // A function that create / update the plot for a given variable:
+            //The below function updates or generates the bar charts based on the dataset provided as input
             function update(data, color) {
 
+                //Call the function to update both the x axes accordingly
                 axes(data);
 
+
+                //Creating the bars of the chart, based on the provided dataset
                 var u = gr.selectAll("rect")
                             .data(data)
                             .join("rect")
-
+                    
+                    //Setting a transition, so that each bar appears smoothly
                     u.transition()                            //(Evans, 2014)
                             .duration(1000)
                             .attr("x", function(d){
-                                return x(d.group);
+                                return x(d.group);        //Setting the x-coordinate of the bar
                             })
                             .attr("y", function(d){
-                                return y(d.value);
+                                return y(d.value);        //Setting the y-coordinate of the bar
                             })
-                            .attr("width", x.bandwidth())
+                            .attr("width", x.bandwidth())    //The width will remain the same within each dataset, but will vary for different datasets
                             .attr("height", function(d){
-                                return height - y(d.value);
+                                return height - y(d.value);   //Adjusting the height according to the current value, and matching it to its position on the y-axis
                             })
-                            .attr("fill", color)
+                            .attr("fill", color)            //Setting the color of the bars, based on the color provided as an argument to the function
                     
-                    u.on("mouseover", onMouseOver)
-                     .on("mouseout", onMouseOut)
-
+                    u.on("mouseover", onMouseOver)         //Listening for any mouseover events
+                     .on("mouseout", onMouseOut)           //Listening for any mouseout events
+                
+                     
+                //Removing the unused elements for the next dataset 
                 u.exit().remove()
                 
             }
 
+            //When the mouse cursor moves over the bar, the below function is called
             function onMouseOver(d, i){
-                console.log("helo")
+                // console.log("entered mouseover")
                 d3.select(this)
                     .transition()
-                    .duration(400)
+                    .duration(400)       //Setting the duration of the transition
 
+                //Creating the text which will apppear above the bar on hovering over the bar
                 gr.append("text")
                     .attr("class", "val")
                     .attr("x", function(){
+                        //Setting the x-coordinate of the text
                         return x(i.group) + + x.bandwidth()/2;           //(learner, 2019)
                     })
                     .attr("y", function(){
+                        //Setting the y-coordinate of the text
                         return y(i.value) - 15;
                     })
                     .text(function(){
-                        return i.value;
+                        return i.value;       //The respective value of the bar will appear as a text, when hovering over the bar
                     })
                     .attr("text-anchor", "middle")
             }
 
+            //When the mouse cursor moves away from the bar, the below function is called
             function onMouseOut(){
                 d3.select(this)
                     .transition()
-                    .duration(400)
+                    .duration(400)       //Setting the duration of the transition
                 
                 d3.selectAll(".val")
-                    .remove()
+                    .remove()            //After the cursor moves away from the sphere, the text disappears
             }
 
 
-            // Initialize the plot with the first dataset
+            //When the page is loaded, we initially call the first dataset
             update(data1, color1)
         </script>
 
-        <button onclick="window.location.href='Part 5 ex23.html'">Click for Line Chart</button>
+        <!-- Creating the button present at the bottom of the page -->
+
+        <!-- On clicking this button, the page leads the user to another HTML page, which 
+        displays the data on a line chart -->
+        <button id="bottomButton" onclick="window.location.href='Part 5 ex23.html'">Click for Line Chart</button>
     </body>
 </html>

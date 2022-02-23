@@ -3,11 +3,10 @@
 <!-- 
 1) mousavi (2016). a perfect circle div (Example). Coderwall. [online]  
 Available at: https://coderwall.com/p/yfccow/a-perfect-circle-div
-
 -->
 
 
-
+<!-- Exercise 3 -->
 
 <!DOCTYPE html>
 
@@ -20,23 +19,28 @@ Available at: https://coderwall.com/p/yfccow/a-perfect-circle-div
         <script type='text/javascript' src='https://d3js.org/d3.v7.min.js'></script>
 
         <script>
+
+            //Creating a rectangle with the help of the div tag
             d3.select('body')
                 .append('div')
-                .style('width', '100px')
-                .style('height', '20px')
-                .style('background-color', 'green');
+                .style('width', '100px')        //Setting the width of the rectangle
+                .style('height', '20px')        //Setting the height of the rectangle
+                .style('background-color', 'green');        //Setting the color of the rectangle to be green
 
             d3.selectAll("div")
+                //This below code listens for any mouseover event and updates the div accordingly
                 .on("mouseover", function(event){
                     d3.select(this)
-                        .style("background-color", "orange")
-                        .style('width', '50px')
-                        .style('height', '50px')
-                        .style("border-width", "2px")
-                        .style("border-color", "purple")
-                        .style("border-style", "dashed")
-                        .style("border-width", "thick")
+                        .style("background-color", "orange")        //Set the color of the square to be orange color
+                        .style('width', '50px')                     //Update the width to 50px in order to make a sqaure
+                        .style('height', '50px')                    //Update the height to 50px in order to make a square
+                        .style("border-width", "2px")               //Set the border width of the square to be 2px
+                        .style("border-color", "purple")            //Set the border color to be purple
+                        .style("border-style", "dashed")            //Set the border style to be dashed 
+                        .style("border-width", "thick")             //Set the border width to be thick
+                        //In order to not make the square appear circular, we set border radius as 0
                         .style("border-radius", "0px");           //(mousavi, 2016)
+
                         // Get current event info
                         // Note: d3.event (event) passed as the first argument to all listeners
                         console.log(event);
@@ -45,15 +49,17 @@ Available at: https://coderwall.com/p/yfccow/a-perfect-circle-div
                         // Note: d3.mouse was removed in d3v6, you should use d3.pointer(event)
                         console.log(d3.pointer(event));
                 })
+                //This below code listens for any mouseout event and updates the div accordingly
                 .on("mouseout", function(){
                     d3.select(this)
-                        .style("background-color", "steelblue")
-                        .style("width", "80px")
-                        .style("height", "80px")
-                        .style("border-width", "2px")
-                        .style("border-color", "red")
-                        .style("border-style", "solid")
-                        .style("border-width", "medium")
+                        .style("background-color", "steelblue")      //Set the color of the square to be orange color
+                        .style("width", "80px")                     //Update the width to be 80px
+                        .style("height", "80px")                    //Update the height to be 80px
+                        .style("border-width", "2px")               //Set the border width of the circle to be 2px
+                        .style("border-color", "red")               //Set the border color to be red
+                        .style("border-style", "solid")             //Set the border style to be solid 
+                        .style("border-width", "medium")            //Set the border width to be medium
+                        //To make the shape appear circular, the border radius is set as 40px
                         .style("border-radius", "40px");        //(mousavi, 2016)   
                 });
                 

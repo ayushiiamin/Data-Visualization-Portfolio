@@ -1,3 +1,7 @@
+<!-- Exercise 6, 7, 8 -->
+
+
+
 <!DOCTYPE html>
 
 <html lang = "en">
@@ -9,34 +13,38 @@
         <script type='text/javascript' src='https://d3js.org/d3.v7.min.js'></script>
 
         <script>
+
+            //Creating a square with the help of the div tag
             d3.select('body')
                 .append("div")
-                .style('width', '100px')
-                .style('height', '100px')
-                .style('background-color', 'blue')
+                .style('width', '100px')     //Setting the width of the sqaure      
+                .style('height', '100px')      //Setting the height of the sqaure
+                .style('background-color', 'blue')      //Setting the color of the square to be blue
 
             d3.selectAll("div")
+                //This below code listens for any mouseover event and updates the div accordingly
                 .on("mouseover", function(event){
                     d3.select(this)
                         .transition()
-                        .duration(1000)
-                        .style('width', '50px')
-                        .style('height', '50px')
-                        .style("background-color", "red")
+                        .duration(1000)     //Setting the duration of the initial transition to be 1s
+                        .style('width', '50px')         //Decreasing the width of the square to be 50px
+                        .style('height', '50px')        //Decreasing the height of the square to be 50px
+                        .style("background-color", "red")       //Change the color of the box to be red
                         .transition()
-                        .duration(2000)
-                        .style('width', '150px')
-                        .style('height', '150px')
-                        .style("background-color", "green");
+                        .duration(2000)      //Setting the duration of the next transition to be 2s   
+                        .style('width', '150px')            //Increasing the width of the square to be 150px
+                        .style('height', '150px')           //Increasing the height of the square to be 150px
+                        .style("background-color", "green");     //Change the color of the box to be green
 
                 })
+                //This below code listens for any mouseout event and updates the div accordingly
                 .on("mouseout", function(event){
                     d3.select(this)
                         .transition()
-                        .duration(1000)
-                        .style('width', '100px')
-                        .style('height', '100px')
-                        .style('background-color', 'blue') 
+                        .duration(1000)    //Setting the duration of the transition to be 1s
+                        .style('width', '100px')       //Set the width of the square to be its original value
+                        .style('height', '100px')       //Set the height of the square to be its original value
+                        .style('background-color', 'blue')      //Set the color of the box to be its original value - blue
                 })
                 
 

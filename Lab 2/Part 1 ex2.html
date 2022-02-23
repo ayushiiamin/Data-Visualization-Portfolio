@@ -15,6 +15,7 @@ Available at: https://stackoverflow.com/questions/42718803/equivalent-method-of-
 -->
 
 
+<!-- Exercise 2 -->
 
 
 <!DOCTYPE html>
@@ -33,11 +34,13 @@ Available at: https://stackoverflow.com/questions/42718803/equivalent-method-of-
 
         <script>
 
+            //Defining the dimensions and margins of the map
             const margin = {top: 30, right: 30, bottom: 70, left: 150};
             const width = 1050 - margin.left - margin.right;
             const height = 800 - margin.top - margin.bottom;
 
 
+            //Creating an svg for the map
             var svg = d3.select('body')
                         .append('div')
                         .append("svg")
@@ -47,17 +50,27 @@ Available at: https://stackoverflow.com/questions/42718803/equivalent-method-of-
                         .attr("transform",
                         "translate(" + margin.left + "," + margin.top + ")");
 
-            
-            var mapProjection = d3.geoMercator()            //(Holtz, 2022)
+
+            //The below code is used for building the projection of the map
+            //This projection will be used for converting each of the countries coordinates
+            //to pixels so that the map can be displayed on the SVG
+            var mapProjection = d3.geoMercator()                    //(Holtz, 2022)
                                     .scale(100)
                                     .center([0,55])
                                     .translate([185, 150])
 
-            //(Holtz, 2022)
+
+            //The JSON file which consists of the data, is hosted on GitHub
+            //Storing the path of the GitHub file in a variable
+                        //(Holtz, 2022)
             let mapJSON = "https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson";
 
+
+            //Loading the JSON file
             d3.json(mapJSON).then(function(data){
                 // console.log(Object.keys(data))
+
+                //The below code is used for drawing the map
                 var map = svg.append("g")
                                 .selectAll("path")
                                 .data(data.features)
@@ -65,61 +78,82 @@ Available at: https://stackoverflow.com/questions/42718803/equivalent-method-of-
                                 .append("path")
                                 .attr("class", "map")
                                 .attr("fill", "#0490AE")
-                                .attr("d", d3.geoPath()
-                                              .projection(mapProjection)        //(Holtz, 2022)
+                                .attr("d", d3.geoPath()          //Creating a geographic path and sets the current projection
+                                              //The projection will be used for converting the coordinates of the countries into pixels
+                                                .projection(mapProjection)              //(Holtz, 2022)
                                 )
-                                .style("opacity", 0.75)
-                                .on("mouseover", onMouseOver)
-                                .on("mouseout", onMouseOut)
+                                .style("opacity", 0.75)           //Setting the opacity of the svg     
+                                .on("mouseover", onMouseOver)     //Listening for any mouseover events
+                                .on("mouseout", onMouseOut)       //Listening for any mouseout events
 
+
+                //Setting the tooltip for the box which appears behind the text 
                 var tooltipRect = d3.select("svg")
                                     .append("g")
                                     .append("rect")
                                     .style("position", "absolute")
-                                    .style("visibility", "hidden")        //(Stophface, 2016)
-                                    .attr("x", 610)
-                                    .attr("y", 15)
-                                    .attr("fill", "#695E93")  
+                                    //Setting the visibility originally to be hidden
+                                    .style("visibility", "hidden")                  //(Stophface, 2016)
+                                    .attr("x", 610)        //Setting the x-coordinate of the rectangle
+                                    .attr("y", 15)          //Setting the y-coordinate of the rectangle
+                                    .attr("fill", "#695E93")          //Setting the color of the rectangle
 
+                //Setting the tooltip for the text
                 var tooltip = d3.select("svg")
                                 .append("g")
                                 .append("text")
                                 .style("position", "absolute")
-                                .style("visibility", "hidden")         //(Stophface, 2016)
-                                .attr("x", 610)
-                                .attr("y", 40)
-                                .attr("fill", "#EFDCF9")
-                                .attr("font-size", "30px")
+                                //Setting the visibility originally to be hidden
+                                .style("visibility", "hidden")                  //(Stophface, 2016)
+                                .attr("x", 610)          //Setting the x-coordinate of the text
+                                .attr("y", 40)           //Setting the y-coordinate of the text   
+                                .attr("fill", "#EFDCF9")          //Setting the color of the text
+                                .attr("font-size", "30px")        //Setting the font size of the text 
              
 
+                //When the mouse cursor moves over any country, the below function is called
                 function onMouseOver(d, i){
+                    // console.log(i.properties.name)
                     d3.select(this)
                        .transition()
-                       .duration(400)
-                       .attr("fill", "#CD0046")
-                       .style("stroke", "black")       //(Angelica Lo Duca, 2021)
+                       .duration(400)          //Setting the duration of the transition
+                       .attr("fill", "#CD0046")         //When the mouse moves over the country, make the country pink in color
+                       //Draw an outline around the selected country     
+                       .style("stroke", "black")                    //(Angelica Lo Duca, 2021)
 
+
+                    //Now set the text tooltip's visibility to be "visibile"
+                    //so that it appears on the screen
                     tooltip.style("visibility", "visible")         //(Stophface, 2016)
                             .text(function(){
-                                return i.properties.name
+                                return i.properties.name     //When the mouse hovers over the country, the country name will be dispalyed as the text on the top right
                             })
-
+                    
+                    //Now set the box tooltip's visibility to be "visibile"
+                    //so that it appears on the screen
                     tooltipRect.style("visibility", "visible")
                                 .attr("width", function(){
+
+                                    //Adjust the width of the box, based on the length of the text
                                     return d3.select("text").node().getComputedTextLength()      //(ozil, 2017)
                                 })
-                                .attr("height", 35)
+                                .attr("height", 35)     //Setting the height of the box
                     
                 }
 
+
+                //When the mouse cursor moves away from any country, the below function is called
                 function onMouseOut(){
                     d3.selectAll(".map")
                         .transition()
-                        .duration(400)
-                        .attr("fill", "#0490AE")
-                        .style("stroke", "transparent")         //(Angelica Lo Duca, 2021)
-                        .style("opacity", 0.75)
+                        .duration(400)    //Setting the duration of the transition
+                        .attr("fill", "#0490AE")        //Setting the color of the country, back to its original color
+                        //Setting the outline of the country to be transparent
+                        .style("stroke", "transparent")                 //(Angelica Lo Duca, 2021)
+                        .style("opacity", 0.75)     //Setting the opacity back to its original value
 
+                        
+                    //After the mouse moves away from the country, the text box disappears
                     tooltip.style("visibility", "hidden")        //(Stophface, 2016)
                     tooltipRect.style("visibility", "hidden")
                 }
