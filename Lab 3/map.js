@@ -51,21 +51,23 @@ const heightSVG = 750 - margin.top - margin.bottom;
                                 )
                                 .style("opacity", 0.75)           //Setting the opacity of the svg     
                                 .on("click", function(d, i){
+                                    // console.log(i.properties.name)
+                                    getCountry(i.properties.name)
                                     d3.select(this)
                                         .transition()
                                         .duration(100)
                                         .attr("fill", "#0C4160")
                                         .style("stroke", "black")
                                 })     
-                    d3.select("path")
-                        .on("click", function(d, i){
-                            console.log("helo")
-                            d3.select(this)
-                                        .transition()
-                                        .duration(100)
-                                        .attr("fill", "#CD0046")
-                                        .style("stroke", "transparent")
-                        })            
+                    // d3.select("path")
+                    //     .on("click", function(d, i){
+                    //         // console.log("helo")
+                    //         d3.select(this)
+                    //                     .transition()
+                    //                     .duration(100)
+                    //                     .attr("fill", "#CD0046")
+                    //                     .style("stroke", "transparent")
+                    //     })            
 
 
                 
