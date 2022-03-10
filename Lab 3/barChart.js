@@ -114,7 +114,7 @@ d3.csv("data/asia.csv", function(d, i){
     //Defining the x-axis for the bar chart
     var x = d3.scaleBand()
                 .range([0, widthCHART])
-                .padding(0.2)             //Since each of the datasets consists of discrete values, we add a padding of 0.2 between each bars so that the bar chart does not appear like a histogram
+                .padding(0.1)             //Since each of the datasets consists of discrete values, we add a padding of 0.2 between each bars so that the bar chart does not appear like a histogram
 
      //Creating a horizontal bottom x-axis using the data generated for the x-axis above
      var xBottomAxis = d3.axisBottom()
@@ -128,9 +128,12 @@ d3.csv("data/asia.csv", function(d, i){
 
 
     //Defining the y-axis for the bar chart
-    var y = d3.scaleLinear()
-                .domain([0, 600000])          //Only numbers from 0-26 will appear on the y-axis
-                .range([heightCHART, 0]);
+    // var y = d3.scaleLinear()
+    //             .domain([0, 600000])          //Only numbers from 0-26 will appear on the y-axis
+    //             .range([heightCHART, 0]);
+    var y = d3.scaleBand()
+                .range([heightCHART, 0])
+                .padding(0.1)
 
     //Creating a vertical left y-axis using the data generated for the y-axis above
     var yLeftAxis = d3.axisLeft()
@@ -147,11 +150,14 @@ d3.csv("data/asia.csv", function(d, i){
 
     //The below function is used for updating x-axis values dynamically
     function axes(data){
+        
+        // var monthSet = new Set()
 
         //The domain is set according the elements present in the "group" key
         //of each of the datasets
         x.domain(data.map(function(d) {            //(Holtz, 2022)
-            return d.group; 
+            // monthSet.add(month[d.date.getMonth()])
+            return month[d.date.getMonth()]; 
         }))
 
         //Update the bottom x-axis accordingly
@@ -162,6 +168,11 @@ d3.csv("data/asia.csv", function(d, i){
         x_bottom.transition()                  //(Holtz, 2022)
                 .duration(1000)
                 .call(xBottomAxis)
+
+        
+        y.domain(data.map(function(d){
+            
+        }))
     }
 
     var india = asiaArr.filter(yearCountry)
@@ -175,7 +186,9 @@ d3.csv("data/asia.csv", function(d, i){
     function update(data) {
 
         
-        // axes(data);
+        axes(data);
+        var lastDate;
+        
         
         var u = gr.selectAll("rect")
                     .data(data)
@@ -185,23 +198,72 @@ d3.csv("data/asia.csv", function(d, i){
             u.transition()                            
                     .duration(1000)
                     .attr("x", function(d){
-                        return x(d.group);        
+                        //console.log(month[d.date.getMonth()])
+
+                        
+                        lastDate = function(data){
+                            return new Date(d.date.getFullYear(), d.date.getMonth()+1, 0)
+                        }
+
+                        // console.log(month[d.date.getMonth()])
+                        // console.log(lastDate(d.date))                                
+
+                        if(d.date.toDateString() == lastDate(d.date).toDateString()){
+                            // return y(d.total_cases)
+                            // return x(d.date.getMonth())
+                            console.log(x(month[d.date.getMonth()]))
+                            return x(month[d.date.getMonth()]) + 100
+                        } 
+                        // console.log(month[d.date.getMonth()])
+                        // console.log(lastDate(d))
+
+                        // monthSet.add(month[d.date.getMonth()])
+                        // console.log(monthSet)
+                        // return x(d.group);        
                     })
                     .attr("y", function(d){
-                        return y(d.value);        
+
+                        lastDate = function(data){
+                            return new Date(d.date.getFullYear(), d.date.getMonth()+1, 0)
+                        }
+
+                        // console.log(month[d.date.getMonth()])
+                        // console.log(lastDate(d.date))                                
+
+                        if(d.date.toDateString() == lastDate(d.date).toDateString()){
+                            return y(d.total_cases) + 50
+                        }
+                        
+                        // return y(d.value);        
                     })
                     .attr("width", x.bandwidth())    
                     .attr("height", function(d){
-                        return height - y(d.value);   
+
+                        lastDate = function(data){
+                            return new Date(d.date.getFullYear(), d.date.getMonth()+1, 0)
+                        }
+
+                        // console.log(month[d.date.getMonth()])
+                        // console.log(lastDate(d.date))                                
+
+                        if(d.date.toDateString() == lastDate(d.date).toDateString()){
+                            // console.log(d.total_cases)
+                            // console.log(heightCHART - y(d.total_cases))
+                            return heightCHART - y(d.total_cases) 
+                        }
+
+                          
                     })
-                    .attr("fill", color)            
-            
-            u.on("mouseover", onMouseOver)         
-             .on("mouseout", onMouseOut)           
+                    .attr("fill", "black")            
+            // console.log(monthSet)
+            // u.on("mouseover", onMouseOver)         
+            //  .on("mouseout", onMouseOut)           
         
              
         
-        u.exit().remove()
+        // u.exit().remove()
         
     }
+
+    update(india)
 })
