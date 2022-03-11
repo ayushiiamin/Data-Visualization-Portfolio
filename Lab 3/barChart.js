@@ -43,67 +43,22 @@
             date: parseDate(d.date),                 //(Ordonez, 2020)
             total_cases: Number(d.total_cases),
             new_cases: Number(d.new_cases),
-            new_cases_smoothed: Number(d.new_cases_smoothed),
             total_deaths: Number(d.total_deaths),
             new_deaths: Number(d.new_deaths),
-            new_deaths_smoothed: Number(d.new_deaths_smoothed),
             total_cases_per_million: Number(d.total_cases_per_million),
             new_cases_per_million: Number(d.new_cases_per_million),
-            new_cases_smoothed_per_million: Number(d.new_cases_smoothed_per_million),
             total_deaths_per_million: Number(d.total_deaths_per_million),
             new_deaths_per_million: Number(d.new_deaths_per_million),
-            new_deaths_smoothed_per_million: Number(d.new_deaths_smoothed_per_million),
-            reproduction_rate: Number(d.reproduction_rate),
-            icu_patients: Number(d.icu_patients),
-            icu_patients_per_million: Number(d.icu_patients_per_million),
-            hosp_patients: Number(d.hosp_patients),
-            hosp_patients_per_million: Number(d.hosp_patients_per_million),
-            weekly_icu_admissions: Number(d.weekly_icu_admissions),
-            weekly_icu_admissions_per_million: Number(d.weekly_icu_admissions_per_million),
-            weekly_hosp_admissions: Number(d.weekly_hosp_admissions),
-            weekly_hosp_admissions_per_million: Number(d.weekly_hosp_admissions_per_million),
-            new_tests: Number(d.new_tests),
-            total_tests: Number(d.total_tests),
-            total_tests_per_thousand: Number(d.total_tests_per_thousand),
-            new_tests_per_thousand: Number(d.new_tests_per_thousand),
-            new_tests_smoothed: Number(d.new_tests_smoothed),
-            new_tests_smoothed_per_thousand: Number(d.new_tests_smoothed_per_thousand),
-            positive_rate: Number(d.positive_rate),
-            tests_per_case: Number(d.tests_per_case),
-            tests_units: d.tests_units,
             total_vaccinations: Number(d.total_vaccinations),
             people_vaccinated: Number(d.people_vaccinated),
             people_fully_vaccinated: Number(d.people_fully_vaccinated),
             total_boosters: Number(d.total_boosters),
             new_vaccinations: Number(d.new_vaccinations),
-            new_vaccinations_smoothed: Number(d.new_vaccinations_smoothed),
             total_vaccinations_per_hundred: Number(d.total_vaccinations_per_hundred),
             people_vaccinated_per_hundred: Number(d.people_vaccinated_per_hundred),
             people_fully_vaccinated_per_hundred: Number(d.people_fully_vaccinated_per_hundred),
             total_boosters_per_hundred: Number(d.total_boosters_per_hundred),
-            new_vaccinations_smoothed_per_million: Number(d.new_vaccinations_smoothed_per_million),
-            new_people_vaccinated_smoothed: Number(d.new_people_vaccinated_smoothed),
-            new_people_vaccinated_smoothed_per_hundred: Number(d.new_people_vaccinated_smoothed_per_hundred),
-            stringency_index: Number(d.stringency_index),
-            population: Number(d.population),
-            population_density: Number(d.population_density),
-            median_age: Number(d.median_age),
-            aged_65_older: Number(d.aged_65_older),
-            aged_70_older: Number(d.aged_70_older),
-            gdp_per_capita: Number(d.gdp_per_capita),
-            extreme_poverty: Number(d.extreme_poverty),
-            cardiovasc_death_rate: Number(d.cardiovasc_death_rate),
-            diabetes_prevalence: Number(d.diabetes_prevalence),
-            female_smokers: Number(d.female_smokers),
-            male_smokers: Number(d.male_smokers),
-            handwashing_facilities: Number(d.handwashing_facilities),
-            hospital_beds_per_thousand: Number(d.hospital_beds_per_thousand),
-            life_expectancy: Number(d.life_expectancy),
-            human_development_index: Number(d.human_development_index),
-            excess_mortality_cumulative_absolute: Number(d.excess_mortality_cumulative_absolute),
-            excess_mortality_cumulative: Number(d.excess_mortality_cumulative),
-            excess_mortality: Number(d.excess_mortality),
-            excess_mortality_cumulative_per_million: Number(d.excess_mortality_cumulative_per_million)
+            population: Number(d.population)
         };
     }
 
@@ -194,17 +149,12 @@
         // window.getCountry = function(country){        //(Subin Siby, 2014)
         //     window.countryName = country
         // }
+        console.log(asiaArr.length)
+        
         var india = asiaArr.filter(yearCountry)      //(dedpo, 2016)
 
         function yearCountry(d){
-            // console.log(d)
-            // console.log(getCountry())
-            // console.log(window.countryName)
-                // console.log(countryName)
-                return ((d.location == "India") && (d.date.getFullYear() == 2020))
-           
-            
-            
+            return ((d.location == "India") && (d.date.getFullYear() == 2020))
         }
 
         function update(data) {
@@ -213,6 +163,8 @@
             axes(data);
             var lastDate;
             var caseNumSet = new Set()
+
+            console.log(data.length)
             
             var u = gr.selectAll("rect")
                         .data(data)

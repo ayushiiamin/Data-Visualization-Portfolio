@@ -5,7 +5,7 @@ const heightSVG = 750 - margin.top - margin.bottom;
 
             //Creating an svg for the map
             var svg = d3.select('body')
-                        .append('div')
+            .append("div")
                         .append("svg")
                         .attr("class","map")
                         .attr("width", widthSVG + margin.left + margin.right)
