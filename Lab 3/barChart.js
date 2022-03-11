@@ -115,7 +115,6 @@
 
         //Creating an svg for the map
         var svgCHART = d3.select('body')
-                            .append('div')
                             .append("svg")
                             .attr("class","bar")
                             .attr("width", widthCHART + marginCHART.left + marginCHART.right)

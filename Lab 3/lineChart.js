@@ -7,7 +7,7 @@
 
     var	parseDate = d3.timeParse("%Y-%m-%d");            //(Ordonez, 2020)
 
-    function toNumDate(d) {
+    function strToOriginal(d) {
         return {
             iso_code: d.iso_code,
             continent: d.continent,
@@ -83,7 +83,7 @@
 
     d3.csv("data/asia.csv", function(d, i){
         // console.log(d.date)
-        asiaArr.push(toNumDate(d))
+        asiaArr.push(strToOriginal(d))
     }).then(function(data){
 
         const month = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
@@ -181,11 +181,37 @@
             axes(data);
             var lastDate;
             var caseNumSet = new Set()
+            var reqMonths = []
+            var reqValues = []
 
-            console.log("entered draw")
+            for(var i = 0; i<data.length; i++){
+                lastDate = function(d){
+                    return new Date(d.getFullYear(), d.getMonth() + 1, 0)
+                }
+
+                
+                if(data[i].date.getTime() == lastDate(data[i].date).getTime()){
+                        reqMonths.push(month[data[i].date.getMonth()])
+                        reqValues.push(data[i].total_deaths)
+                        caseNumSet.add(data[i].total_deaths)
+                }
+            }
+
+            updateYAxis(caseNumSet)
+
+            var newData = data.filter(testFunc)
+
+            function testFunc(dat){
+                if(dat.date.getTime() == lastDate(dat.date).getTime()){
+                    return (reqValues.includes(dat.total_deaths))
+                }
+                
+            }
+
+            // console.log(newData)
 
             var u = svgLINE.selectAll(".line")
-                            .data([data]);
+                            .data([newData]);
 
             u.enter()
               .append("path")
@@ -194,39 +220,14 @@
               .transition()        
               .duration(1000)
               .attr("fill", "none")
-              .attr("stroke", "black")      
-              .attr("stroke-width", function(d){
-                //   console.log(d.date)
-                  return 1.5
-              })
+              .attr("stroke", "#CD0046")      
+              .attr("stroke-width", 1.5)
               .attr("d", d3.line()
               .x(function(d){
-                    // console.log("helo")
-                    lastDate = function(data){
-                        return new Date(d.date.getFullYear(), d.date.getMonth()+1, 0)         //(w3resource, 2020)   
-                    }                               
-
-                    if(d.date.getTime() == lastDate(d.date).getTime()){          //(Hellnar, 2010)
-                        // if(isNaN(d.total_cases) == false){
-                            caseNumSet.add(d.total_deaths)
-                            return x(month[d.date.getMonth()])  +100          //(W3schools.com, 2022)
-                        // }
-                    }
-                    return null
+                    return x(month[d.date.getMonth()]) + 98
                 })
                .y(function(d){
-                    lastDate = function(data){
-                        return new Date(d.date.getFullYear(), d.date.getMonth()+1, 0)       //(w3resource, 2020)
-                    }
-
-                    updateYAxis(caseNumSet)
-                    
-                    if(d.date.getTime() == lastDate(d.date).getTime()){         //(Hellnar, 2010)
-                        // if(d.total_cases != NaN){
-                            return y(d.total_deaths) + 50
-                        // }
-                    }  
-                    return null           
+                    return y(d.total_deaths) + 50   
                 })
               )
         }
