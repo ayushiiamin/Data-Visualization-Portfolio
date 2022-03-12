@@ -18,6 +18,10 @@
 // 6) Subin Siby (2014). Create Global Functions In JavaScript. [online] Subinsb.com. 
 //    Available at: https://subinsb.com/global-functions-javascript/
 
+
+
+
+
 // var countryName;
 
 // window.getCountry = function(country){

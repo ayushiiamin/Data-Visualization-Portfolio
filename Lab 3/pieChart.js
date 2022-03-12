@@ -43,6 +43,7 @@ function dateToOriginalType(d) {
 }
 
 
+
 d3.csv("data/asia.csv", function(d, i){
     asiaArrPIE.push(dateToOriginalType(d))
 }).then(function(data){
@@ -54,33 +55,17 @@ d3.csv("data/asia.csv", function(d, i){
                     .attr("height", heightPIE)
                     .attr("transform", "translate(10, 0)")
                     .append("g")
-                    .attr("transform", "translate(" + widthPIE / 2 + "," + heightPIE / 2 + ")");
+                    .attr("transform", "translate(" + (widthPIE-250) + "," + (heightPIE-180) + ")");
 
     var radius = Math.min(widthPIE, heightPIE)/2;
 
-    var color = d3.scaleOrdinal().range(d3.schemeSet3);
-
-    var lastDate;
-    var lastDayofYear;
+    var color = d3.scaleOrdinal().range(["#01949A", "#CD0046", "#CDF4DC", "#130170"]);
+    // var color = d3.scaleOrdinal().range(["#CDF4DC", "#130170", "#CDF4DC", "#130170"]);
+    
+    
 
     var pie = d3.pie()
                 .sort(null)
-                .value(function(dat){
-
-                    lastDate = function(d){
-                        return new Date(d.getFullYear(), d.getMonth() + 1, 0)
-                    }
-
-                    lastDayofYear = function(d){
-                        return new Date(d.getFullYear(), 11, 31)            //(Bobbyhadz.com, 2021)
-                    }
-
-                    console.log(dat)
-
-                    if(dat.date.getTime() == lastDate(dat.date).getTime()){
-                        return dat.total_cases
-                    }
-                })
 
     var arc = d3.arc()
                 .innerRadius(radius - 100)
@@ -95,13 +80,37 @@ d3.csv("data/asia.csv", function(d, i){
                 
     function showPie(data){
 
+        var lastDayofYear;
+        var datArr = []
+
+        for(var i = 0; i<data.length; i++){
+            lastDayofYear = function(d){
+                return new Date(d.getFullYear(), 11, 31)            //(Bobbyhadz.com, 2021)
+            }
+
+            if(data[i].date.getTime() == lastDayofYear(data[i].date).getTime()){
+                // console.log(data[i].date)
+                datArr.push(data[i].total_cases)
+                console.log(data[i].total_cases)
+
+                datArr.push(data[i].total_deaths)
+                console.log(data[i].total_deaths)
+
+                datArr.push(data[i].total_vaccinations)
+                console.log(data[i].total_vaccinations)
+                
+                datArr.push(data[i].total_boosters)
+                console.log(data[i].total_boosters)
+                // console.log(datArr)
+            }
+        }
+
+        console.log(datArr)
 
         var path = svgPIE.selectAll("path")
-                       .data(pie(data))     
-                    
-        
-                    //    console.log(pie(data))
+                       .data(pie(datArr))
                        
+        console.log(pie(datArr))
 
         path.enter()
             .append("path")
@@ -109,7 +118,7 @@ d3.csv("data/asia.csv", function(d, i){
             .transition()
             .duration(1000)    
             .attr("fill", function(d, i){
-                
+                console.log(color(i))
                 return color(i);         
             })
             .attr("d", arc)
@@ -120,17 +129,6 @@ d3.csv("data/asia.csv", function(d, i){
                                 return arc(d);
                             }
                 })
-
-                path.append("text")
-                .attr("transform", function(d) { 
-                    console.log("helo")
-                    return "translate(" + arc.centroid(d) + ")"; 
-                })
-                .attr("dy", ".35em")
-                .text(function(d) {
-                   
-                    return d.data.date; 
-                });
             
         path.exit().remove();
     }

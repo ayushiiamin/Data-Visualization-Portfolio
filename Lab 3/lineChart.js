@@ -1,3 +1,29 @@
+// REFERENCES - 
+
+// 1) w3resource. (2020). JavaScript: Find out the last day of a month - w3resource. [online] 
+//    Available at: https://www.w3resource.com/javascript-exercises/javascript-date-exercise-9.php
+
+// 2) Hellnar (2010). Checking if two Dates have the same date info. [online] Stack Overflow. 
+//    Available at: https://stackoverflow.com/questions/4428327/checking-if-two-dates-have-the-same-date-info
+
+// 3) W3schools.com. (2022). JavaScript Date getMonth() Method. [online] 
+//    Available at: https://www.w3schools.com/jsref/jsref_getmonth.asp
+
+// 4) Ordonez, T. (2020). D3 Convert String to Date. [online] Tom Ordonez. 
+//    Available at: https://www.tomordonez.com/d3-convert-string-to-date/
+
+// 5) dedpo (2016). Selecting a section of data from CSV in d3.js. [online] Stack Overflow. 
+//    Available at: https://stackoverflow.com/questions/36314656/selecting-a-section-of-data-from-csv-in-d3-js
+
+// 6) Subin Siby (2014). Create Global Functions In JavaScript. [online] Subinsb.com. 
+//    Available at: https://subinsb.com/global-functions-javascript/    
+    
+    
+    
+    
+    
+    
+    
     const marginLINE = {top: 10, right: 30, bottom: 70, left: 155};
     const widthLINE = 400 - marginLINE.left - marginLINE.right;
     const heightLINE = 220 - marginLINE.top - marginLINE.bottom;
