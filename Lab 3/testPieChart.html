@@ -1,0 +1,172 @@
+<!-- REFERENCES -->
+
+<!--   
+1) Holtz, Y. (2022). Input data transition for d3.js line chart. D3-graph-gallery.com. [online] 
+Available at: https://www.d3-graph-gallery.com/graph/line_change_data.html
+-->
+
+
+
+<!DOCTYPE html>
+
+<html lang = "en">
+    <head>
+        <script src='https://d3js.org/d3.v7.min.js'></script>
+    </head>
+
+    <style>
+        .topButtons {
+
+            /* The below statements are used for designing the button, which are present at the top of the page */
+            background-color: #047076;
+            border: none;
+            color: #DBEBED;
+            padding: 5px 15px;
+            text-align: center;
+            display: inline-block;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        #bottomButton {
+
+            /* The below statements are used for designing the buttons, which are present at the bottom of the page */
+            background-color: #4D4C60;
+            border: none;
+            color: #FADCDC;
+            padding: 5px 15px;
+            text-align: center;
+            display: inline-block;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+
+    <body>
+        <script type='text/javascript' src='https://d3js.org/d3.v7.min.js'></script>
+
+        <script>
+            var widthTEST = 460;
+            var heightTEST = 300;
+
+            var empArr = [];
+
+            var	parseDateTEST = d3.timeParse("%m/%d/%Y");            //(Ordonez, 2020)
+
+
+            function testFunc(d) {
+                return {
+                    date: parseDateTEST(d.date),                 //(Ordonez, 2020)
+                    case: Number(d.case),
+                    death: Number(d.death),
+                    vaccination: Number(d.vaccination),
+                    booster: Number(d.booster)
+                };
+            }
+
+            // let arrCSV = "https://raw.githubusercontent.com/ayushiiamin/csvfileimp/main/pieTestData.csv"
+
+            d3.csv("data/forPie.csv", function(d, i){
+                empArr.push(testFunc(d))
+            }).then(function(data){
+
+                // const data1 = [
+                //     {case: 102709, death: 148994, vaccinations: 122111, boosters: 5408}
+                // ];
+
+                // console.log(empArr)
+                
+                var svgTEST = d3.select("body")
+                                .append("svg")
+                                .attr("class","pie")
+                                .attr("width", widthTEST + 100)
+                                .attr("height", heightTEST)
+                                .attr("transform", "translate(10, 0)")
+                                .append("g")
+                                .attr("transform", "translate(" + widthTEST / 2 + "," + heightTEST / 2 + ")");
+                
+                var radius = Math.min(widthTEST, heightTEST)/2;
+
+                var color = d3.scaleOrdinal().range(d3.schemeSet3);
+
+                var pie = d3.pie()
+                            .sort(null)
+                            // .value(function(dat){
+                            //     // console.log(Object.keys(dat))
+                            //     // console.log(Object.keys(dat).length)
+
+                            //     for(var i = 0; i < Object.keys(dat).length; i++){
+                            //         // console.log(dat[Object.keys(dat)[i]])
+                            //         testArr.push(dat[Object.keys(dat)[i]])
+                            //     }
+                                
+                            //     return testArr
+                            // })
+
+                var arc = d3.arc()
+                            .innerRadius(radius - 100)
+                            .outerRadius(radius - 50);
+
+                function showPie(data){
+
+                    // console.log(Object.values(data[Object.keys(data)]))
+
+                    // console.log(Object.keys(data))
+                    // console.log(data[0])
+                    // console.log(data[Object.keys(data)[0]])
+
+                    var lastDayofYear;
+                    var testArrz = []
+
+                    for(var i = 0; i<data.length; i++){
+                        lastDayofYear = function(d){
+                            return new Date(d.getFullYear(), 11, 31)            //(Bobbyhadz.com, 2021)
+                        }
+                        
+                    
+                    if(data[i].date.getTime() == lastDayofYear(data[i].date).getTime()){
+                        console.log(data[i].date)
+                        for(var j = 1; j < 5; j++){
+                            console.log(Object.values(data[Object.keys(data)[i]])[j])
+                            testArrz.push(Object.values(data[Object.keys(data)[i]])[j])
+                        }
+                    }
+
+                }    
+                
+                console.log(testArrz)
+
+                    var path = svgTEST.selectAll("path")
+                                .data(pie(testArrz)) 
+                                
+                                
+                    // console.log(Object.values(data[Object.keys(data)]))
+
+                    console.log(pie(testArrz))
+
+                    path.enter()
+                        .append("path")
+                        .merge(path)
+                        .transition()
+                        .duration(1000)    
+                        .attr("fill", function(d, i){
+                            
+                            return color(i);         
+                        })
+                        .attr("d", arc)
+                        .attrTween("d", function(d){
+                            var i = d3.interpolate(d.endAngle, d.startAngle);
+                                        return function (t){
+                                            d.startAngle = i(t);
+                                            return arc(d);
+                                        }
+                            })
+                        
+                    path.exit().remove();
+                }
+
+                showPie(empArr)
+            })
+        </script>
+    </body>
+</html>

@@ -1,0 +1,50 @@
+1) Afghanistan - 52330
+2) Armenia - 159409
+3) Azerbaijan - 218700
+4) Bahrain - 92675
+5) Bangladesh - 513510
+6) Bhutan - 670
+7) Brunei - 157
+8) Cambodia - 378
+9) China - 87071
+10) Georgia - 227420
+11) Hong Kong - 8846
+12) India - 10286709
+13) Indonesia - 743198
+14) Iran - 1225142
+15) Iraq - 595291
+16) Israel - 423262
+17) Japan - 235749
+18) Jordan - 294494
+19) Kazakhstan - 201196
+20) Kuwait - 150584
+21) Kyrgyzstan - 81034
+22) Laos - 41
+23) Lebanon - 181503
+24) Macao - 46
+25) Malaysia - 113010
+26) Maldives - 13757
+27) Mongolia - 1195
+28) Myanmar - 124630
+29) Nepal - 260593
+30) Northern Cyprus - 0
+31) Oman - 128867
+32) Pakistan - 482178
+33) Palestine - 138004
+34) Philippines - 474064
+35) Qatar - 143834
+36) Saudi Arabia - 362741
+37) Singapore - 58599
+38) South Korea - 61769
+39) Sri Lanka - 43299
+40) Syria - 11434
+41) Taiwan - 799
+42) Tajikistan - 13665
+43) Thailand - 6884
+44) Timor - 44
+45) Turkey - 2208652
+46) Turkmenistan - 0
+47) United Arab Emirates - 207822
+48) Uzbekistan - 77060
+49) Vietnam - 1465
+50) Yemen - 2099

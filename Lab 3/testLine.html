@@ -1,0 +1,121 @@
+<!-- REFERENCES -->
+
+<!--   
+1) Holtz, Y. (2022). Input data transition for d3.js line chart. D3-graph-gallery.com. [online] 
+Available at: https://www.d3-graph-gallery.com/graph/line_change_data.html
+-->
+
+
+
+<!DOCTYPE html>
+
+<html lang = "en">
+    <head>
+        <script src='https://d3js.org/d3.v7.min.js'></script>
+    </head>
+
+    <style>
+        .topButtons {
+
+            /* The below statements are used for designing the button, which are present at the top of the page */
+            background-color: #047076;
+            border: none;
+            color: #DBEBED;
+            padding: 5px 15px;
+            text-align: center;
+            display: inline-block;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        #bottomButton {
+
+            /* The below statements are used for designing the buttons, which are present at the bottom of the page */
+            background-color: #4D4C60;
+            border: none;
+            color: #FADCDC;
+            padding: 5px 15px;
+            text-align: center;
+            display: inline-block;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+
+    <body>
+        <script type='text/javascript' src='https://d3js.org/d3.v7.min.js'></script>
+
+        <script>
+            var widthPIE = 460;
+            var heightPIE = 300;
+
+            const data1 = [
+                {case: 102709, death: 148994, vaccinations: 122111, boosters: 5408}
+            ];
+            
+            var svgPIE = d3.select("body")
+                            .append("svg")
+                            .attr("class","pie")
+                            .attr("width", widthPIE + 100)
+                            .attr("height", heightPIE)
+                            .attr("transform", "translate(10, 0)")
+                            .append("g")
+                            .attr("transform", "translate(" + widthPIE / 2 + "," + heightPIE / 2 + ")");
+            
+            var radius = Math.min(widthPIE, heightPIE)/2;
+
+            var color = d3.scaleOrdinal().range(d3.schemeSet3);
+
+            var pie = d3.pie()
+                        .sort(null)
+                        // .value(function(dat){
+                        //     // console.log(Object.keys(dat))
+                        //     // console.log(Object.keys(dat).length)
+
+                        //     for(var i = 0; i < Object.keys(dat).length; i++){
+                        //         // console.log(dat[Object.keys(dat)[i]])
+                        //         testArr.push(dat[Object.keys(dat)[i]])
+                        //     }
+                            
+                        //     return testArr
+                        // })
+
+            var arc = d3.arc()
+                        .innerRadius(radius - 100)
+                        .outerRadius(radius - 50);
+
+            function showPie(data){
+
+                console.log(data[Object.keys(data)])
+
+                var path = svgPIE.selectAll("path")
+                            .data(pie(Object.values(data[Object.keys(data)]))) 
+                            
+                            
+                console.log(Object.values(data[Object.keys(data)]))
+
+                path.enter()
+                    .append("path")
+                    .merge(path)
+                    .transition()
+                    .duration(1000)    
+                    .attr("fill", function(d, i){
+                        
+                        return color(i);         
+                    })
+                    .attr("d", arc)
+                    .attrTween("d", function(d){
+                        var i = d3.interpolate(d.endAngle, d.startAngle);
+                                    return function (t){
+                                        d.startAngle = i(t);
+                                        return arc(d);
+                                    }
+                        })
+                    
+                path.exit().remove();
+            }
+
+            showPie(data1)
+        </script>
+    </body>
+</html>

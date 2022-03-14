@@ -3,8 +3,8 @@
 // 1) w3resource. (2020). JavaScript: Find out the last day of a month - w3resource. [online] 
 //    Available at: https://www.w3resource.com/javascript-exercises/javascript-date-exercise-9.php
 
-// 2) Hellnar (2010). Checking if two Dates have the same date info. [online] Stack Overflow. 
-//    Available at: https://stackoverflow.com/questions/4428327/checking-if-two-dates-have-the-same-date-info
+// 2) GeeksforGeeks. (2019). Compare two dates using JavaScript - GeeksforGeeks. [online] 
+//    Available at: https://www.geeksforgeeks.org/compare-two-dates-using-javascript/#:~:text=In%20JavaScript%2C%20we%20can%20compare,we%20can%20directly%20compare%20them
 
 // 3) W3schools.com. (2022). JavaScript Date getMonth() Method. [online] 
 //    Available at: https://www.w3schools.com/jsref/jsref_getmonth.asp
@@ -21,14 +21,6 @@
 
 
 
-
-// var countryName;
-
-// window.getCountry = function(country){
-
-//     countryName = country;
-
-//     console.log(countryName)
 
     const marginCHART = {top: 10, right: 30, bottom: 70, left: 155};
     const widthCHART = 400 - marginCHART.left - marginCHART.right;
@@ -72,32 +64,28 @@
 
         const month = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
 
-        //Creating an svg for the map
+        
         var svgCHART = d3.select('body')
                             .append("svg")
                             .attr("class","bar")
                             .attr("width", widthCHART + marginCHART.left + marginCHART.right)
                             .attr("height", heightCHART + marginCHART.top + marginCHART.bottom)
-                            // .attr("transform", "translate(150,150)")
-                            // .append("g")
-                            // .attr("transform",
-                            // "translate(" + marginCHART.left + "," + 100 + ")");
 
         var g = svgCHART.selectAll("g")
                         .data(asiaArr)
                         .enter()
                         .append("g")
                         .attr("transform", function(d, i) {
-                            // console.log(d)
-                            //console.log(typeof d.date.getFullYear())
                             return "translate(" + marginCHART.left + "," + marginCHART.top + ")";
                         })
-                        // console.log(asiaArr.date.getMonth()+1)
+                        
 
-        
+        var cBar = 0                
+                        
+
         var x = d3.scaleBand()
                     .range([0, widthCHART])
-                    .padding(0.1)             
+                    .padding(0.4)             
 
         
         var xBottomAxis = d3.axisBottom()
@@ -120,9 +108,32 @@
                                 .attr("transform", "translate(" + (widthCHART-115) + ", 50)")
                                 .call(yLeftAxis);
 
-        var gr = svgCHART.append("g")           
+        var gr = svgCHART.append("g")  
+        
+        window.onMouseOverBAR = function(){
+                    
+            d3.selectAll(".barRect")
+                .transition()
+                .duration(1000)
+                .attr("fill", "#130170")
+                .attr("width", x.bandwidth() + 5) 
+        }  
+        
+    window.onMouseOutBAR = function(){
+            
+            d3.selectAll(".barRect")
+                .transition()
+                .duration(1000)
+                .attr("fill", "#01949A")
+                .attr("width", x.bandwidth()) 
+        }  
 
 
+    window.getCountryBAR = function(country){           //(Subin Siby, 2014)
+            var countryName; 
+            countryName = country;
+            // console.log("entered bar chart")
+            
         function axes(data){
             x.domain(data.map(function(d) {            //(Holtz, 2022)
                 return month[d.date.getMonth()];              //(W3schools.com, 2022)
@@ -132,7 +143,7 @@
                             .scale(x)
 
             x_bottom.transition()                  //(Holtz, 2022)
-                    .duration(1000)
+                    .duration(900)
                     .call(xBottomAxis)    
         }
 
@@ -145,83 +156,103 @@
                             .scale(y)
 
             y_left.transition()                  
-                    .duration(1000)
+                    .duration(900)
                     .call(yLeftAxis)
         }
 
-        
-        // window.getCountry = function(country){        //(Subin Siby, 2014)
-        //     window.countryName = country
-        // }
-        console.log(asiaArr.length)
-        
-        var india = asiaArr.filter(yearCountry)      //(dedpo, 2016)
 
-        function yearCountry(d){
-            return ((d.location == "India") && (d.date.getFullYear() == 2020))
-        }
+        function drawBAR(data) {
 
-        function update(data) {
-
+            cBar++
             
-            axes(data);
-            var lastDate;
-            var caseNumSet = new Set()
+                axes(data);
+                var lastDateBAR;
+                var caseNumSetBAR = new Set()
+                var reqMonthsBAR = []
+                var reqValuesBAR = []
+                
+    
+                for(var i = 0; i<data.length; i++){
+                    lastDateBAR = function(d){
+                        return new Date(d.getFullYear(), d.getMonth() + 1, 0)          //(w3resource, 2020) 
+                    }
+                    if(data[i].date.getTime() == lastDateBAR(data[i].date).getTime()){      //(GeeksforGeeks, 2019)
+                            reqMonthsBAR.push(month[data[i].date.getMonth()])
+                            reqValuesBAR.push(data[i].total_cases)
+                            caseNumSetBAR.add(data[i].total_cases)
+                    }
+                }
 
-            console.log(data.length)
-            
-            var u = gr.selectAll("rect")
-                        .data(data)
-                        .join("rect")
+                updateYAxis(caseNumSetBAR)
+
+                var newDataBAR = data.filter(barFunc)
+                function barFunc(dat){
+                    if(dat.date.getTime() == lastDateBAR(dat.date).getTime()){          //(GeeksforGeeks, 2019)
+                        return (reqValuesBAR.includes(dat.total_cases))
+                    }   
+                }
                 
                 
-                u.transition()                            
-                        .duration(1000)
-                        .attr("x", function(d){
-                            lastDate = function(data){
-                                return new Date(d.date.getFullYear(), d.date.getMonth()+1, 0)         //(w3resource, 2020)   
-                            }                               
-
-                            if(d.date.toDateString() == lastDate(d.date).toDateString()){          //(Hellnar, 2010)
-                                caseNumSet.add(d.total_cases)
-                                return x(month[d.date.getMonth()]) + 100            //(W3schools.com, 2022)
-                            }       
-                        })
-                        .attr("y", function(d){
-
-                            lastDate = function(data){
-                                return new Date(d.date.getFullYear(), d.date.getMonth()+1, 0)       //(w3resource, 2020)
-                            }
-
-                            updateYAxis(caseNumSet)
+                var u = svgCHART.selectAll(".barRect")
+                            .data(newDataBAR)
                             
-                            if(d.date.toDateString() == lastDate(d.date).toDateString()){         //(Hellnar, 2010)
-                                return y(d.total_cases) + 50
-                            }     
-                        })
-                        .attr("width", x.bandwidth())    
-                        .attr("height", function(d){
+                   u.enter()
+                    .append("rect")
+                    .attr("class", "barRect")
+                    .merge(u)
+                    .transition()                        
+                    .duration(900)
+                    .attr("x", function(d){
+                        return x(month[d.date.getMonth()]) + 100      
+                    })
+                    .attr("y", function(d){
+                        return y(d.total_cases) + 50    
+                    })
+                    .attr("width", x.bandwidth())    
+                    .attr("height", function(d){
+                        return heightCHART - y(d.total_cases)
+                    })
+                    .attr("fill", "#01949A")
+                    
+                if(cBar >= 2){
+                    clearBar()
+                }
 
-                            lastDate = function(data){
-                                return new Date(d.date.getFullYear(), d.date.getMonth()+1, 0)           //(w3resource, 2020)
-                            }                              
+                u.exit().remove()
+                        
+            }
 
-                            if(d.date.toDateString() == lastDate(d.date).toDateString()){          //(Hellnar, 2010)
-                                return heightCHART - y(d.total_cases) 
-                            }   
-                        })
-                        .attr("fill", "#CD0046")            
-                // console.log(monthSet)
-                // u.on("mouseover", onMouseOver)         
-                //  .on("mouseout", onMouseOut)           
-            
+            function clearBar(){
+                d3.selectAll(".barRect")
+                    .exit()
+                    .remove()
                 
+                // d3.selectAll(".xaxis")
+                //     .transition()                            
+                //     .duration(1000)
+                //     .remove() 
+
+                // d3.selectAll(".myYaxis")
+                //     .transition()
+                //     .duration(1000)
+                //     .remove()
+
+                
+                cBar=0
+                
+
+                drawBAR(barCountry)
+            }
+
+            var barCountry = asiaArr.filter(yearCountry)      //(dedpo, 2016)
+
+            function yearCountry(d){
+                return ((d.location == countryName) && (d.date.getFullYear() == 2020))
+            }
+
+            drawBAR(barCountry)
             
-            u.exit().remove()
             
         }
 
-        update(india)
-    })
-
-// }
+      })

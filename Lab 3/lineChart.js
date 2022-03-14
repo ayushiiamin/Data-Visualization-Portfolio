@@ -91,7 +91,8 @@
                             return "translate(" + marginLINE.left + "," + marginLINE.top + ")";
                         })
                         // console.log(asiaArr.date.getMonth()+1)
-
+        var cLINE = 0 
+        var cDOT = 0 
         
         var x = d3.scaleBand()
                     .range([0, widthLINE])
@@ -103,7 +104,7 @@
 
         
         var x_bottom = svgLINE.append("g")
-                                .attr("class", "xaxis")
+                                .attr("class", "xaxisLINE")
                                 .attr("transform", "translate(100," + (heightLINE+50) + ")")
                                 .call(xBottomAxis)                 
 
@@ -114,12 +115,49 @@
                             .scale(y)
 
         var y_left = svgLINE.append("g")
-                                .attr("class", "myYaxis")
+                                .attr("class", "myYaxisLINE")
                                 .attr("transform", "translate(" + (widthLINE-115) + ", 50)")
                                 .call(yLeftAxis);
 
-        var gr = svgLINE.append("g")           
+        var gr = svgLINE.append("g") 
+        
 
+
+        window.onMouseOverLINE = function(){
+            // console.log("entered mouseover")
+            // for(var i = 0; i<data.length; i++){
+                // if(data[i].total_deaths == dea){
+                    // console.log(d3.select(".point")._groups[0][0].__data__.total_deaths)
+                    d3.selectAll(".point")
+                    // .filter(function(d) { 
+                    //     // console.log(d)
+                    //     console.log(dea)
+                    //     console.log("helo", d.total_deaths)
+                    //     return d.total_deaths == dea;
+                    // })
+                    // .datum(dea)
+                        .transition()
+                        .duration(900)
+                        .attr("r", 5)
+                        .attr("fill", "#004369")
+                // }
+            // }
+        }
+
+        window.onMouseOutLINE = function(){
+            // console.log("entered mouseout")
+            d3.selectAll(".point")
+                .transition()
+                .duration(900)
+                .attr("r", 3)
+                .attr("fill", "#CD0046")
+
+        }
+
+        window.getCountryLINE = function(country){
+            var countryNameLINE;
+            countryNameLINE = country;   
+            // console.log("entered line chart")             
 
         function axes(data){
             x.domain(data.map(function(d) {            //(Holtz, 2022)
@@ -130,7 +168,7 @@
                             .scale(x)
 
             x_bottom.transition()                  //(Holtz, 2022)
-                    .duration(1000)
+                    .duration(900)
                     .call(xBottomAxis)    
         }
 
@@ -143,80 +181,139 @@
                             .scale(y)
 
             y_left.transition()                  
-                    .duration(1000)
+                    .duration(900)
                     .call(yLeftAxis)
         }
 
-        
-        // window.getCountry = function(country){        //(Subin Siby, 2014)
-        //     window.countryName = country
-        // }
-        console.log(asiaArrLINE.length)
-        var countryArrLINE = asiaArrLINE.filter(yearCountry)      //(dedpo, 2016)
 
-        function yearCountry(d){
-            return ((d.location == "India") && (d.date.getFullYear() == 2020))   
-        }
+        // console.log(asiaArrLINE.length)
+        
 
         function drawLine(data){
+            cLINE++
+
+
+
             axes(data);
             var lastDate;
-            var caseNumSet = new Set()
+            var deaNumSet = new Set()
             var reqMonths = []
-            var reqValues = []
-
-            console.log(data.length)
+            var reqValues1 = []
+            
 
             for(var i = 0; i<data.length; i++){
                 lastDate = function(d){
                     return new Date(d.getFullYear(), d.getMonth() + 1, 0)
                 }
-
-                
                 if(data[i].date.getTime() == lastDate(data[i].date).getTime()){
                         // console.log(lastDate(data[i].date))
                         // console.log(lastDate(data[i].date))
                         reqMonths.push(month[data[i].date.getMonth()])
-                        reqValues.push(data[i].total_deaths)
-                        caseNumSet.add(data[i].total_deaths)
+                        reqValues1.push(data[i].total_deaths)
+                        // reqValues2.push(data[i].total_cases)
+                        deaNumSet.add(data[i].total_deaths)
                 }
             }
 
-            updateYAxis(caseNumSet)
+            updateYAxis(deaNumSet)
 
-            var newData = data.filter(testFunc)
-
-            function testFunc(dat){
+            var newData1 = data.filter(chart1Func)
+            function chart1Func(dat){
                 if(dat.date.getTime() == lastDate(dat.date).getTime()){
-                    
-                    return (reqValues.includes(dat.total_deaths))
-                }
-                
+                    return (reqValues1.includes(dat.total_deaths))
+                }   
             }
 
-            // console.log(newData)
+            var l = svgLINE.selectAll(".line")
+                            .data([newData1]);
 
-            var u = svgLINE.selectAll(".line")
-                            .data([newData]);
-
-            u.enter()
+            l.enter()
               .append("path")
               .attr("class","line")
-              .merge(u)
+              .merge(l)
               .transition()        
-              .duration(1000)
+              .duration(900)
               .attr("fill", "none")
               .attr("stroke", "#CD0046")      
               .attr("stroke-width", 1.5)
               .attr("d", d3.line()
               .x(function(d){
-                    return x(month[d.date.getMonth()]) + 98
+                    return x(month[d.date.getMonth()]) + 108
                 })
                .y(function(d){
                     return y(d.total_deaths) + 50   
                 })
               )
+
+            if(cLINE >= 2){
+                // u.exit().remove()
+                clearLINE()
+            }
+
+            showDots(newData1)
+
+            l.exit().remove()
+        }
+
+
+        function showDots(data){
+
+            cDOT++
+
+        
+            var d = svgLINE.selectAll(".point")
+                        .data(data)
+
+            d.enter()
+               .append("circle")
+               .attr("class","point")
+               .merge(d)
+               .transition()           
+                .duration(900)
+               .attr("cx", function(d){
+                   //alert(x(d))
+                   return x(month[d.date.getMonth()]) + 108; 
+               })
+               .attr("cy", function(d){
+                   return y(d.total_deaths) + 50  
+               })
+               .attr("r", 3)                
+               .attr("fill", "#CD0046")
+            
+            // console.log(data.length)
+
+            if(cDOT >= 2){
+                // u.exit().remove()
+                clearLINE()
+            }
+
+            d.exit().remove()
+        }
+
+
+        function clearLINE(){
+            d3.selectAll(".line")
+                .exit()
+                .remove()
+
+            d3.selectAll(".point")
+                .exit()
+                .remove()
+            
+            cLINE=0
+            cDOT=0
+            
+
+            drawLine(countryArrLINE)
+        }
+
+        var countryArrLINE = asiaArrLINE.filter(yearCountry)      //(dedpo, 2016)
+
+        function yearCountry(d){
+            return ((d.location == countryNameLINE) && (d.date.getFullYear() == 2020))   
         }
 
         drawLine(countryArrLINE)
+
+    }
     })
