@@ -18,6 +18,12 @@
 // 6) Subin Siby (2014). Create Global Functions In JavaScript. [online] Subinsb.com. 
 //    Available at: https://subinsb.com/global-functions-javascript/
 
+// 7) Plunkett, O. (2015). Using d3 - How do I select specific data from array to highlight when I click a button? [online] Stack Overflow. 
+//    Available at: https://stackoverflow.com/questions/33241490/using-d3-how-do-i-select-specific-data-from-array-to-highlight-when-i-click-a
+
+// 8) santoku (2018). How to filter elements and hide others? [online] Stack Overflow. 
+//    Available at: https://stackoverflow.com/questions/49517904/how-to-filter-elements-and-hide-others
+
 
 
 
@@ -110,13 +116,27 @@
 
         var gr = svgCHART.append("g")  
         
-        window.onMouseOverBAR = function(){
-                    
+        window.onMouseOverBAR = function(d, i){
+
+            
+            // if(i.total_cases > 1000000)  {
+            //     d3.selectAll(".barRect")
+            //     .filter(function(d){
+            //         // console.log(d.total_cases)
+            //         return d.total_cases > 1000000;
+            //     })
+            //     .transition()
+            //     .duration(1000)
+            //     .attr("fill", "#130170")
+            //     .attr("width", x.bandwidth() + 5) 
+            // }    
+            
             d3.selectAll(".barRect")
                 .transition()
                 .duration(1000)
                 .attr("fill", "#130170")
                 .attr("width", x.bandwidth() + 5) 
+            
         }  
         
     window.onMouseOutBAR = function(){
@@ -126,7 +146,24 @@
                 .duration(1000)
                 .attr("fill", "#01949A")
                 .attr("width", x.bandwidth()) 
-        }  
+        } 
+        
+    window.onClickBAR = function(){
+        d3.selectAll(".barRect")
+            .filter(function(d){
+                return !(d.total_cases > 50000)           
+            })
+            .remove()           //(santoku, 2018)
+
+        d3.selectAll(".barRect")
+            .filter(function(d){
+                return (d.total_cases > 50000);     //(Plunkett, 2015)
+            })
+            .transition()
+            .duration(1000)
+            .attr("fill", "#C15B78")
+            .attr("width", x.bandwidth() + 5)
+    }
 
 
     window.getCountryBAR = function(country){           //(Subin Siby, 2014)

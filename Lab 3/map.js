@@ -179,16 +179,16 @@ var asiaArrMAP = [];
                     .attr("fill", "#01949A")
                     .style("stroke", "black")
                 
-                    console.log(cl)
-                if(cl >= 2){
-                  d3.selectAll(".map")
-                    .transition()
-                    .duration(100)
-                    .attr("fill", "#CD0046")
-                    .style("stroke", "transparent")
+                //     console.log(cl)
+                // if(cl >= 2){
+                //   d3.selectAll(".map")
+                //     .transition()
+                //     .duration(100)
+                //     .attr("fill", "#CD0046")
+                //     .style("stroke", "transparent")
                     
-                    cl=0
-                }
+                //     cl=0
+                // }
             }
 
             var circles = svg.append("g")

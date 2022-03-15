@@ -88,6 +88,8 @@ const marginSCATTER = {top: 10, right: 30, bottom: 70, left: 155};
           
         var gr = svgSCATTER.append("g")
 
+        
+
         window.getCountrySCATTER = function(country){
             var countryNameSCATTER;
             countryNameSCATTER = country; 
@@ -120,8 +122,40 @@ const marginSCATTER = {top: 10, right: 30, bottom: 70, left: 155};
                     .call(yLeftAxis)
         }
 
+        
+
 
         function showScatter(data){
+
+            svgSCATTER.append("circle")
+                    .attr("cx", 400)
+                    .attr("cy", 200)
+                    .attr("fill", "#A998EE")
+                    .attr("r", 32)
+                    .on("click", onClickBAR)
+            
+            svgSCATTER.append("text")
+                        .text("Filter Bar Chart")
+                        .attr("x", 400)
+                        .attr("y", 200)
+                        .attr("text-anchor", "middle")
+                        .attr("font-size", "10px")
+                        .attr("fill", "#130170")
+
+            svgSCATTER.append("circle")
+                    .attr("cx", 400)
+                    .attr("cy", 200)
+                    .attr("fill", "#A998EE")
+                    .attr("r", 32)
+                    .on("click", onClickBAR)
+            
+            svgSCATTER.append("text")
+                        .text("Filter Bar Chart")
+                        .attr("x", 400)
+                        .attr("y", 200)
+                        .attr("text-anchor", "middle")
+                        .attr("font-size", "10px")
+                        .attr("fill", "#130170")
 
             cSCATTER++
 
@@ -178,7 +212,28 @@ const marginSCATTER = {top: 10, right: 30, bottom: 70, left: 155};
                                 return y(d.total_cases)  + 50 ;
                             })
                             
+        //     d3.select(".scatter").call(d3.brush()
+        //                     .extent([[0, 0], [widthSCATTER, heightSCATTER]])
+        //                     .on("start brush end", updateChart)
+        //                     )
+            
+        //     function updateChart(){
+        //         // console.log("helo")
+        //         // console.log(this)
+        //         extent = d3.brushSelection(this)
+        //         // console.log(this)
+        //         s1.classed("selected", function(d){
+        //             return isBrushed(extent, x(month[d.date.getMonth()]), y(d.total_cases))
+        //         })
+        //     }
 
+        //     function isBrushed(brush_coords, cx, cy) {
+        //         var x0 = brush_coords[0][0],
+        //             x1 = brush_coords[1][0],
+        //             y0 = brush_coords[0][1],
+        //             y1 = brush_coords[1][1];
+        //        return x0 <= cx && cx <= x1 && y0 <= cy && cy <= y1;    // This return TRUE or FALSE depending on if the points is in the selected area
+        //    }
 
 
             //deaths            
@@ -202,6 +257,8 @@ const marginSCATTER = {top: 10, right: 30, bottom: 70, left: 155};
                     return (reqValuesSCATTER2.includes(dat.total_deaths))
                 }   
             }
+
+            
 
 
             var s2 = svgSCATTER.selectAll(".scatt2")
