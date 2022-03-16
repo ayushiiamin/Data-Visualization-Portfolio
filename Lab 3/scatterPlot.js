@@ -1,3 +1,39 @@
+// REFERENCES - 
+
+// 1) w3resource. (2020). JavaScript: Find out the last day of a month - w3resource. [online] 
+//    Available at: https://www.w3resource.com/javascript-exercises/javascript-date-exercise-9.php
+
+// 2) GeeksforGeeks. (2019). Compare two dates using JavaScript - GeeksforGeeks. [online] 
+//    Available at: https://www.geeksforgeeks.org/compare-two-dates-using-javascript/#:~:text=In%20JavaScript%2C%20we%20can%20compare,we%20can%20directly%20compare%20them
+
+// 3) W3schools.com. (2022). JavaScript Date getMonth() Method. [online] 
+//    Available at: https://www.w3schools.com/jsref/jsref_getmonth.asp
+
+// 4) Ordonez, T. (2020). D3 Convert String to Date. [online] Tom Ordonez. 
+//    Available at: https://www.tomordonez.com/d3-convert-string-to-date/
+
+// 5) dedpo (2016). Selecting a section of data from CSV in d3.js. [online] Stack Overflow. 
+//    Available at: https://stackoverflow.com/questions/36314656/selecting-a-section-of-data-from-csv-in-d3-js
+
+// 6) Subin Siby (2014). Create Global Functions In JavaScript. [online] Subinsb.com. 
+//    Available at: https://subinsb.com/global-functions-javascript/
+
+// 7) Plunkett, O. (2015). Using d3 - How do I select specific data from array to highlight when I click a button? [online] Stack Overflow. 
+//    Available at: https://stackoverflow.com/questions/33241490/using-d3-how-do-i-select-specific-data-from-array-to-highlight-when-i-click-a
+
+// 8) santoku (2018). How to filter elements and hide others? [online] Stack Overflow. 
+//    Available at: https://stackoverflow.com/questions/49517904/how-to-filter-elements-and-hide-others
+
+// 9) Saxena, U. (2017). Animating using D3 transitions vs using CSS animation. [online] Stack Overflow. 
+//    Available at: https://stackoverflow.com/questions/46675499/animating-using-d3-transitions-vs-using-css-animation
+
+// 10) Holtz, Y. (2022). Building legends in d3.js. [online] D3-graph-gallery.com. 
+//     Available at: https://www.d3-graph-gallery.com/graph/custom_legend.html
+
+
+
+
+
 const marginSCATTER = {top: 10, right: 30, bottom: 70, left: 155};
     const widthSCATTER = 400 - marginSCATTER.left - marginSCATTER.right;
     const heightSCATTER = 220 - marginSCATTER.top - marginSCATTER.bottom;
@@ -45,7 +81,7 @@ const marginSCATTER = {top: 10, right: 30, bottom: 70, left: 155};
                             .attr("class","scatter")
                             .attr("width", widthSCATTER + marginSCATTER.left + marginSCATTER.right)
                             .attr("height", heightSCATTER + marginSCATTER.top + marginSCATTER.bottom)
-                            .attr("transform", "translate(10, 0)")
+                            .attr("transform", "translate(20, 20)")
 
         var gSCATTER = svgSCATTER.selectAll("g")
                             .data(asiaArrSCATTER)
@@ -54,6 +90,13 @@ const marginSCATTER = {top: 10, right: 30, bottom: 70, left: 155};
                             .attr("transform", function(d, i) {
                                 return "translate(" + marginSCATTER.left + "," + marginSCATTER.top + ")";
                             })
+
+        gSCATTER.append("text")
+                            .attr("x", 2)
+                            .attr("y", 30)
+                            .attr("font-size", "15px")
+                            .attr("font-family", "sans-serif")
+                            .text("Rise in cases and deaths")    
 
         var cSCATTER = 0
 
@@ -129,18 +172,18 @@ const marginSCATTER = {top: 10, right: 30, bottom: 70, left: 155};
 
             svgSCATTER.append("circle")
                     .attr("cx", 400)
-                    .attr("cy", 200)
-                    .attr("fill", "#A998EE")
+                    .attr("cy", 130)
+                    .attr("fill", "#2D1674")
                     .attr("r", 32)
-                    .on("click", onClickBAR)
+                    .on("click", onClickLINE)
             
             svgSCATTER.append("text")
-                        .text("Filter Bar Chart")
+                        .text("Filter Line Chart")
                         .attr("x", 400)
-                        .attr("y", 200)
+                        .attr("y", 130)
                         .attr("text-anchor", "middle")
-                        .attr("font-size", "10px")
-                        .attr("fill", "#130170")
+                        .attr("font-size", "9px")
+                        .attr("fill", "white")
 
             svgSCATTER.append("circle")
                     .attr("cx", 400)
@@ -156,6 +199,39 @@ const marginSCATTER = {top: 10, right: 30, bottom: 70, left: 155};
                         .attr("text-anchor", "middle")
                         .attr("font-size", "10px")
                         .attr("fill", "#130170")
+
+
+            //(Holtz, 2022)
+            const legendData = ["Cases", "Deaths"]
+
+            svgSCATTER.selectAll("legendDots")
+                        .data(legendData)
+                        .enter()
+                        .append("circle")
+                        .attr("cx", 350)
+                        .attr("cy", function(d,i){ 
+                            return 40 + i*20              //(Holtz, 2022)
+                        }) 
+                        .attr("r", 7)
+                        .style("fill", function(d){ 
+                            return color(d)
+                        })
+
+            svgSCATTER.selectAll("legendLabels")
+                        .data(legendData)
+                        .enter()
+                        .append("text")
+                        .attr("font-size", "13px")
+                        .attr("x", 360)
+                        .attr("y", function(d,i){ 
+                            return 41 + i*20            //(Holtz, 2022)
+                        }) 
+                        .attr("fill", "black")
+                        .text(function(d){ 
+                              return d
+                        })
+                        .attr("text-anchor", "left")
+                        .style("alignment-baseline", "middle")         //(Holtz, 2022)
 
             cSCATTER++
 

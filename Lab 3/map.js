@@ -8,15 +8,24 @@
 
 
 
+
+//Defining the dimensions and margins of the map
 const margin = {top: 30, right: 30, bottom: 70, left: 155};
 const widthSVG = 1060 - margin.left - margin.right;
 const heightSVG = 750 - margin.top - margin.bottom;
 
 
+//Initializing an empty array to store the data extracted from the csv file
 var asiaArrMAP = [];
 
+    //As the date in the csv file is represented in the format - "YYYY-MM-DD", 
+    //we create a format function to convert the dates from string to "Date" object type
     var	parseDate = d3.timeParse("%Y-%m-%d");            //(Ordonez, 2020)
 
+
+    //The below function is used for converting each of the csv column data to their original type
+    //The column containing string data, are left as it is
+    //The function returns a dictionary array, containing key-value pairs from the csv file
     function strNumDateObjArr(d) {
         return {
             iso_code: d.iso_code,
@@ -44,34 +53,46 @@ var asiaArrMAP = [];
         };
     }
 
+
+    //Loading the csv file
     d3.csv("data/asia.csv", function(d, i){
+
+        //Using the function to convert each of the data read, to their respective data type
+        //The returned dictionary is push to the empty array initialized above
         asiaArrMAP.push(strNumDateObjArr(d))
     }).then(function(datas){
+
+
         //Creating an svg for the map
         var svg = d3.select('body')
                     .append("svg")
                     .attr("class","map")
+                    .attr("transform", "translate(10, 20)")
                     .attr("width", widthSVG + margin.left + margin.right)
                     .attr("height", heightSVG + margin.top + margin.bottom)
                     .append("g")
                     .attr("transform",
                     "translate(" + 0 + "," + 10 + ")");
 
-        var cl=0
-
+        
+        //The below code is used for building the projection of the map
+        //This projection will be used for converting each of the countries coordinates
+        //to pixels so that the map can be displayed on the SVG
         var mapProjection = d3.geoMercator()                    //(Holtz, 2022)
                             .scale(185)
                             .center([21,37])
                             .translate([0, 100])
 
-        
+        //The JSON file (available on https://www.d3-graph-gallery.com/ ) which consists of the data required for drawing the map, is hosted on GitHub
+        //Storing the path of the GitHub file in a variable
         let mapJSON = "https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson";     //(Holtz, 2022)
 
 
         //Loading the JSON file
         d3.json(mapJSON).then(function(data){
         
-
+            //As we will be only dealing with Asian countries, the filter() function is used for
+            //filtering out each of the Asian countries
             data.features = data.features.filter(function(d){
                 return (
                     (d.properties.name=="Afghanistan") 
@@ -128,31 +149,47 @@ var asiaArrMAP = [];
             })
 
             
-
+            //Since we will only be dealing with the data recorded for December 31st, 2020, the filter()
+            //function is used here, that uses another function filterTheData() to extract the required values based on a condition
+            //This data will be used for generating the bubbles that appear on the map
             var listOfCountryMAP = asiaArrMAP.filter(filterTheData)
 
+            //Initializing an empty variable to store the last date of the year
             var lastDayofYearMAP;
 
+            //The below function is used for returning the filtered data
             function filterTheData(d){ 
+
+                //Getting the last day of the year
+                //An anaonymous function is defined that returns the last day of the year, based on the input given
+                //Since 31st December serves as the last day of the year, the "Day" is set as 31, "Month" is set as 11 (The month numbering starts from 0, 
+                //Jan is labelled as 0, Feb is 1, and so on)
+                //The year is extracted from the input with the help of getFullYear() function
                 lastDayofYearMAP = function(d){
                     return new Date(d.getFullYear(), 11, 31)            //(Bobbyhadz.com, 2021)
                 }
 
+                //Checking if the current Date object that the function is reading is 31st Decemeber 2020
                 if((d.date.getTime() == lastDayofYearMAP(d.date).getTime()) && (d.date.getFullYear() == 2020)){
                     return d
                 }
             }
 
-            //(Holtz, 2022)
+            //Setting the domain for the bubbles
+            //The radius will be set according to the domain and range 
+            //Using D3's extenet() functiomn to return the min and max value of the "total_cases"    
             const setDomain = d3.extent(listOfCountryMAP, function(d){
-                return d.total_cases
+                return d.total_cases              //(Holtz, 2022)
             })
 
-            //(Holtz, 2022)
+            //Setting the scale for the bubbles's sizes
+            //The radius will be set according to the size given below
             const rad = d3.scaleSqrt()
                             .domain(setDomain)
-                            .range([1, 50])
+                            .range([1, 50])              //(Holtz, 2022)
 
+
+            //The below code is used for drawing the map
             var map = svg.append("g")
                             .selectAll("path")
                             .data(data.features)
@@ -165,43 +202,40 @@ var asiaArrMAP = [];
                                             .projection(mapProjection)                                  //(Holtz, 2022)
                             )
                             .style("opacity", 0.75)           //Setting the opacity of the svg     
-                            .on("click", onClick)
+                            .on("click", onClick)      //Listening for click events
 
+            //This function deals with click events
             function onClick(d, i){
-                cl++
+
+                //The name of the country that is clicked on the map is sent to the three below global functions
+                //so that the three graphs can be drawn accordingly
                 getCountryBAR(i.properties.name)
                 getCountryLINE(i.properties.name)
                 getCountrySCATTER(i.properties.name)
                 
+                //On clicking on a country, it turns teal in color, and a black outline appears around it
                 d3.select(this)
                     .transition()
                     .duration(100)
                     .attr("fill", "#01949A")
                     .style("stroke", "black")
-                
-                //     console.log(cl)
-                // if(cl >= 2){
-                //   d3.selectAll(".map")
-                //     .transition()
-                //     .duration(100)
-                //     .attr("fill", "#CD0046")
-                //     .style("stroke", "transparent")
-                    
-                //     cl=0
-                // }
             }
 
+            //The below code is used for genearting the bubbles that appear on the map
             var circles = svg.append("g")
                             .selectAll("circle")
+                            //Sorting out the countries based on the "total_cases" value
+                            //This is done so that we can see which countries have the highest number of cases and which have the least
                             .data(listOfCountryMAP.sort(function(a,b){
                                 return b.total_cases - a.total_cases
                             }))
                             .enter()
-                            .append("circle")
+                            .append("circle")        //Adding the SVG circle element
                             .attr("r", function(d){
                                 for(var j = 0; j < data.features.length; j++){
+                                    //Checking if the current country is present in the map coordinates dataset
                                     if(d.location == data.features[j].properties.name){
-                                        return rad(d.total_cases)
+                                        return rad(d.total_cases)          //Set the radius of the bubble accordingly
                                     }
                                 }
                             })
@@ -209,11 +243,19 @@ var asiaArrMAP = [];
                             .attr("fill-opacity", .4)
                             .attr("cx", function(d, i){
                                 for(var j = 0; j < data.features.length; j++){
+                                    //Checking if the current country is present in the map coordinates dataset
                                     if(d.location == data.features[j].properties.name){
+                                        //Checking if the coordinates of the country array is greater than 2
+                                        //This is done because some of the coordinates array length is greater than 2
                                         if(data.features[j].geometry.coordinates[0][0].length > 2){
+                                            //Return the coordinates
+                                            //This will serve as the x-coordinate of the circle
                                             return mapProjection(data.features[j].geometry.coordinates[0][0][4])[0]        //(Holtz, 2022)
                                         }
                                         else{
+                                            //Else if the coordinates array has a length less than 2
+                                            //Return the coordinates now
+                                            //This will serve as the x-coordinate of the circle
                                             return mapProjection(data.features[j].geometry.coordinates[0][4])[0]           //(Holtz, 2022)
                                         }
                                     }
@@ -221,11 +263,19 @@ var asiaArrMAP = [];
                             })
                             .attr("cy", function(d, i){
                                 for(var j = 0; j < data.features.length; j++){
+                                    //Checking if the current country is present in the map coordinates dataset
                                     if(d.location == data.features[j].properties.name){
+                                        //Checking if the coordinates of the country array is greater than 2
+                                        //This is done because some of the coordinates array length is greater than 2
                                         if(data.features[j].geometry.coordinates[0][0].length > 2){
+                                            //Return the coordinates
+                                            //This will serve as the y-coordinate of the circle
                                             return mapProjection(data.features[j].geometry.coordinates[0][0][4])[1]        //(Holtz, 2022)
                                         }
                                         else{
+                                            //Else if the coordinates array has a length less than 2
+                                            //Return the coordinates now
+                                            //This will serve as the y-coordinate of the circle
                                             return mapProjection(data.features[j].geometry.coordinates[0][4])[1]          //(Holtz, 2022)
                                         }
                                     }

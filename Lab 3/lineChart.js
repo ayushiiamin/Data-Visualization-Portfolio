@@ -18,6 +18,14 @@
 // 6) Subin Siby (2014). Create Global Functions In JavaScript. [online] Subinsb.com. 
 //    Available at: https://subinsb.com/global-functions-javascript/    
     
+// 7) Plunkett, O. (2015). Using d3 - How do I select specific data from array to highlight when I click a button? [online] Stack Overflow. 
+//    Available at: https://stackoverflow.com/questions/33241490/using-d3-how-do-i-select-specific-data-from-array-to-highlight-when-i-click-a
+
+// 8) santoku (2018). How to filter elements and hide others? [online] Stack Overflow. 
+//    Available at: https://stackoverflow.com/questions/49517904/how-to-filter-elements-and-hide-others
+
+// 9) Saxena, U. (2017). Animating using D3 transitions vs using CSS animation. [online] Stack Overflow. 
+//    Available at: https://stackoverflow.com/questions/46675499/animating-using-d3-transitions-vs-using-css-animation
     
     
     
@@ -74,7 +82,7 @@
                             .attr("class","line")
                             .attr("width", widthLINE + marginLINE.left + marginLINE.right)
                             .attr("height", heightLINE + marginLINE.top + marginLINE.bottom)
-                            .attr("transform", "translate(10, 0)")
+                            .attr("transform", "translate(10, 20)")
                             // .attr("transform", "translate(150,150)")
                             // .append("g")
                             // .attr("transform",
@@ -90,7 +98,13 @@
                             // console.log(d)
                             return "translate(" + marginLINE.left + "," + marginLINE.top + ")";
                         })
-                        // console.log(asiaArr.date.getMonth()+1)
+
+        gLINE.append("text")
+                        .attr("x", 2)
+                        .attr("y", 30)
+                        .attr("font-size", "15px")
+                        .attr("font-family", "sans-serif")
+                        .text("Rise in deaths")  
         var cLINE = 0 
         var cDOT = 0 
         
@@ -124,24 +138,11 @@
 
 
         window.onMouseOverLINE = function(){
-            // console.log("entered mouseover")
-            // for(var i = 0; i<data.length; i++){
-                // if(data[i].total_deaths == dea){
-                    // console.log(d3.select(".point")._groups[0][0].__data__.total_deaths)
                     d3.selectAll(".point")
-                    // .filter(function(d) { 
-                    //     // console.log(d)
-                    //     console.log(dea)
-                    //     console.log("helo", d.total_deaths)
-                    //     return d.total_deaths == dea;
-                    // })
-                    // .datum(dea)
                         .transition()
                         .duration(900)
                         .attr("r", 5)
                         .attr("fill", "#004369")
-                // }
-            // }
         }
 
         window.onMouseOutLINE = function(){
@@ -153,6 +154,81 @@
                 .attr("fill", "#CD0046")
 
         }
+
+        window.onClickLINE = function(){
+            d3.selectAll(".point")
+            .filter(function(d){
+                return !(d.total_deaths > 1200)           
+            })
+            .remove()           //(santoku, 2018)
+
+            d3.selectAll(".point")
+                .filter(function(d){
+                    return (d.total_deaths > 1200);     //(Plunkett, 2015)
+                })
+                .transition()
+                .duration(1000)
+                .attr("fill", "#713770")
+                .attr("r", 5)
+
+            // d3.selectAll(".line")
+            //     .filter(function(d){
+            //         console.log([d])
+            //         return !(d.total_deaths > 1000)           
+            //     })
+            //     .remove()           //(santoku, 2018)
+
+            // d3.selectAll(".line")
+            //     .filter(function(d){
+            //         return [d.total_deaths > 1000];     //(Plunkett, 2015)
+            //     })
+            //     .transition()
+            //     .duration(1000)
+            //     .attr("stroke", "#713770")
+            //     .attr("stroke-width", 1.5)
+        }
+
+        window.whileMousingOver = function(){
+            d3.selectAll(".point")
+                .transition()
+                .duration(1000)
+                .attr("r", 5)
+                .attr("fill", "#2E765E")
+                .transition()
+                .duration(1000)
+                .attr("r", 3)
+                .attr("fill", "#CD0046")
+                // .on("mouseover", mouseTest)
+                .on("end", whileMousingOver)           //(Saxena, 2017)
+
+
+            d3.selectAll(".scatt2")
+                .transition()
+                .duration(1000)
+                .attr("r", 5)
+                .attr("fill", "#0461B1")
+                .transition()
+                .duration(1000)
+                .attr("r", 3)
+                .attr("fill", "#CD0046")
+                // .on("mouseover", mouseTest)
+                .on("end", whileMousingOver)           //(Saxena, 2017)
+        }
+
+        window.whileMousingOut = function(){
+            d3.selectAll(".point")
+                .transition()
+                .duration(1000)
+                .attr("r", 3)
+                .attr("fill", "#CD0046")
+
+            d3.selectAll(".scatt2")
+                .transition()
+                .duration(1000)
+                .attr("r", 3)
+                .attr("fill", "#CD0046")
+        }
+
 
         window.getCountryLINE = function(country){
             var countryNameLINE;
@@ -227,6 +303,8 @@
             var l = svgLINE.selectAll(".line")
                             .data([newData1]);
 
+            // console.log([newData1])
+
             l.enter()
               .append("path")
               .attr("class","line")
@@ -268,6 +346,8 @@
                .append("circle")
                .attr("class","point")
                .merge(d)
+               .on("mouseover", whileMousingOverLINE)
+               .on("mouseout", whileMousingOutLINE)
                .transition()           
                 .duration(900)
                .attr("cx", function(d){
