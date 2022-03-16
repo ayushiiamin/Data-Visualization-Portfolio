@@ -1,9 +1,23 @@
+/* REFERENCES - */
+
+/* 
+1) W3schools.com. (2022). HTML header Tag. [online] 
+Available at: https://www.w3schools.com/tags/tag_header.asp
+*/
+
+
+
 body{
+
+    /* The below is done to add a background color to the dashboard */
     background-color: #8fb9c9;
     margin: 0;
 }
 
+/* (W3schools.com, 2022) */
 .header {
+
+    /* The below is done to adjust and style the main page header */
     padding: 4px;
     text-align: center;
     background: #05445E;

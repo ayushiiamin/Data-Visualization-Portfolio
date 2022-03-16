@@ -6,6 +6,14 @@
 // 2) Holtz, Y. (2022). Basic background map in d3.js. [online] D3-graph-gallery.com. 
 //    Available at: https://www.d3-graph-gallery.com/graph/backgroundmap_basic.html
 
+// 3) Ordonez, T. (2020). D3 Convert String to Date. [online] Tom Ordonez. 
+//    Available at: https://www.tomordonez.com/d3-convert-string-to-date/
+
+// 4) dedpo (2016). Selecting a section of data from CSV in d3.js. [online] Stack Overflow. 
+//    Available at: https://stackoverflow.com/questions/36314656/selecting-a-section-of-data-from-csv-in-d3-js
+
+// 5) Bobbyhadz.com. (2021). Get the Last Day of the Year in JavaScript | bobbyhadz. [online] 
+//    Available at: https://bobbyhadz.com/blog/javascript-get-last-day-of-year#:~:text=To%20get%20the%20last%20day,last%20day%20of%20the%20year.&text=Copied!
 
 
 
@@ -93,7 +101,7 @@ var asiaArrMAP = [];
         
             //As we will be only dealing with Asian countries, the filter() function is used for
             //filtering out each of the Asian countries
-            data.features = data.features.filter(function(d){
+            data.features = data.features.filter(function(d){    //(dedpo, 2016)
                 return (
                     (d.properties.name=="Afghanistan") 
                     || (d.properties.name=="Armenia")

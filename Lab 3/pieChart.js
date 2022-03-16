@@ -24,6 +24,9 @@
 // 8) Holtz, Y. (2022). Building legends in d3.js. [online] D3-graph-gallery.com. 
 //     Available at: https://www.d3-graph-gallery.com/graph/custom_legend.html
 
+// 9) Ordonez, T. (2020). D3 Convert String to Date. [online] Tom Ordonez. 
+//    Available at: https://www.tomordonez.com/d3-convert-string-to-date/
+
 
 
 //Setting the dimensions

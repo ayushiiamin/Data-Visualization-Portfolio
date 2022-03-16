@@ -27,6 +27,12 @@
 // 9) Saxena, U. (2017). Animating using D3 transitions vs using CSS animation. [online] Stack Overflow. 
 //    Available at: https://stackoverflow.com/questions/46675499/animating-using-d3-transitions-vs-using-css-animation
 
+// 10) Holtz, Y. (2022). Update X axis limits in d3.js scatterplot. [online] D3-graph-gallery.com. 
+//     Available at: https://www.d3-graph-gallery.com/graph/scatter_buttonXlim.html
+
+// 11) W3schools.com. (2015). JavaScript String includes() Method. [online] 
+//    Available at: https://www.w3schools.com/jsref/jsref_includes.asp
+
 
 
 
@@ -114,7 +120,7 @@
         //Counter to see the number of times the drawBar() function is called
         var cBar = 0                
                         
-        //Defining the x-axis for the lollipop chart                
+        //Defining the x-axis for the bar chart                
         var x = d3.scaleBand()
                     .range([0, widthCHART])
                     .padding(0.4)          //Adding a padding of 0.4 between the bars, so that the bar elements aren't too close to each other       
@@ -129,7 +135,7 @@
                                 .attr("transform", "translate(100," + (heightCHART+50) + ")")
                                 .call(xBottomAxis)                 
         
-        //Defining the y-axis for the lollipop chart
+        //Defining the y-axis for the bar chart
         var y = d3.scaleLinear()
                     .range([heightCHART, 0])
         
@@ -207,7 +213,7 @@
             .duration(1000)
             .attr("fill", "#01949A")         //After 1 min, the bars tunr back to teal in color
             //The below is done so that the transition is done infinitely
-            //while the cursor is on one of the marks in the line chart
+            //while the cursor is on one of the markers on the line chart
             .on("end", whileMousingOverLINE)           //(Saxena, 2017)
 
         //Select all of the markers present in scatt1 class
@@ -219,10 +225,10 @@
             .transition()
             .duration(1000)
             .attr("r", 3)           //After 1 minute change the radius value back to 3
-            .attr("fill", "#01949A")          //Additionally, change the color back to pink
+            .attr("fill", "#01949A")          //Additionally, change the color back to teal
             //The below is done so that the transition is done infinitely
-            //while the cursor is on one of the marks in the line chart
-            //This helps the markers achieve a pulsing effect
+            //while the cursor is on one of the markers in line chart
+            //This helps the scatter plot markers achieve a pulsing effect
             .on("end", whileMousingOverLINE)           //(Saxena, 2017)
     }
 
@@ -252,7 +258,7 @@
     //This function gets the name of the country that was clicked on the map
     window.getCountryBAR = function(country){           //(Subin Siby, 2014)
 
-            //Storing the country name in an empty variable countryName
+            //Storing the country name (that was clicked on) in an empty variable countryName
             var countryName; 
             countryName = country;
         
@@ -295,7 +301,7 @@
                     .call(yLeftAxis)
         }
 
-        //The below function generates the bar chart based on teh data provided as input to the function
+        //The below function generates the bar chart based on the data provided as input to the function
         function drawBAR(data) {
 
             //Counter to check how many times the function was called
@@ -318,7 +324,7 @@
                     //As we are printing the rise in the number of cases for each month, 
                     //we extract the last day of each month
                     lastDateBAR = function(d){
-                        //The below geneartes a "Date" object for the provided month and year
+                        //The below generates a "Date" object for the provided month and year
                         return new Date(d.getFullYear(), d.getMonth() + 1, 0)          //(w3resource, 2020) 
                     }
 
@@ -328,7 +334,7 @@
                             reqMonthsBAR.push(month[data[i].date.getMonth()])
                             //Append the "total_cases" to the empty array defined above
                             reqValuesBAR.push(data[i].total_cases)
-                            //Add teh "total_cases" value to the set that is sent to the updateYAxis() function
+                            //Add the "total_cases" value to the set that is sent to the updateYAxis() function
                             caseNumSetBAR.add(data[i].total_cases)
                     }
                 }
@@ -342,7 +348,7 @@
                     if(dat.date.getTime() == lastDateBAR(dat.date).getTime()){          //(GeeksforGeeks, 2019)
                         //Checking to see if the current "total_cases" value that is been read, is present
                         //in the array defined above
-                        return (reqValuesBAR.includes(dat.total_cases))
+                        return (reqValuesBAR.includes(dat.total_cases))     //(W3schools.com, 2015)   
                     }   
                 }
                 
@@ -354,34 +360,45 @@
                     .append("rect")
                     .attr("class", "barRect")
                     .merge(u)
-                    .on("mouseover", whileMousingOver)
-                    .on("mouseout", whileMousingOut)
+                    .on("mouseover", whileMousingOver)        //Listening for mouseover events
+                    .on("mouseout", whileMousingOut)          //Listening for mouseout events
                     .transition()                        
-                    .duration(900)          ////Using a transition, so that the bars appear smoothly
+                    .duration(900)          //Using a transition, so that the bars appear smoothly
                     .attr("x", function(d){
-                        //Setting the x-ccordinate of the bars
+
+                        //Setting the x-coordinate of the bars based on the current month that is been read
                         return x(month[d.date.getMonth()]) + 100      
                     })
                     .attr("y", function(d){
-                        //setting the y-coordinate of the bars
+
+                        //setting the y-coordinate of the bars based on the current "total_cases" value
                         return y(d.total_cases) + 50    
                     })
-                    .attr("width", x.bandwidth())    
+                    .attr("width", x.bandwidth())    //Setting the width of the bars (remains the same for all bars)
                     .attr("height", function(d){
-                        //Setting the height value dynamically
+
+                        //Adjusting the height according to the current "total_cases" value, and matching it to its position on the y-axis
                         return heightCHART - y(d.total_cases)
                     })
-                    .attr("fill", "#01949A")
-                    
+                    .attr("fill", "#01949A")          //Setting the bars to be teal in color
+                
+                //If the drawBAR() function is called 2 or more than 2 times, the function clearBar() is called
                 if(cBar >= 2){
                     clearBar()
                 }
 
+                //Clearing the bars
                 u.exit().remove()
                         
             }
 
+            //The below function is used for clearing the bars, as soon as a new country
+            //is clicked on
+            //This is done so that the chart gets updated automatically with the new country's data
             function clearBar(){
+
+                //Select all the bars in the bar chart 
+                //and remove them - Done so that the next bars can appear
                 d3.selectAll(".barRect")
                     .exit()
                     .remove()
@@ -396,19 +413,20 @@
                 //     .duration(1000)
                 //     .remove()
 
-                
+                //Reset the counter to 0
                 cBar=0
-                
-
-                drawBAR(barCountry)
+                drawBAR(barCountry)    //Again call the function for drawing the bars
             }
 
+            //Variable that stores the data for the particular country that was clicked on
             var barCountry = asiaArr.filter(yearCountry)      //(dedpo, 2016)
-
             function yearCountry(d){
+                //Filter out the data for that particular country that was clicked on
+                //and only filter data for the year 2020
                 return ((d.location == countryName) && (d.date.getFullYear() == 2020))
             }
 
+            //Pass the filtered dataset to the function, so that the bar chart can be drawn accordingly
             drawBAR(barCountry)
             
             

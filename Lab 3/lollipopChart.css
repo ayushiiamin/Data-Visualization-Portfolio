@@ -10,6 +10,8 @@ Available at: https://www.w3schools.com/howto/howto_css_cards.asp
 
 /* (W3schools.com, 2022) */
 .lollipop {
+
+    /* The below is done so that the lollipop chart can appear on a light blue card */
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
     transition: 0.3s;
     width: 40.8%;
@@ -17,11 +19,13 @@ Available at: https://www.w3schools.com/howto/howto_css_cards.asp
     background-color:#B1D4E0;
     border-radius: 5px;
   }
-
+  
+  /* Setting 8 pixels as the font size of the y-axis */
   .myYaxisLOLLIPOP {
     font: 8px sans-serif;
   }
   
+  /* Setting 8 pixels as the font size of the x-axis */
   .xaxisLOLLIPOP {
     font: 8px sans-serif;
   }

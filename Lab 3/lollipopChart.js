@@ -24,6 +24,8 @@
 // 8) W3schools.com. (2015). JavaScript String includes() Method. [online] 
 //    Available at: https://www.w3schools.com/jsref/jsref_includes.asp
 
+// 9) Ordonez, T. (2020). D3 Convert String to Date. [online] Tom Ordonez. 
+//    Available at: https://www.tomordonez.com/d3-convert-string-to-date/
 
 
 //Setting the dimensions
@@ -109,7 +111,7 @@ var	parseDate = d3.timeParse("%Y-%m-%d");            //(Ordonez, 2020)
 
         //Defining the x-axis for the lollipop chart
         var x = d3.scaleBand()
-                   .range([ 0, widthLOLLIPOP])
+                   .range([0, widthLOLLIPOP])
                    .padding(1);          //Adding a padding of 1 between the lollipo lines, so that the chart elements aren't too close to each other
         
         //Creating a horizontal bottom x-axis using the data generated for the x-axis above
@@ -270,7 +272,7 @@ var	parseDate = d3.timeParse("%Y-%m-%d");            //(Ordonez, 2020)
                    .attr("x1", function(d) { 
 
                         //Setting the x1-coordinate of the line based on the current location
-                        return x(d.location) + 100;      //(Holtz, 2022)
+                        return x(d.location) + 100;      
                     })
                     .attr("x2", function(d) { 
 
@@ -282,7 +284,8 @@ var	parseDate = d3.timeParse("%Y-%m-%d");            //(Ordonez, 2020)
                         //Setting the x1-coordinate of the line based on the current "total_cases" value
                         return y(d.total_cases) + 36; 
                     })
-                    .attr("y2", y(0) + 36)  //To the y, 0 is being sent here as we want the chart to appear vertically
+                    //To the y, 0 is being sent here as we want the chart to appear vertically
+                    .attr("y2", y(0) + 36)    //(Holtz, 2022)
             
                     
             //Creating the markers that appear on the top of the line
