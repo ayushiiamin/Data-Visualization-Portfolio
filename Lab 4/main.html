@@ -9,6 +9,16 @@
     </head>
 
     <body>
+        <div class="header">
+            <h1>Crime Rate in USA</h1>
+
+            <div class="slidecontainer">
+                <p style="display: inline">Current year: <span id="displayYear"></span></p>
+                <!-- <input type="range" min="1960" max="2019" value="50" class="slider" id="yearCrime"> -->
+                <input type="range" class="slider" id="yearCrime">
+            </div>
+        </div>
+
         <script type='text/javascript' src='https://d3js.org/d3.v7.min.js'></script>
 
         <script src="map.js"></script>
