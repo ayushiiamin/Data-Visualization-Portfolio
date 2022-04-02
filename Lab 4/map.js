@@ -70,9 +70,10 @@ d3.csv("data/crimeUS.csv", function(d, i){
 
     //Creating an svg for the map
     var svg = d3.select('body')
+    
                 .append("svg")
                 .attr("class","map")
-                .attr("transform", "translate(10, 20)")
+                .attr("transform", "translate(10, 10)")
                 .attr("width", widthSVG + margin.left + margin.right)
                 .attr("height", heightSVG + margin.top + margin.bottom)
                 .append("g")
@@ -108,26 +109,31 @@ d3.csv("data/crimeUS.csv", function(d, i){
 
             currentYear = slider.value;
             change(currentYear)
+            changePIE(currentYear)
+            changeLOLLIPOP(currentYear)
             
-
-
             slider.oninput = function() {
                 output.innerHTML = this.value;
                 currentYear = this.value
                 change(currentYear)
+                changePIE(currentYear)
+                changeLOLLIPOP(currentYear)
             }
             
-        function change(tes) {
+        function change(yearMAP) {
             testMap = new Map()
-            var testArr = mapArr.filter(filteringDataMAP)
+
+            
+            var newMapArr = mapArr.filter(filteringDataMAP)
             
             function filteringDataMAP(d){
-                if(d.year == +tes){
+                if(d.year == +yearMAP){
                     tst.set(d.state, d.property_total_all)           //(Holtz, 2022)
                     testMap.set(d.state, d.population)
                     return d
                 }
             }
+        
         
 
         var map = svg.append("g")
@@ -203,7 +209,7 @@ d3.csv("data/crimeUS.csv", function(d, i){
                     .attr("x", d3.pointer(event)[0])
                     .attr("y", d3.pointer(event)[1] + 15)
                     .text(function(){
-                        d.pop = testMap.get(d.properties.name) || 0;
+                        d.pop = testMap.get(d.properties.name) || "Unknown";
                         return "Population: " + d.pop
                     })
         }
