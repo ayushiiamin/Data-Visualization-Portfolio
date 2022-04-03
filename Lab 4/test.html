@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
 
+
 <!-- Load d3.js -->
 <script src='https://d3js.org/d3.v7.min.js'></script>
 
@@ -9,67 +10,71 @@
 
 <script>
 
-    // set the dimensions and margins of the graph
-    const margin = {top: 10, right: 10, bottom: 10, left: 10},
-      width = 445 - margin.left - margin.right,
-      height = 445 - margin.top - margin.bottom;
-    
-    // append the svg object to the body of the page
-    const svg = d3.select("#my_dataviz")
+  // set the dimensions and margins of the graph
+  const margin = {top: 20, right: 30, bottom: 30, left: 55},
+      width = 460 - margin.left - margin.right,
+      height = 400 - margin.top - margin.bottom;
+  
+  // append the svg object to the body of the page
+  const svg = d3.select("#my_dataviz")
     .append("svg")
       .attr("width", width + margin.left + margin.right)
       .attr("height", height + margin.top + margin.bottom)
     .append("g")
       .attr("transform",
             `translate(${margin.left}, ${margin.top})`);
-    
-    // Read data
-    d3.csv('https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/data_hierarchy_1level.csv').then(function(data) {
-    
-      // stratify the data: reformatting for d3.js
-      const root = d3.stratify()
-        .id(function(d) { return d.name; })   // Name of the entity (column name is name in csv)
-        .parentId(function(d) { return d.parent; })   // Name of the parent (column name is parent in csv)
-        (data);
-      root.sum(function(d) { return +d.value })   // Compute the numeric value for each entity
-    
-      // Then d3.treemap computes the position of each element of the hierarchy
-      // The coordinates are added to the root object above
-      d3.treemap()
-        .size([width, height])
-        .padding(4)
-        (root)
-    
-      // use this information to add rectangles:
-      svg
-        .selectAll("rect")
-        .data(root.leaves())
-        .enter("rect")
-        .attr("x", function(d){
-                        return d.x0
-                    })
-                    .attr("y", function(d){
-                        return d.y0
-                    })
-                    .attr("width", function(d){
-                        console.log(d)
-                        return d.x1 - d.x0
-                    })
-                    .attr("height", function(d){
-                        return d.y1 - d.y0
-                    })
-          .style("stroke", "black")
-          .style("fill", "#69b3a2");
-    
-      // and to add the text labels
-      svg
-        .selectAll("text")
-        .data(root.leaves())
-        .join("text")
-          .attr("x", function(d){ return d.x0+10})    // +10 to adjust position (more right)
-          .attr("y", function(d){ return d.y0+20})    // +20 to adjust position (lower)
-          .text(function(d){ return d.data.name})
-          .attr("font-size", "15px")
-          .attr("fill", "white")
-    })
-    </script>
+  
+  // Parse the Data
+  d3.csv("https://raw.githubusercontent.com/holtzy/data_to_viz/master/Example_dataset/5_OneCatSevNumOrdered_wide.csv").then( function(data) {
+  
+    // List of groups = header of the csv files
+    // const keys = data.columns.slice(1)
+    const keys = ['Amanda', 'Ashley', 'Betty', 'Deborah', 'Dorothy', 'Helen', 'Linda', 'Patricia']
+    console.log(keys)
+  
+    // Add X axis
+    const x = d3.scaleLinear()
+      .domain(d3.extent(data, function(d) { return d.year; }))
+      .range([ 0, width ]);
+    svg.append("g")
+      .attr("transform", `translate(0, ${height})`)
+      .call(d3.axisBottom(x).ticks(5));
+  
+    // Add Y axis
+    const y = d3.scaleLinear()
+      .domain([0, 200000])
+      .range([ height, 0 ]);
+    svg.append("g")
+      .call(d3.axisLeft(y));
+  
+    // color palette
+    const color = d3.scaleOrdinal()
+      .domain(keys)
+      .range(['#e41a1c','#377eb8','#4daf4a','#984ea3','#ff7f00','#ffff33','#a65628','#f781bf'])
+  
+    //stack the data?
+    const stackedData = d3.stack()
+      .keys(keys)
+
+     const test =  stackedData(data)
+    //  console.log(test)
+      //console.log("This is the stack result: ", stackedData)
+  
+    // Show the areas
+    svg
+      .selectAll("mylayers")
+      .data(test)
+      .join("path")
+        .style("fill", function(d) { return color(d.key); })
+        .attr("d", d3.area()
+          .x(function(d, i) { return x(d.data.year); })
+          .y0(function(d) { 
+            // console.log(d)
+            // console.log(d[0])
+            return y(d[0]); 
+          })
+          .y1(function(d) { return y(d[1]); })
+      )
+  
+  })
+  </script>

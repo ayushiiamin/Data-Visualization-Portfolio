@@ -110,14 +110,26 @@ d3.csv("data/crimeUS.csv", function(d, i){
             currentYear = slider.value;
             change(currentYear)
             changePIE(currentYear)
-            changeLOLLIPOP(currentYear)
+            changeLOLLIPOP_NE(currentYear)
+            changeLOLLIPOP_WE(currentYear)
+            changeLOLLIPOP_SO(currentYear)
+            changeLOLLIPOP_MW(currentYear)
+            changeBUBBLE_BU(currentYear)
+            changeBUBBLE_LA(currentYear)
+            changeBUBBLE_MO(currentYear)
             
             slider.oninput = function() {
                 output.innerHTML = this.value;
                 currentYear = this.value
                 change(currentYear)
                 changePIE(currentYear)
-                changeLOLLIPOP(currentYear)
+                changeLOLLIPOP_NE(currentYear)
+                changeLOLLIPOP_WE(currentYear)
+                changeLOLLIPOP_SO(currentYear)
+                changeLOLLIPOP_MW(currentYear)
+                changeBUBBLE_BU(currentYear)
+                changeBUBBLE_LA(currentYear)
+                changeBUBBLE_MO(currentYear)
             }
             
         function change(yearMAP) {

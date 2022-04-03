@@ -1,4 +1,4 @@
-.lollipopNorthEastProperty {
+.bubblePropertyBU {
 
     /* The below is done so that the map can appear on a light gray card */
       box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
@@ -11,7 +11,7 @@
       padding: 0 10px;
     }
 
-.lollipopWesternProperty {
+.bubblePropertyLA {
 
       /* The below is done so that the map can appear on a light gray card */
         box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
@@ -24,7 +24,7 @@
         padding: 0 10px;
       }
 
-.lollipopSouthProperty {
+.bubblePropertyMO {
 
         /* The below is done so that the map can appear on a light gray card */
           box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
@@ -36,16 +36,3 @@
           float: left;
           padding: 0 10px;
         }
-
-.lollipopMidWestProperty {
-
-          /* The below is done so that the map can appear on a light gray card */
-            box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-            transition: 0.3s;
-            width: 40.8%;
-            height: 0.5%;
-            background-color:#171717;
-            border-radius: 5px;
-            float: left;
-            padding: 0 10px;
-          }

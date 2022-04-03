@@ -3,14 +3,14 @@
 // 1) Shuvo, N.A. (2021). X Axis text labels are not rotating in d3. [online] Stack Overflow. 
 //    Available at: https://stackoverflow.com/questions/65920124/x-axis-text-labels-are-not-rotating-in-d3
 
-const marginLOLLIPOP_NE = {top: 10, right: 30, bottom: 40, left: 155};
-const widthLOLLIPOP_NE = 400 - marginLOLLIPOP_NE.left - marginLOLLIPOP_NE.right;
-const heightLOLLIPOP_NE = 300 - marginLOLLIPOP_NE.top - marginLOLLIPOP_NE.bottom;
+const marginLOLLIPOP_MW = {top: 10, right: 30, bottom: 40, left: 155};
+const widthLOLLIPOP_MW = 400 - marginLOLLIPOP_MW.left - marginLOLLIPOP_MW.right;
+const heightLOLLIPOP_MW = 300 - marginLOLLIPOP_MW.top - marginLOLLIPOP_MW.bottom;
 
 
-var lollipopArrPropertyNE = [];
+var lollipopArrPropertyMW = [];
 
-function toOriginalTypeLOLLIPOP_NE(d){
+function toOriginalTypeLOLLIPOP_MW(d){
     return {
         state: d.state,
         year: Number(d.year),
@@ -41,40 +41,40 @@ function toOriginalTypeLOLLIPOP_NE(d){
     };
 }
 
-d3.csv("data/northEastRegionUS.csv", function(d, i){
-    lollipopArrPropertyNE.push(toOriginalTypeLOLLIPOP_NE(d))
-}).then(function(lollipopData_NE){
+d3.csv("data/midWestRegionUS.csv", function(d, i){
+    lollipopArrPropertyMW.push(toOriginalTypeLOLLIPOP_MW(d))
+}).then(function(lollipopData_MW){
 
-    var svgLOLLIPOP_NE = d3.select('body')
+    var svgLOLLIPOP_MW = d3.select('body')
                             .append("svg")
-                            .attr("class","lollipopNorthEastProperty")
-                            .attr("width", widthLOLLIPOP_NE + marginLOLLIPOP_NE.left + marginLOLLIPOP_NE.right - 7)
-                            .attr("height", heightLOLLIPOP_NE + marginLOLLIPOP_NE.top + marginLOLLIPOP_NE.bottom - 10)
+                            .attr("class","lollipopMidWestProperty")
+                            .attr("width", widthLOLLIPOP_MW + marginLOLLIPOP_MW.left + marginLOLLIPOP_MW.right - 7)
+                            .attr("height", heightLOLLIPOP_MW + marginLOLLIPOP_MW.top + marginLOLLIPOP_MW.bottom - 10)
                             .attr("transform", "translate(20, 20)")
 
     //Creating a group container
-    var gLOLLIPOP_NE = svgLOLLIPOP_NE.selectAll("g")
-                                        .data(lollipopArrPropertyNE)
+    var gLOLLIPOP_MW = svgLOLLIPOP_MW.selectAll("g")
+                                        .data(lollipopArrPropertyMW)
                                         .enter()
                                         .append("g")
                                         .attr("transform", function(d, i) {
-                                            return "translate(" + (marginLOLLIPOP_NE.left+10) + "," + marginLOLLIPOP_NE.top + ")";
+                                            return "translate(" + (marginLOLLIPOP_MW.left+10) + "," + marginLOLLIPOP_MW.top + ")";
                                         })
 
     var x = d3.scaleBand()
-                .range([0, widthLOLLIPOP_NE])
-                .padding(1)
+                .range([0, widthLOLLIPOP_MW])
+                .padding(0.1)
 
     var xBottomAxis = d3.axisBottom()
                         .scale(x)
 
-    var x_bottom = svgLOLLIPOP_NE.append("g")
-                                .attr("class", "xaxis")
-                                .attr("transform", "translate(100," + (heightLOLLIPOP_NE+50) + ")")
+    var x_bottom = svgLOLLIPOP_MW.append("g")
+                                .attr("class", "xaxis_MW")
+                                .attr("transform", "translate(100," + (heightLOLLIPOP_MW+50) + ")")
                                 .attr("color", "white")
                                 .call(xBottomAxis) 
 
-    x_bottom.selectAll("text")              
+    x_bottom.selectAll("text")               
             .style("text-anchor", "end")
             .attr("dx", "-.8em")              //(Shuvo, 2021)
             .attr("dy", ".15em")
@@ -82,23 +82,23 @@ d3.csv("data/northEastRegionUS.csv", function(d, i){
             .attr("fill", "#29A0B1")
 
     var y = d3.scaleLinear()
-                .range([heightLOLLIPOP_NE, 0])
+                .range([heightLOLLIPOP_MW, 0])
     
     var yLeftAxis = d3.axisLeft()
                         .scale(y)
 
-    var y_left = svgLOLLIPOP_NE.append("g")
-                            .attr("class", "myYaxis")
-                            .attr("transform", "translate(" + (widthLOLLIPOP_NE-115) + ", 50)")
+    var y_left = svgLOLLIPOP_MW.append("g")
+                            .attr("class", "myYaxis_MW")
+                            .attr("transform", "translate(" + (widthLOLLIPOP_MW-115) + ", 50)")
                             .attr("color", "white")
                             .call(yLeftAxis)
 
     y_left.selectAll("text")
             .attr("fill", "#29A0B1")
 
-    var gr_NE = svgLOLLIPOP_NE.append("g")
+    var gr_MW = svgLOLLIPOP_MW.append("g")
 
-    var stateNameCode_NE = new Map([
+    var stateNameCode_MW = new Map([
             ["Alabama", "AL"],
             ["Alaska", "AK"],
             ["Arizona", "AZ"],
@@ -157,7 +157,7 @@ d3.csv("data/northEastRegionUS.csv", function(d, i){
     function axes(data){
 
         x.domain(data.map(function(d){
-            d.stateCode = stateNameCode_NE.get(d.state) || 0
+            d.stateCode = stateNameCode_MW.get(d.state) || 0
             return d.stateCode
         }))
 
@@ -193,7 +193,7 @@ d3.csv("data/northEastRegionUS.csv", function(d, i){
               .attr("fill", "#29A0B1")
     }
 
-    function drawLollipopChart_NE(data){
+    function drawLollipopChart_MW(data){
         
         axes(data)
         var popRate = []
@@ -204,23 +204,23 @@ d3.csv("data/northEastRegionUS.csv", function(d, i){
 
         updateYAxis(popRate)
 
-        var l = svgLOLLIPOP_NE.selectAll(".lollipopLine")
+        var l = svgLOLLIPOP_MW.selectAll(".lollipopLine_MW")
                                 .data(data)
         
             l.enter()
              .append("line")
-             .attr("class", "lollipopLine")
+             .attr("class", "lollipopLine_MW")
              .merge(l)
              .transition()
              .duration(900)
              .attr("stroke", "grey")
              .attr("x1", function(d){
-                d.stateCode = stateNameCode_NE.get(d.state) || 0
-                return x(d.stateCode) + 100
+                d.stateCode = stateNameCode_MW.get(d.state) || 0
+                return x(d.stateCode) + 107
              })
              .attr("x2", function(d){
-                d.stateCode = stateNameCode_NE.get(d.state) || 0
-                return x(d.stateCode) + 100
+                d.stateCode = stateNameCode_MW.get(d.state) || 0
+                return x(d.stateCode) + 107
              })
              .attr("y1", function(d){
                  return y(d.property_rates_all) + 50
@@ -228,20 +228,20 @@ d3.csv("data/northEastRegionUS.csv", function(d, i){
              .attr("y2", y(0) + 50)
 
 
-        var m = svgLOLLIPOP_NE.selectAll(".marker")
+        var m = svgLOLLIPOP_MW.selectAll(".marker_MW")
                                 .data(data)
 
             m.enter()
                 .append("circle")
-                .attr("class", "marker")
+                .attr("class", "marker_MW")
                 .merge(m)
                 .transition()
                 .duration(900)
                 // .attr("stroke", "black")
                 .style("fill", "#29A0B1")
                 .attr("cx", function(d){
-                    d.stateCode = stateNameCode_NE.get(d.state) || 0
-                    return x(d.stateCode) + 100
+                    d.stateCode = stateNameCode_MW.get(d.state) || 0
+                    return x(d.stateCode) + 107
                 })
                 .attr("cy", function(d){
                     return y(d.property_rates_all) + 50
@@ -252,17 +252,17 @@ d3.csv("data/northEastRegionUS.csv", function(d, i){
         m.exit().remove()
     }
 
-    window.changeLOLLIPOP_NE = function(yearLOLLIPOP_NE) {
+    window.changeLOLLIPOP_MW = function(yearLOLLIPOP_MW) {
 
-        var newLollipopArr_NE = lollipopArrPropertyNE.filter(filteringDataLOLLIPOP_NE)
+        var newLollipopArr_MW = lollipopArrPropertyMW.filter(filteringDataLOLLIPOP_MW)
             
-        function filteringDataLOLLIPOP_NE(d){
-            if(d.year == +yearLOLLIPOP_NE){
+        function filteringDataLOLLIPOP_MW(d){
+            if(d.year == +yearLOLLIPOP_MW){
                 return d
             }
         }
 
-        drawLollipopChart_NE(newLollipopArr_NE)  
+        drawLollipopChart_MW(newLollipopArr_MW)  
     }  
 })
 
