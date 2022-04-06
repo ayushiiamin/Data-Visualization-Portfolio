@@ -1,12 +1,12 @@
-window.callBubbleChart_MO = function(mo_data){
+window.callBubbleChart_MU = function(mu_data){
 
-    const marginBUBBLE_MO = {top: 10, right: 30, bottom: 40, left: 155};
-    const widthBUBBLE_MO = 400 - marginBUBBLE_MO.left - marginBUBBLE_MO.right;
-    const heightBUBBLE_MO = 300 - marginBUBBLE_MO.top - marginBUBBLE_MO.bottom;
+    const marginBUBBLE_MU = {top: 10, right: 30, bottom: 40, left: 155};
+    const widthBUBBLE_MU = 400 - marginBUBBLE_MU.left - marginBUBBLE_MU.right;
+    const heightBUBBLE_MU = 300 - marginBUBBLE_MU.top - marginBUBBLE_MU.bottom;
 
-    var bubbleArrPropertyMO = [];
+    var bubbleArrViolentMU = [];
 
-    function toOriginalTypeBUBBLE_MO(d){
+    function toOriginalTypeBUBBLE_MU(d){
         return {
             state: d.state,
             year: Number(d.year),
@@ -26,7 +26,7 @@ window.callBubbleChart_MO = function(mo_data){
 
             property_total_all: Number(d.property_total_all),
             total_burglary: Number(d.total_burglary),
-            rates_larceny: Number(d.total_larceny),
+            total_larceny: Number(d.total_larceny),
             total_motor: Number(d.total_motor),
 
             violent_total_all: Number(d.violent_total_all),
@@ -38,34 +38,34 @@ window.callBubbleChart_MO = function(mo_data){
     }
 
     d3.csv("data/crimeUS.csv", function(d, i){
-        bubbleArrPropertyMO.push(toOriginalTypeBUBBLE_MO(d))
-    }).then(function(bubbleData_MO){
+        bubbleArrViolentMU.push(toOriginalTypeBUBBLE_MU(d))
+    }).then(function(bubbleData_MU){
 
-        var svgBUBBLE_MO = d3.select('body')
+        var svgBUBBLE_MU = d3.select('body')
                                 .append("svg")
-                                .attr("class","bubblePropertyMO")
-                                .attr("width", widthBUBBLE_MO + marginBUBBLE_MO.left + marginBUBBLE_MO.right - 7)
-                                .attr("height", heightBUBBLE_MO + marginBUBBLE_MO.top + marginBUBBLE_MO.bottom + 16)
+                                .attr("class","bubbleViolentMU")
+                                .attr("width", widthBUBBLE_MU + marginBUBBLE_MU.left + marginBUBBLE_MU.right - 7)
+                                .attr("height", heightBUBBLE_MU + marginBUBBLE_MU.top + marginBUBBLE_MU.bottom + 16)
                                 .attr("transform", "translate(20, 20)")
 
         //Creating a group container
-        var gBUBBLE_MO = svgBUBBLE_MO.selectAll("g")
-                                            .data(bubbleArrPropertyMO)
+        var gBUBBLE_MU = svgBUBBLE_MU.selectAll("g")
+                                            .data(bubbleArrViolentMU)
                                             .enter()
                                             .append("g")
                                             .attr("transform", function(d, i) {
-                                                return "translate(" + (marginBUBBLE_MO.left+10) + "," + marginBUBBLE_MO.top + ")";
+                                                return "translate(" + (marginBUBBLE_MU.left+10) + "," + marginBUBBLE_MU.top + ")";
                                             })
         
         var x = d3.scaleLinear()
-                    .range([0, widthBUBBLE_MO])
+                    .range([0, widthBUBBLE_MU])
                             
         var xBottomAxis = d3.axisBottom()
                             .scale(x)
                             
-        var x_bottom = svgBUBBLE_MO.append("g")
-                                    .attr("class", "xaxis_MO")
-                                    .attr("transform", "translate(100," + (heightBUBBLE_MO+50) + ")")
+        var x_bottom = svgBUBBLE_MU.append("g")
+                                    .attr("class", "xaxis_MU")
+                                    .attr("transform", "translate(100," + (heightBUBBLE_MU+50) + ")")
                                     .attr("color", "white")
                                     .call(xBottomAxis) 
                             
@@ -74,27 +74,27 @@ window.callBubbleChart_MO = function(mo_data){
                 .attr("dx", "-.8em")              //(Shuvo, 2021)
                 .attr("dy", ".15em")
                 .attr("transform", "rotate(-65)" )
-                .attr("fill", "#FF0080")
+                .attr("fill", "#E80000")
                             
         var y = d3.scaleLinear()
-                .range([heightBUBBLE_MO, 0])
+                .range([heightBUBBLE_MU, 0])
                                 
         var yLeftAxis = d3.axisLeft()
                         .scale(y)
                             
-        var y_left = svgBUBBLE_MO.append("g")
-                                    .attr("class", "myYaxis_MO")
-                                    .attr("transform", "translate(" + (widthBUBBLE_MO-115) + ", 50)")
+        var y_left = svgBUBBLE_MU.append("g")
+                                    .attr("class", "myYaxis_MU")
+                                    .attr("transform", "translate(" + (widthBUBBLE_MU-115) + ", 50)")
                                     .attr("color", "white")
                                     .call(yLeftAxis)
                             
         y_left.selectAll("text")
-            .attr("fill", "#FF0080")
+            .attr("fill", "#E80000")
                             
-        var gr_MO = svgBUBBLE_MO.append("g")
+        var gr_MU = svgBUBBLE_MU.append("g")
 
-        var colorScale_MO = d3.scaleOrdinal()
-                                .range(d3.schemePuRd[7]);
+        var colorScale_MU = d3.scaleOrdinal()
+                                .range(d3.schemeReds[7]);
 
         function axes(data){
 
@@ -113,8 +113,8 @@ window.callBubbleChart_MO = function(mo_data){
                     .style("text-anchor", "end")
                     .attr("dx", "-.8em")              //(Shuvo, 2021)
                     .attr("dy", ".15em")
-                    .attr("transform", "rotate(-65)")
-                    .attr("fill", "#FF0080")
+                    .attr("transform", "rotate(-65)" )
+                    .attr("fill", "#E80000")
         }
 
         function updateYAxis(data){
@@ -131,66 +131,66 @@ window.callBubbleChart_MO = function(mo_data){
                 .call(yLeftAxis)
 
             y_left.selectAll("text")
-                .attr("fill", "#FF0080")
+                .attr("fill", "#E80000")
         }
 
         function updateColorScale(data){
 
-            colorScale_MO.domain(
+            colorScale_MU.domain(
                 [d3.min(data), d3.max(data)]
             )
         }
 
-        function drawBubbleChart_MO(data){
+        function drawBubbleChart_MU(data){
 
-            var moPop = []
-            var moRate = []
+            var muPop = []
+            var muRate = []
 
             for (var i = 0; i<data.length; i++){
-                moPop.push(data[i].population)
-                moRate.push(data[i].rates_motor)
+                muPop.push(data[i].population)
+                muRate.push(data[i].rates_murder)
             }
 
-            axes(moPop)
-            updateYAxis(moRate)
-            updateColorScale(moRate)
+            axes(muPop)
+            updateYAxis(muRate)
+            updateColorScale(muRate)
 
-            var o = svgBUBBLE_MO.selectAll(".rate_MO")
+            var mu = svgBUBBLE_MU.selectAll(".rate_MU")
                                     .data(data)
 
-                o.enter()
+                mu.enter()
                     .append("circle")
-                    .attr("class", "rate_MO")
-                    .merge(o)
+                    .attr("class", "rate_MU")
+                    .merge(mu)
                     .transition()
                     .duration(900)
                     .style("fill", function(d){
-                        return colorScale_MO(d.rates_motor)
+                        return colorScale_MU(d.rates_murder)
                     })
                     .attr("cx", function(d){
                         return x(d.population) + 107
                     })
                     .attr("cy", function(d){
-                        return y(d.rates_motor) + 50
+                        return y(d.rates_murder) + 50
                     })
                     .attr("r", 5)
 
-            o.exit().remove()
+            mu.exit().remove()
         }
 
-        window.changeBUBBLE_MO = function(yearBUBBLE_MO) {
+        window.changeBUBBLE_MU = function(yearBUBBLE_MU) {
 
-            var newBubbleArr_MO = bubbleArrPropertyMO.filter(filteringDataBUBBLE_MO)
+            var newBubbleArr_MU = bubbleArrViolentMU.filter(filteringDataBUBBLE_MU)
                 
-            function filteringDataBUBBLE_MO(d){
-                if(d.year == +yearBUBBLE_MO){
+            function filteringDataBUBBLE_MU(d){
+                if(d.year == +yearBUBBLE_MU){
                     return d
                 }
             }
 
-            drawBubbleChart_MO(newBubbleArr_MO)  
+            drawBubbleChart_MU(newBubbleArr_MU)  
         }
 
-        changeBUBBLE_MO(mo_data)
+        changeBUBBLE_MU(mu_data)
     })
 }

@@ -1,3 +1,11 @@
+<!-- REFERENCES - 
+
+1) Niel Sinel (2015). How to display an output depending on the selected radio button after selecting a radio button? [online] Stack Overflow. 
+   Available at: https://stackoverflow.com/questions/32325864/how-to-display-an-output-depending-on-the-selected-radio-button-after-selecting
+
+-->
+
+
 <!DOCTYPE html>
 
 <html lang = "en">
@@ -11,6 +19,7 @@
         <link rel="stylesheet" href="lollipopChart.css">
         <link rel="stylesheet" href="bubbleChart.css">
         <link rel="stylesheet" href="stackedAreaChart.css">
+        <link rel="stylesheet" href="circularBarplot.css">
     </head>
 
     <body>
@@ -22,24 +31,70 @@
                 <!-- <input type="range" min="1960" max="2019" value="50" class="slider" id="yearCrime"> -->
                 <input type="range" class="slider" id="yearCrime">
             </div>
+
+            <h2>Choose a crime category</h2>
+
+        <form name="crimeForm">
+            <input type="radio" name="crime_category" value="Property" id="property"/>
+            <label class="crime_category">Property</label>
+
+            <input type="radio" name="crime_category" value="Violent" id="violent"/>
+            <label class="crime_category">Violent</label>
+        </form>
         </div>
 
         <script type='text/javascript' src='https://d3js.org/d3.v7.min.js'></script>
 
-        <!-- <script src="map.js"></script>
+        <script>
+            var varia;
+            function radioClick(){
+                var option = document.crimeForm.crime_category;
+                for(var i = 0; i < option.length; i++) {
+                    option[i].onclick = function() {          //(Niel Sinel, 2015)
+                        callMap(this.value)
+                    };
+                }
+            }
+            radioClick()
+            
+        </script>
+
+        <script src="map.js"></script>
+
         <script src="donutChart.js"></script>
+
+        <script src="circularBarplotProperty.js"></script>
+
+        <script src="bubbleChartProperty_BU.js"></script>
+        <script src="bubbleChartProperty_LA.js"></script>
+        <script src="bubbleChartProperty_MO.js"></script>
+
+        <script src="circularBarplotViolent.js"></script>
+
+        <script src="bubbleChartViolent_AS.js"></script>
+        <script src="bubbleChartViolent_MU.js"></script>
+        <script src="bubbleChartViolent_RA.js"></script>
+        <script src="bubbleChartViolent_RO.js"></script>
         
-        <script src="lollipopChartNortheastProperty.js"></script>
+       <!--   -->
+        
+        <!-- <script src="lollipopChartNortheastProperty.js"></script>
         <script src="lollipopChartWesternProperty.js"></script>
         <script src="lollipopChartSouthernProperty.js"></script>
         <script src="lollipopChartMidwestProperty.js"></script> 
 
-        <script src="bubbleChartProperty_BU.js"></script>
-        <script src="bubbleChartProperty_LA.js"></script>  
-        <script src="bubbleChartProperty_MO.js"></script> -->
+        
+          
+         -->
 
-        <script src="stackedAreaChartProperty_BU_LA_MO.js"></script>    
+        <!-- 
 
+        
+        
+        
+         -->
+
+        <!-- <script src="stackedAreaChartProperty_BU_LA_MO.js"></script> -->
         <!-- <script src="treeMap.js"></script> -->
     </body>
 </html>

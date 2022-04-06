@@ -48,8 +48,8 @@ d3.csv("data/northEastRegionUS.csv", function(d, i){
     var svgLOLLIPOP_NE = d3.select('body')
                             .append("svg")
                             .attr("class","lollipopNorthEastProperty")
-                            .attr("width", widthLOLLIPOP_NE + marginLOLLIPOP_NE.left + marginLOLLIPOP_NE.right - 7)
-                            .attr("height", heightLOLLIPOP_NE + marginLOLLIPOP_NE.top + marginLOLLIPOP_NE.bottom - 10)
+                            .attr("width", widthLOLLIPOP_NE + marginLOLLIPOP_NE.left + marginLOLLIPOP_NE.right + 250)
+                            .attr("height", heightLOLLIPOP_NE + marginLOLLIPOP_NE.top + marginLOLLIPOP_NE.bottom + 200)
                             .attr("transform", "translate(20, 20)")
 
     //Creating a group container
@@ -62,7 +62,7 @@ d3.csv("data/northEastRegionUS.csv", function(d, i){
                                         })
 
     var x = d3.scaleBand()
-                .range([0, widthLOLLIPOP_NE])
+                .range([0, 1050])
                 .padding(1)
 
     var xBottomAxis = d3.axisBottom()

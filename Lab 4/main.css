@@ -6,6 +6,9 @@
    
 2) W3schools.com. (2022). How To Create Range Sliders. [online] 
    Available at: https://www.w3schools.com/howto/howto_js_rangeslider.asp
+
+3) Valdis Azamaris (2013). Center vertically radiobutton and it’s label. [online]
+   Available at: https://stackoverflow.com/questions/20019399/center-vertically-radiobutton-and-its-label
 */
 
 
@@ -72,3 +75,14 @@ body{
     transition: 0.5s;
     cursor: pointer;
   }
+
+  /* (Valdis Azamaris, 2013) */
+  input[type='radio']{
+    margin:1;
+}
+
+/* (Valdis Azamaris, 2013) */
+input[type='radio'], label{   
+   display:inline;
+   vertical-align: text-bottom;
+}
