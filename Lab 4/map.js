@@ -81,7 +81,6 @@ d3.csv("data/crimeUS.csv", function(d, i){
 
     var mapProjection = d3.geoAlbersUsa()                   //(Ocks.org, 2022)
                             .scale(520)
-                            // .center([0,52])
                             .translate([220, 140])
 
 
@@ -127,11 +126,15 @@ d3.csv("data/crimeUS.csv", function(d, i){
 
                 d3.selectAll(".circularBarplotViolent")          
                     .remove()
+
+                d3.selectAll(".areaViolent")          
+                    .remove()
                 
                 callCircularBarplot_property(currentYear)    
                 callBubbleChart_BU(currentYear)
                 callBubbleChart_LA(currentYear)
                 callBubbleChart_MO(currentYear)
+                callAREA_property()
             }
             else if(selectedOption == "Violent"){
                 d3.selectAll(".bubblePropertyBU")
@@ -145,12 +148,16 @@ d3.csv("data/crimeUS.csv", function(d, i){
 
                 d3.selectAll(".circularBarplotProperty")
                     .remove()
+                
+                d3.selectAll(".areaProperty")          
+                    .remove()
 
                 callCircularBarplot_violent(currentYear)
                 callBubbleChart_AS(currentYear)
                 callBubbleChart_MU(currentYear)
                 callBubbleChart_RA(currentYear)
                 callBubbleChart_RO(currentYear)
+                callAREA_violent()
             }
             
 
@@ -204,16 +211,19 @@ d3.csv("data/crimeUS.csv", function(d, i){
             }
         
         function change(yearMAP) {
-            testMap = new Map()
+            // var testMap = new Map()
+
+            var arrMap = [];
+            var testArr = []
 
             
             var newMapArr = mapArr.filter(filteringDataMAP)
             
             function filteringDataMAP(d){
                 if(d.year == +yearMAP){
-                    propertyType.set(d.state, d.property_total_all)           //(Holtz, 2022)
-                    violentType.set(d.state, d.violent_total_all)
-                    testMap.set(d.state, d.population)
+                    // propertyType.set(d.state, d.property_total_all)           //(Holtz, 2022)
+                    // violentType.set(d.state, d.violent_total_all)
+                    // testMap.set(d.state, d.population)
                     return d
                 }
             }
@@ -230,23 +240,38 @@ d3.csv("data/crimeUS.csv", function(d, i){
 
             changeColorScale(selectedOption)
 
+            function propFunc(dat, stateName){
+                for(var i = 0; i< dat.length; i++){
+                    if(dat[i].state == stateName){
+                        return dat[i].property_total_all
+                    }
+                }
+            }
+
+            function violentFunc(dat, stateName){
+                for(var i = 0; i< dat.length; i++){
+                    if(dat[i].state == stateName){
+                        return dat[i].violent_total_all
+                    }
+                }
+            }
+
         var map = svg.append("g")
                         .selectAll("path")
                         .data(data.features)
                         .enter()
                         .append("path")
                         .attr("class", "map")
-                        // .attr("fill", "#6ECB5A")
                         .attr("d", d3.geoPath()
                                         .projection(mapProjection)
                         )
                         .attr("fill", function(d){
                             if(selectedOption == "Property"){
-                                d.total = propertyType.get(d.properties.name) || 0;                  //(Holtz, 2022)
+                                d.total = propFunc(newMapArr, d.properties.name) || 0;                  //(Holtz, 2022)
                                 return colorScale(d.total)  
                             }
                             else if(selectedOption == "Violent"){
-                                d.total = violentType.get(d.properties.name) || 0;
+                                d.total = violentFunc(newMapArr, d.properties.name) || 0;
                                 return colorScale(d.total)
                             }
                             
@@ -320,7 +345,19 @@ d3.csv("data/crimeUS.csv", function(d, i){
                 .duration(50)
                 .style("stroke", "#000000")
 
-            changeSTACK_BU_LA_MO(d.properties.name)
+            if(selectedOption == "Property"){
+                changeAREA_property(yearMAP, d.properties.name)
+                filterData_BU(d.properties.name)
+                filterData_LA(d.properties.name)
+                filterData_MO(d.properties.name)
+            }
+            else if(selectedOption == "Violent"){
+                changeAREA_violent(yearMAP, d.properties.name)
+                filterData_AS(d.properties.name)
+                filterData_MU(d.properties.name)
+                filterData_RA(d.properties.name)
+                filterData_RO(d.properties.name)
+            }
         }
 
     }

@@ -45,8 +45,8 @@ window.callBubbleChart_RO = function(ro_data){
                                 .append("svg")
                                 .attr("class","bubbleViolentRO")
                                 .attr("width", widthBUBBLE_RO + marginBUBBLE_RO.left + marginBUBBLE_RO.right - 7)
-                                .attr("height", heightBUBBLE_RO + marginBUBBLE_RO.top + marginBUBBLE_RO.bottom + 16)
-                                .attr("transform", "translate(20, 20)")
+                                .attr("height", heightBUBBLE_RO + marginBUBBLE_RO.top + marginBUBBLE_RO.bottom + 18)
+                                .attr("transform", "translate(-453, 35)")
 
         //Creating a group container
         var gBUBBLE_RO = svgBUBBLE_RO.selectAll("g")
@@ -56,6 +56,14 @@ window.callBubbleChart_RO = function(ro_data){
                                             .attr("transform", function(d, i) {
                                                 return "translate(" + (marginBUBBLE_RO.left+10) + "," + marginBUBBLE_RO.top + ")";
                                             })
+
+        gBUBBLE_RO.append("text")
+                    .attr("x", -150)
+                    .attr("y", 20)
+                    .attr("font-size", "17px")
+                    .attr("font-family", "sans-serif")
+                    .attr("fill", "#7F4AA4")
+                    .text("Robbery")
         
         var x = d3.scaleLinear()
                     .range([0, widthBUBBLE_RO])
@@ -95,6 +103,27 @@ window.callBubbleChart_RO = function(ro_data){
 
         var colorScale_RO = d3.scaleOrdinal()
                                 .range(d3.schemePurples[7]);
+
+        var filter_ro = 0
+
+        window.filterData_RO = function(state){
+            filter_ro++
+                                                                                                                                                
+            d3.selectAll(".rate_RO")
+                .filter(function(d){
+                    return !(d.state == state)
+                })
+                .style("visibility", "hidden") 
+                                                                                                                                                
+            if(filter_ro >= 2){
+                d3.selectAll(".rate_RO")
+                    .style("visibility", "visible")  
+                                                                                                                                                
+                filter_ro = 0
+                                                                                                                                                
+                filterData_RO(state)
+            }
+        }
 
         function axes(data){
 
@@ -143,6 +172,23 @@ window.callBubbleChart_RO = function(ro_data){
 
         function drawBubbleChart_RO(data){
 
+            svgBUBBLE_RO.append("rect")
+                        .attr("x", 370)
+                        .attr("y", 30)
+                        .attr("fill", "#F8CF40")
+                        .attr("width", 60)
+                        .attr("height", 20)
+                        .on("click", onClickRO)
+            
+            svgBUBBLE_RO.append("text")
+                        .text("Reset Filter")
+                        .attr("x", 400)
+                        .attr("y", 43)
+                        .attr("text-anchor", "middle")
+                        .attr("font-size", "12px")
+                        .attr("fill", "#0000FF")
+                        .on("click", onClickRO)
+
             var roPop = []
             var roRate = []
 
@@ -162,6 +208,8 @@ window.callBubbleChart_RO = function(ro_data){
                     .append("circle")
                     .attr("class", "rate_RO")
                     .merge(ro)
+                    .on("mouseover", onMouseOver_RO)
+                    .on("mouseout", onMouseOut_RO)
                     .transition()
                     .duration(900)
                     .style("fill", function(d){
@@ -176,6 +224,64 @@ window.callBubbleChart_RO = function(ro_data){
                     .attr("r", 5)
 
             ro.exit().remove()
+        }
+
+        var tooltipRect_RO = d3.select(".bubbleViolentRO")
+                                .append("g")
+                                .append("rect")
+                                .style("position", "absolute")
+                                .style("visibility", "hidden")
+                                .attr("fill", "#695E93")     
+                
+        var tooltip_RO = d3.select(".bubbleViolentRO")
+                            .append("g")
+                            .append("text")
+                            .attr("class", "roText")
+                            .style("position", "absolute")
+                            .style("visibility", "hidden")         
+                            .attr("fill", "#EFDCF9")         
+                            .attr("font-size", "15px")
+
+        var ttRect_RO;
+
+        function onMouseOver_RO(event, d, i){
+
+            ttRect_RO = tooltip_RO.node().getBBox()
+
+            tooltipRect_RO.style("visibility", "visible")
+                            .attr("x", d3.pointer(event)[0]) 
+                            .attr("y", d3.pointer(event)[1] - 12)
+                            .attr("width", ttRect_RO.width)
+                            .attr("height", ttRect_RO.height)
+
+            tooltip_RO.style("visibility", "visible")
+                        .attr("x", d3.pointer(event)[0])
+                        .attr("y", d3.pointer(event)[1])
+                        .text(function(){
+                            return "State: " + d.state
+                        })
+                        .append("tspan")                  //(G, 2017)
+                        .attr("x", d3.pointer(event)[0])
+                        .attr("y", d3.pointer(event)[1] + 15)
+                        .text(function(){
+                            return "Population: " + d.population
+                        })
+                        .append("tspan")                  //(G, 2017)
+                        .attr("x", d3.pointer(event)[0])
+                        .attr("y", d3.pointer(event)[1] + 30)
+                        .text(function(){
+                            return "Robbery Rate: " + d.rates_robbery
+                        })
+        }
+
+        function onMouseOut_RO(event, d, i){
+            tooltip_RO.style("visibility", "hidden")
+            tooltipRect_RO.style("visibility", "hidden")
+        }
+
+        function onClickRO(){
+            d3.selectAll(".rate_RO")
+                .style("visibility", "visible")
         }
 
         window.changeBUBBLE_RO = function(yearBUBBLE_RO) {

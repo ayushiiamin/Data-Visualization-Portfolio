@@ -46,8 +46,8 @@ window.callBubbleChart_AS = function(as_data){
                                 .append("svg")
                                 .attr("class","bubbleViolentAS")
                                 .attr("width", widthBUBBLE_AS + marginBUBBLE_AS.left + marginBUBBLE_AS.right - 7)
-                                .attr("height", heightBUBBLE_AS + marginBUBBLE_AS.top + marginBUBBLE_AS.bottom + 16)
-                                .attr("transform", "translate(20, 20)")
+                                .attr("height", heightBUBBLE_AS + marginBUBBLE_AS.top + marginBUBBLE_AS.bottom + 18)
+                                .attr("transform", "translate(10, -340)")
 
         //Creating a group container
         var gBUBBLE_AS = svgBUBBLE_AS.selectAll("g")
@@ -57,6 +57,14 @@ window.callBubbleChart_AS = function(as_data){
                                             .attr("transform", function(d, i) {
                                                 return "translate(" + (marginBUBBLE_AS.left+10) + "," + marginBUBBLE_AS.top + ")";
                                             })
+
+         gBUBBLE_AS.append("text")
+                    .attr("x", -150)
+                    .attr("y", 20)
+                    .attr("font-size", "17px")
+                    .attr("font-family", "sans-serif")
+                    .attr("fill", "#FF8300")
+                    .text("Assault")
         
         var x = d3.scaleLinear()
                     .range([0, widthBUBBLE_AS])
@@ -96,6 +104,27 @@ window.callBubbleChart_AS = function(as_data){
 
         var colorScale_AS = d3.scaleOrdinal()
                                 .range(d3.schemeOranges[7]);
+
+        var filter_as = 0
+
+        window.filterData_AS = function(state){
+            filter_as++
+                                                                        
+            d3.selectAll(".rate_AS")
+                .filter(function(d){
+                    return !(d.state == state)
+                })
+                .style("visibility", "hidden") 
+                                                                        
+            if(filter_as >= 2){
+                d3.selectAll(".rate_AS")
+                    .style("visibility", "visible")  
+                                                                        
+                filter_as = 0
+                                                                        
+                filterData_AS(state)
+            }
+        }
 
         function axes(data){
 
@@ -144,6 +173,23 @@ window.callBubbleChart_AS = function(as_data){
 
         function drawBubbleChart_AS(data){
 
+            svgBUBBLE_AS.append("rect")
+                        .attr("x", 370)
+                        .attr("y", 30)
+                        .attr("fill", "#F8CF40")
+                        .attr("width", 60)
+                        .attr("height", 20)
+                        .on("click", onClickAS)
+            
+            svgBUBBLE_AS.append("text")
+                        .text("Reset Filter")
+                        .attr("x", 400)
+                        .attr("y", 43)
+                        .attr("text-anchor", "middle")
+                        .attr("font-size", "12px")
+                        .attr("fill", "#0000FF")
+                        .on("click", onClickAS)
+
             var asPop = []
             var asRate = []
 
@@ -163,6 +209,8 @@ window.callBubbleChart_AS = function(as_data){
                     .append("circle")
                     .attr("class", "rate_AS")
                     .merge(as)
+                    .on("mouseover", onMouseOver_AS)
+                    .on("mouseout", onMouseOut_AS)
                     .transition()
                     .duration(900)
                     .style("fill", function(d){
@@ -177,6 +225,64 @@ window.callBubbleChart_AS = function(as_data){
                     .attr("r", 5)
 
             as.exit().remove()
+        }
+
+        var tooltipRect_AS = d3.select(".bubbleViolentAS")
+                            .append("g")
+                            .append("rect")
+                            .style("position", "absolute")
+                            .style("visibility", "hidden")
+                            .attr("fill", "#695E93")     
+                            
+        var tooltip_AS = d3.select(".bubbleViolentAS")
+                            .append("g")
+                            .append("text")
+                            .attr("class", "asText")
+                            .style("position", "absolute")
+                            .style("visibility", "hidden")         
+                            .attr("fill", "#EFDCF9")         
+                            .attr("font-size", "15px")
+
+        var ttRect_AS;
+
+        function onMouseOver_AS(event, d, i){
+
+            ttRect_AS = tooltip_AS.node().getBBox()
+
+            tooltipRect_AS.style("visibility", "visible")
+                        .attr("x", d3.pointer(event)[0]) 
+                        .attr("y", d3.pointer(event)[1] - 12)
+                        .attr("width", ttRect_AS.width)
+                        .attr("height", ttRect_AS.height)
+
+            tooltip_AS.style("visibility", "visible")
+                    .attr("x", d3.pointer(event)[0])
+                    .attr("y", d3.pointer(event)[1])
+                    .text(function(){
+                        return "State: " + d.state
+                    })
+                    .append("tspan")                  //(G, 2017)
+                    .attr("x", d3.pointer(event)[0])
+                    .attr("y", d3.pointer(event)[1] + 15)
+                    .text(function(){
+                        return "Population: " + d.population
+                    })
+                    .append("tspan")                  //(G, 2017)
+                    .attr("x", d3.pointer(event)[0])
+                    .attr("y", d3.pointer(event)[1] + 30)
+                    .text(function(){
+                        return "Assault Rate: " + d.rates_assault
+                    })
+        }
+
+        function onMouseOut_AS(event, d, i){
+            tooltip_AS.style("visibility", "hidden")
+            tooltipRect_AS.style("visibility", "hidden")
+        }
+
+        function onClickAS(){
+            d3.selectAll(".rate_AS")
+                .style("visibility", "visible")
         }
 
         window.changeBUBBLE_AS = function(yearBUBBLE_AS){

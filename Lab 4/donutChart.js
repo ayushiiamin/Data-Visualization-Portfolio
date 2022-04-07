@@ -96,7 +96,7 @@ d3.csv("data/crimeUS.csv", function(d, i){
         var mean_totRape = d3.mean(totRape)
         var mean_totRobbery = d3.mean(totRobbery)
 
-        crime_mapPIE = new Map([
+       var crime_mapPIE = new Map([
             [mean_totBurglary, "Burglary"],
             [mean_totLarceny, "Larceny"],
             [mean_totMotor, "Motor"],
@@ -106,7 +106,42 @@ d3.csv("data/crimeUS.csv", function(d, i){
             [mean_totRobbery, "Robbery"]
         ])
 
-        crime_arrPIE = [mean_totBurglary, mean_totLarceny, mean_totMotor, mean_totAssault, mean_totMurder, mean_totRape, mean_totRobbery]
+      var crime_arrPIE = [mean_totBurglary, mean_totLarceny, mean_totMotor, mean_totAssault, mean_totMurder, mean_totRape, mean_totRobbery]
+      var legendArrPIE = ["Burglary", "Larceny", "Motor", "Assault", "Murder", "Rape", "Robbery"]
+
+        var legend_PIE = grPIE.selectAll("legendPIEDots")
+                                .data(legendArrPIE)
+
+             //Adding the markers of the legend
+             legend_PIE.enter()
+                            .append("circle")
+                            .merge(legend_PIE)
+                            .attr("class", "legendPIEDots")
+                            .attr("cx", 150)
+                            .attr("cy", function(d,i){        //Adding a space of 18 between each of the legend markers
+                                return (-12) + i*18              //(Holtz, 2022)
+                            }) 
+                            .attr("r", 7)
+                            .style("fill", function(d, i){
+                                return color(d)        //The colors are set according to the ordinal color scale defined above
+                            })
+         
+         //Adding the labels of the legend
+         grPIE.selectAll("legendPIELabels")
+                            .data(legendArrPIE)
+                            .enter()
+                            .append("text")
+                            .attr("font-size", "13px")
+                            .attr("x", 160)
+                            .attr("y", function(d,i){           //Adding a space of 18 between each of the legend labels
+                                return (-12) + i*18            //(Holtz, 2022)
+                            }) 
+                            .attr("fill", "white")
+                            .text(function(d){ 
+                                return d                 //The 6 country names present in the reqCountriesPIE array is the text that appears as the labels
+                            })
+                            .attr("text-anchor", "left")
+                            .style("alignment-baseline", "middle")
 
         var path = grPIE.selectAll("path")
                         .data(pie(crime_arrPIE))

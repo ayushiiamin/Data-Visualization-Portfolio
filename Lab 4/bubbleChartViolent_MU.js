@@ -45,8 +45,8 @@ window.callBubbleChart_MU = function(mu_data){
                                 .append("svg")
                                 .attr("class","bubbleViolentMU")
                                 .attr("width", widthBUBBLE_MU + marginBUBBLE_MU.left + marginBUBBLE_MU.right - 7)
-                                .attr("height", heightBUBBLE_MU + marginBUBBLE_MU.top + marginBUBBLE_MU.bottom + 16)
-                                .attr("transform", "translate(20, 20)")
+                                .attr("height", heightBUBBLE_MU + marginBUBBLE_MU.top + marginBUBBLE_MU.bottom + 18)
+                                .attr("transform", "translate(-453, 27)")
 
         //Creating a group container
         var gBUBBLE_MU = svgBUBBLE_MU.selectAll("g")
@@ -56,6 +56,14 @@ window.callBubbleChart_MU = function(mu_data){
                                             .attr("transform", function(d, i) {
                                                 return "translate(" + (marginBUBBLE_MU.left+10) + "," + marginBUBBLE_MU.top + ")";
                                             })
+
+        gBUBBLE_MU.append("text")
+                    .attr("x", -150)
+                    .attr("y", 20)
+                    .attr("font-size", "17px")
+                    .attr("font-family", "sans-serif")
+                    .attr("fill", "#E80000")
+                    .text("Murder")
         
         var x = d3.scaleLinear()
                     .range([0, widthBUBBLE_MU])
@@ -95,6 +103,27 @@ window.callBubbleChart_MU = function(mu_data){
 
         var colorScale_MU = d3.scaleOrdinal()
                                 .range(d3.schemeReds[7]);
+
+        var filter_mu = 0
+
+        window.filterData_MU = function(state){
+            filter_mu++
+                                                                                                
+            d3.selectAll(".rate_MU")
+                .filter(function(d){
+                    return !(d.state == state)
+                })
+                .style("visibility", "hidden") 
+                                                                                                
+            if(filter_mu >= 2){
+                d3.selectAll(".rate_MU")
+                    .style("visibility", "visible")  
+                                                                                                
+                filter_mu = 0
+                                                                                                
+                filterData_MU(state)
+            }
+        }
 
         function axes(data){
 
@@ -143,6 +172,23 @@ window.callBubbleChart_MU = function(mu_data){
 
         function drawBubbleChart_MU(data){
 
+            svgBUBBLE_MU.append("rect")
+                        .attr("x", 370)
+                        .attr("y", 30)
+                        .attr("fill", "#F8CF40")
+                        .attr("width", 60)
+                        .attr("height", 20)
+                        .on("click", onClickMU)
+            
+            svgBUBBLE_MU.append("text")
+                        .text("Reset Filter")
+                        .attr("x", 400)
+                        .attr("y", 43)
+                        .attr("text-anchor", "middle")
+                        .attr("font-size", "12px")
+                        .attr("fill", "#0000FF")
+                        .on("click", onClickMU)
+
             var muPop = []
             var muRate = []
 
@@ -162,6 +208,8 @@ window.callBubbleChart_MU = function(mu_data){
                     .append("circle")
                     .attr("class", "rate_MU")
                     .merge(mu)
+                    .on("mouseover", onMouseOver_MU)
+                    .on("mouseout", onMouseOut_MU)
                     .transition()
                     .duration(900)
                     .style("fill", function(d){
@@ -176,6 +224,64 @@ window.callBubbleChart_MU = function(mu_data){
                     .attr("r", 5)
 
             mu.exit().remove()
+        }
+
+        var tooltipRect_MU = d3.select(".bubbleViolentMU")
+                                .append("g")
+                                .append("rect")
+                                .style("position", "absolute")
+                                .style("visibility", "hidden")
+                                .attr("fill", "#695E93")     
+                
+        var tooltip_MU = d3.select(".bubbleViolentMU")
+                            .append("g")
+                            .append("text")
+                            .attr("class", "muText")
+                            .style("position", "absolute")
+                            .style("visibility", "hidden")         
+                            .attr("fill", "#EFDCF9")         
+                            .attr("font-size", "15px")
+
+        var ttRect_MU;
+
+        function onMouseOver_MU(event, d, i){
+
+            ttRect_MU = tooltip_MU.node().getBBox()
+
+            tooltipRect_MU.style("visibility", "visible")
+                            .attr("x", d3.pointer(event)[0]) 
+                            .attr("y", d3.pointer(event)[1] - 12)
+                            .attr("width", ttRect_MU.width)
+                            .attr("height", ttRect_MU.height)
+
+            tooltip_MU.style("visibility", "visible")
+                        .attr("x", d3.pointer(event)[0])
+                        .attr("y", d3.pointer(event)[1])
+                        .text(function(){
+                            return "State: " + d.state
+                        })
+                        .append("tspan")                  //(G, 2017)
+                        .attr("x", d3.pointer(event)[0])
+                        .attr("y", d3.pointer(event)[1] + 15)
+                        .text(function(){
+                            return "Population: " + d.population
+                        })
+                        .append("tspan")                  //(G, 2017)
+                        .attr("x", d3.pointer(event)[0])
+                        .attr("y", d3.pointer(event)[1] + 30)
+                        .text(function(){
+                            return "Murder Rate: " + d.rates_murder
+                        })
+        }
+
+        function onMouseOut_MU(event, d, i){
+            tooltip_MU.style("visibility", "hidden")
+            tooltipRect_MU.style("visibility", "hidden")
+        }
+
+        function onClickMU(){
+            d3.selectAll(".rate_MU")
+                .style("visibility", "visible")
         }
 
         window.changeBUBBLE_MU = function(yearBUBBLE_MU) {

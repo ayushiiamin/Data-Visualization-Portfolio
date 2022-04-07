@@ -151,7 +151,6 @@ window.callCircularBarplot_property = function(property_data){
             }
             else if((cCircularBarPlot_property == 0)){
 
-                
                 cCircularBarPlot_property++
 
                 svgCIRCBARPLOT_property.append("g")

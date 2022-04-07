@@ -12,18 +12,20 @@
     <head>
         <script src='https://d3js.org/d3.v7.min.js'></script>
 
+        <!-- Linking the required css files to the main.html file -->
         <link rel="stylesheet" href="main.css">
         <link rel="stylesheet" href="map.css">
-        <link rel="stylesheet" href="treeMap.css">
         <link rel="stylesheet" href="donutChart.css">
-        <link rel="stylesheet" href="lollipopChart.css">
         <link rel="stylesheet" href="bubbleChart.css">
-        <link rel="stylesheet" href="stackedAreaChart.css">
         <link rel="stylesheet" href="circularBarplot.css">
+        <link rel="stylesheet" href="areaChart.css">
     </head>
 
     <body>
+
+        <!-- Adding the header for the page -->
         <div class="header">
+            <!-- This serves as a title for the dashboard -->
             <h1>Crime Rate in USA</h1>
 
             <div class="slidecontainer">
@@ -46,7 +48,6 @@
         <script type='text/javascript' src='https://d3js.org/d3.v7.min.js'></script>
 
         <script>
-            var varia;
             function radioClick(){
                 var option = document.crimeForm.crime_category;
                 for(var i = 0; i < option.length; i++) {
@@ -56,9 +57,10 @@
                 }
             }
             radioClick()
-            
         </script>
 
+        <!-- Linking the required javascript files to the main.html -->
+        <!-- This is done so that all of them can be loaded accordingly -->
         <script src="map.js"></script>
 
         <script src="donutChart.js"></script>
@@ -69,32 +71,16 @@
         <script src="bubbleChartProperty_LA.js"></script>
         <script src="bubbleChartProperty_MO.js"></script>
 
+        <script src="areaChartProperty.js"></script>
+
         <script src="circularBarplotViolent.js"></script>
 
         <script src="bubbleChartViolent_AS.js"></script>
         <script src="bubbleChartViolent_MU.js"></script>
         <script src="bubbleChartViolent_RA.js"></script>
         <script src="bubbleChartViolent_RO.js"></script>
-        
-       <!--   -->
-        
-        <!-- <script src="lollipopChartNortheastProperty.js"></script>
-        <script src="lollipopChartWesternProperty.js"></script>
-        <script src="lollipopChartSouthernProperty.js"></script>
-        <script src="lollipopChartMidwestProperty.js"></script> 
 
+        <script src="areaChartViolent.js"></script>
         
-          
-         -->
-
-        <!-- 
-
-        
-        
-        
-         -->
-
-        <!-- <script src="stackedAreaChartProperty_BU_LA_MO.js"></script> -->
-        <!-- <script src="treeMap.js"></script> -->
     </body>
 </html>

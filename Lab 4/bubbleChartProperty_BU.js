@@ -41,17 +41,12 @@ window.callBubbleChart_BU = function(bu_data){
         bubbleArrPropertyBU.push(toOriginalTypeBUBBLE_BU(d))
     }).then(function(bubbleData_BU){
         
-        // cBU++
-
-        // if(cBU == 1){
-
-        
         var svgBUBBLE_BU = d3.select('body')
                                 .append("svg")
                                 .attr("class","bubblePropertyBU")
                                 .attr("width", widthBUBBLE_BU + marginBUBBLE_BU.left + marginBUBBLE_BU.right - 7)
-                                .attr("height", heightBUBBLE_BU + marginBUBBLE_BU.top + marginBUBBLE_BU.bottom + 16)
-                                .attr("transform", "translate(20, 20)")
+                                .attr("height", heightBUBBLE_BU + marginBUBBLE_BU.top + marginBUBBLE_BU.bottom + 18)
+                                .attr("transform", "translate(10, -340)")
 
         //Creating a group container
         var gBUBBLE_BU = svgBUBBLE_BU.selectAll("g")
@@ -61,6 +56,14 @@ window.callBubbleChart_BU = function(bu_data){
                                             .attr("transform", function(d, i) {
                                                 return "translate(" + (marginBUBBLE_BU.left+10) + "," + marginBUBBLE_BU.top + ")";
                                             })
+
+        gBUBBLE_BU.append("text")
+                    .attr("x", -150)
+                    .attr("y", 20)
+                    .attr("font-size", "17px")
+                    .attr("font-family", "sans-serif")
+                    .attr("fill", "#1E77BD")
+                    .text("Burglary") 
         
                                             
         var x = d3.scaleLinear()
@@ -101,6 +104,27 @@ window.callBubbleChart_BU = function(bu_data){
 
         var colorScale_BU = d3.scaleOrdinal()
                                 .range(d3.schemeBlues[7]);
+        
+        var filter_bu = 0
+
+        window.filterData_BU = function(state){
+            filter_bu++
+
+            d3.selectAll(".rate_BU")
+               .filter(function(d){
+                   return !(d.state == state)
+               })
+               .style("visibility", "hidden") 
+
+            if(filter_bu >= 2){
+                d3.selectAll(".rate_BU")
+                  .style("visibility", "visible")  
+
+                filter_bu = 0
+
+                filterData_BU(state)
+            }
+        }
 
         function axes(data){
 
@@ -149,6 +173,23 @@ window.callBubbleChart_BU = function(bu_data){
 
         function drawBubbleChart_BU(data){
 
+            svgBUBBLE_BU.append("rect")
+                        .attr("x", 370)
+                        .attr("y", 30)
+                        .attr("fill", "#F8CF40")
+                        .attr("width", 60)
+                        .attr("height", 20)
+                        .on("click", onClickBU)
+            
+            svgBUBBLE_BU.append("text")
+                        .text("Reset Filter")
+                        .attr("x", 400)
+                        .attr("y", 43)
+                        .attr("text-anchor", "middle")
+                        .attr("font-size", "12px")
+                        .attr("fill", "#0000FF")
+                        .on("click", onClickBU)
+
             var buPop = []
             var buRate = []
 
@@ -168,6 +209,8 @@ window.callBubbleChart_BU = function(bu_data){
                     .append("circle")
                     .attr("class", "rate_BU")
                     .merge(b)
+                    .on("mouseover", onMouseOver_BU)
+                    .on("mouseout", onMouseOut_BU)
                     .transition()
                     .duration(900)
                     // .style("fill", "#29A0B1")
@@ -185,7 +228,63 @@ window.callBubbleChart_BU = function(bu_data){
             b.exit().remove()
         }
 
-        // window.varia = "Hello!"
+        var tooltipRect_BU = d3.select(".bubblePropertyBU")
+                            .append("g")
+                            .append("rect")
+                            .style("position", "absolute")
+                            .style("visibility", "hidden")
+                            .attr("fill", "#695E93")     
+                            
+        var tooltip_BU = d3.select(".bubblePropertyBU")
+                            .append("g")
+                            .append("text")
+                            .attr("class", "buText")
+                            .style("position", "absolute")
+                            .style("visibility", "hidden")         
+                            .attr("fill", "#EFDCF9")         
+                            .attr("font-size", "15px")
+
+        var ttRect_BU;
+
+        function onMouseOver_BU(event, d, i){
+
+            ttRect_BU = tooltip_BU.node().getBBox()
+
+            tooltipRect_BU.style("visibility", "visible")
+                        .attr("x", d3.pointer(event)[0]) 
+                        .attr("y", d3.pointer(event)[1] - 12)
+                        .attr("width", ttRect_BU.width)
+                        .attr("height", ttRect_BU.height)
+
+            tooltip_BU.style("visibility", "visible")
+                    .attr("x", d3.pointer(event)[0])
+                    .attr("y", d3.pointer(event)[1])
+                    .text(function(){
+                        return "State: " + d.state
+                    })
+                    .append("tspan")                  //(G, 2017)
+                    .attr("x", d3.pointer(event)[0])
+                    .attr("y", d3.pointer(event)[1] + 15)
+                    .text(function(){
+                        return "Population: " + d.population
+                    })
+                    .append("tspan")                  //(G, 2017)
+                    .attr("x", d3.pointer(event)[0])
+                    .attr("y", d3.pointer(event)[1] + 30)
+                    .text(function(){
+                        return "Burglary Rate: " + d.rates_burglary
+                    })
+        }
+
+        function onMouseOut_BU(event, d, i){
+            tooltip_BU.style("visibility", "hidden")
+            tooltipRect_BU.style("visibility", "hidden")
+        }
+
+        function onClickBU(){
+            d3.selectAll(".rate_BU")
+                .style("visibility", "visible")
+        }
 
         window.changeBUBBLE_BU = function(yearBUBBLE_BU){
             var newBubbleArr_BU = bubbleArrPropertyBU.filter(filteringDataBUBBLE_BU)

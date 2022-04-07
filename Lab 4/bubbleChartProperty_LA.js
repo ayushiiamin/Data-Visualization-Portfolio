@@ -45,8 +45,8 @@ window.callBubbleChart_LA = function(la_data){
                                 .append("svg")
                                 .attr("class","bubblePropertyLA")
                                 .attr("width", widthBUBBLE_LA + marginBUBBLE_LA.left + marginBUBBLE_LA.right - 7)
-                                .attr("height", heightBUBBLE_LA + marginBUBBLE_LA.top + marginBUBBLE_LA.bottom + 16)
-                                .attr("transform", "translate(20, 20)")
+                                .attr("height", heightBUBBLE_LA + marginBUBBLE_LA.top + marginBUBBLE_LA.bottom + 18)
+                                .attr("transform", "translate(-453, 27)")
 
         //Creating a group container
         var gBUBBLE_LA = svgBUBBLE_LA.selectAll("g")
@@ -56,6 +56,14 @@ window.callBubbleChart_LA = function(la_data){
                                             .attr("transform", function(d, i) {
                                                 return "translate(" + (marginBUBBLE_LA.left+10) + "," + marginBUBBLE_LA.top + ")";
                                             })
+
+        gBUBBLE_LA.append("text")
+                  .attr("x", -150)
+                  .attr("y", 20)
+                  .attr("font-size", "17px")
+                  .attr("font-family", "sans-serif")
+                  .attr("fill", "#C5C5C5")
+                  .text("Larceny")
         
         var x = d3.scaleLinear()
                     .range([0, widthBUBBLE_LA])
@@ -95,6 +103,27 @@ window.callBubbleChart_LA = function(la_data){
 
         var colorScale_LA = d3.scaleOrdinal()
                                 .range(d3.schemeGreys[7]);
+
+        var filter_la = 0
+
+        window.filterData_LA = function(state){
+            filter_la++
+                        
+            d3.selectAll(".rate_LA")
+                .filter(function(d){
+                    return !(d.state == state)
+                })
+                .style("visibility", "hidden") 
+                        
+            if(filter_la >= 2){
+                d3.selectAll(".rate_LA")
+                   .style("visibility", "visible")  
+                        
+                filter_la = 0
+                        
+                filterData_LA(state)
+            }
+        }
 
         function axes(data){
 
@@ -143,6 +172,23 @@ window.callBubbleChart_LA = function(la_data){
 
         function drawBubbleChart_LA(data){
 
+            svgBUBBLE_LA.append("rect")
+                        .attr("x", 370)
+                        .attr("y", 30)
+                        .attr("fill", "#F8CF40")
+                        .attr("width", 60)
+                        .attr("height", 20)
+                        .on("click", onClickLA)
+            
+            svgBUBBLE_LA.append("text")
+                        .text("Reset Filter")
+                        .attr("x", 400)
+                        .attr("y", 43)
+                        .attr("text-anchor", "middle")
+                        .attr("font-size", "12px")
+                        .attr("fill", "#0000FF")
+                        .on("click", onClickLA)
+
             var laPop = []
             var laRate = []
 
@@ -162,6 +208,8 @@ window.callBubbleChart_LA = function(la_data){
                     .append("circle")
                     .attr("class", "rate_LA")
                     .merge(a)
+                    .on("mouseover", onMouseOver_LA)
+                    .on("mouseout", onMouseOut_LA)
                     .transition()
                     .duration(900)
                     // .style("fill", "#29A0B1")
@@ -177,6 +225,64 @@ window.callBubbleChart_LA = function(la_data){
                     .attr("r", 5)
 
             a.exit().remove()
+        }
+
+        var tooltipRect_LA = d3.select(".bubblePropertyLA")
+                            .append("g")
+                            .append("rect")
+                            .style("position", "absolute")
+                            .style("visibility", "hidden")
+                            .attr("fill", "#695E93")     
+                            
+        var tooltip_LA = d3.select(".bubblePropertyLA")
+                            .append("g")
+                            .append("text")
+                            .attr("class", "laText")
+                            .style("position", "absolute")
+                            .style("visibility", "hidden")         
+                            .attr("fill", "#EFDCF9")         
+                            .attr("font-size", "15px")
+
+        var ttRect_LA;
+
+        function onMouseOver_LA(event, d, i){
+
+            ttRect_LA = tooltip_LA.node().getBBox()
+
+            tooltipRect_LA.style("visibility", "visible")
+                        .attr("x", d3.pointer(event)[0]) 
+                        .attr("y", d3.pointer(event)[1] - 12)
+                        .attr("width", ttRect_LA.width)
+                        .attr("height", ttRect_LA.height)
+
+            tooltip_LA.style("visibility", "visible")
+                    .attr("x", d3.pointer(event)[0])
+                    .attr("y", d3.pointer(event)[1])
+                    .text(function(){
+                        return "State: " + d.state
+                    })
+                    .append("tspan")                  //(G, 2017)
+                    .attr("x", d3.pointer(event)[0])
+                    .attr("y", d3.pointer(event)[1] + 15)
+                    .text(function(){
+                        return "Population: " + d.population
+                    })
+                    .append("tspan")                  //(G, 2017)
+                    .attr("x", d3.pointer(event)[0])
+                    .attr("y", d3.pointer(event)[1] + 30)
+                    .text(function(){
+                        return "Larceny Rate: " + d.rates_larceny
+                    })
+        }
+
+        function onMouseOut_LA(event, d, i){
+            tooltip_LA.style("visibility", "hidden")
+            tooltipRect_LA.style("visibility", "hidden")
+        }
+
+        function onClickLA(){
+            d3.selectAll(".rate_LA")
+                .style("visibility", "visible")
         }
 
         window.changeBUBBLE_LA = function(yearBUBBLE_LA) {

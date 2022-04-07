@@ -45,8 +45,8 @@ window.callBubbleChart_MO = function(mo_data){
                                 .append("svg")
                                 .attr("class","bubblePropertyMO")
                                 .attr("width", widthBUBBLE_MO + marginBUBBLE_MO.left + marginBUBBLE_MO.right - 7)
-                                .attr("height", heightBUBBLE_MO + marginBUBBLE_MO.top + marginBUBBLE_MO.bottom + 16)
-                                .attr("transform", "translate(20, 20)")
+                                .attr("height", heightBUBBLE_MO + marginBUBBLE_MO.top + marginBUBBLE_MO.bottom + 18)
+                                .attr("transform", "translate(484, -332)")
 
         //Creating a group container
         var gBUBBLE_MO = svgBUBBLE_MO.selectAll("g")
@@ -56,6 +56,14 @@ window.callBubbleChart_MO = function(mo_data){
                                             .attr("transform", function(d, i) {
                                                 return "translate(" + (marginBUBBLE_MO.left+10) + "," + marginBUBBLE_MO.top + ")";
                                             })
+
+        gBUBBLE_MO.append("text")
+                    .attr("x", -150)
+                    .attr("y", 20)
+                    .attr("font-size", "17px")
+                    .attr("font-family", "sans-serif")
+                    .attr("fill", "#FF0080")
+                    .text("Motor")
         
         var x = d3.scaleLinear()
                     .range([0, widthBUBBLE_MO])
@@ -95,6 +103,27 @@ window.callBubbleChart_MO = function(mo_data){
 
         var colorScale_MO = d3.scaleOrdinal()
                                 .range(d3.schemePuRd[7]);
+
+        var filter_mo = 0
+
+        window.filterData_MO = function(state){
+            filter_mo++
+                                                
+            d3.selectAll(".rate_MO")
+                .filter(function(d){
+                    return !(d.state == state)
+                })
+                .style("visibility", "hidden") 
+                                                
+            if(filter_mo >= 2){
+                d3.selectAll(".rate_MO")
+                    .style("visibility", "visible")  
+                                                
+                filter_mo = 0
+                                                
+                filterData_MO(state)
+            }
+        }
 
         function axes(data){
 
@@ -143,6 +172,23 @@ window.callBubbleChart_MO = function(mo_data){
 
         function drawBubbleChart_MO(data){
 
+            svgBUBBLE_MO.append("rect")
+                        .attr("x", 370)
+                        .attr("y", 30)
+                        .attr("fill", "#F8CF40")
+                        .attr("width", 60)
+                        .attr("height", 20)
+                        .on("click", onClickMO)
+            
+            svgBUBBLE_MO.append("text")
+                        .text("Reset Filter")
+                        .attr("x", 400)
+                        .attr("y", 43)
+                        .attr("text-anchor", "middle")
+                        .attr("font-size", "12px")
+                        .attr("fill", "#0000FF")
+                        .on("click", onClickMO)
+
             var moPop = []
             var moRate = []
 
@@ -162,6 +208,8 @@ window.callBubbleChart_MO = function(mo_data){
                     .append("circle")
                     .attr("class", "rate_MO")
                     .merge(o)
+                    .on("mouseover", onMouseOver_MO)
+                    .on("mouseout", onMouseOut_MO)
                     .transition()
                     .duration(900)
                     .style("fill", function(d){
@@ -176,6 +224,64 @@ window.callBubbleChart_MO = function(mo_data){
                     .attr("r", 5)
 
             o.exit().remove()
+        }
+
+        var tooltipRect_MO = d3.select(".bubblePropertyMO")
+                            .append("g")
+                            .append("rect")
+                            .style("position", "absolute")
+                            .style("visibility", "hidden")
+                            .attr("fill", "#695E93")     
+                            
+        var tooltip_MO = d3.select(".bubblePropertyMO")
+                            .append("g")
+                            .append("text")
+                            .attr("class", "moText")
+                            .style("position", "absolute")
+                            .style("visibility", "hidden")         
+                            .attr("fill", "#EFDCF9")         
+                            .attr("font-size", "15px")
+
+        var ttRect_MO;
+
+        function onMouseOver_MO(event, d, i){
+
+            ttRect_MO = tooltip_MO.node().getBBox()
+
+            tooltipRect_MO.style("visibility", "visible")
+                        .attr("x", d3.pointer(event)[0]) 
+                        .attr("y", d3.pointer(event)[1] - 12)
+                        .attr("width", ttRect_MO.width)
+                        .attr("height", ttRect_MO.height)
+
+            tooltip_MO.style("visibility", "visible")
+                    .attr("x", d3.pointer(event)[0])
+                    .attr("y", d3.pointer(event)[1])
+                    .text(function(){
+                        return "State: " + d.state
+                    })
+                    .append("tspan")                  //(G, 2017)
+                    .attr("x", d3.pointer(event)[0])
+                    .attr("y", d3.pointer(event)[1] + 15)
+                    .text(function(){
+                        return "Population: " + d.population
+                    })
+                    .append("tspan")                  //(G, 2017)
+                    .attr("x", d3.pointer(event)[0])
+                    .attr("y", d3.pointer(event)[1] + 30)
+                    .text(function(){
+                        return "Motor Rate: " + d.rates_motor
+                    })
+        }
+
+        function onMouseOut_MO(event, d, i){
+            tooltip_MO.style("visibility", "hidden")
+            tooltipRect_MO.style("visibility", "hidden")
+        }
+
+        function onClickMO(){
+            d3.selectAll(".rate_MO")
+                .style("visibility", "visible")
         }
 
         window.changeBUBBLE_MO = function(yearBUBBLE_MO) {
