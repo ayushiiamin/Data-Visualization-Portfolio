@@ -1,0 +1,102 @@
+<!-- REFERENCES - 
+
+1) Niel Sinel (2015). How to display an output depending on the selected radio button after selecting a radio button? [online] Stack Overflow. 
+   Available at: https://stackoverflow.com/questions/32325864/how-to-display-an-output-depending-on-the-selected-radio-button-after-selecting
+
+-->
+
+
+<!DOCTYPE html>
+
+<html lang = "en">
+    <head>
+        <script src='https://d3js.org/d3.v7.min.js'></script>
+
+        <!-- Linking the required css files to the main.html file -->
+        <link rel="stylesheet" href="main.css">
+        <link rel="stylesheet" href="map.css">
+        <link rel="stylesheet" href="donutChart.css">
+        <link rel="stylesheet" href="bubbleChart.css">
+        <link rel="stylesheet" href="circularBarplot.css">
+        <link rel="stylesheet" href="areaChart.css">
+    </head>
+
+    <body>
+
+        <!-- Adding the header for the page -->
+        <div class="header">
+            <!-- This serves as a title for the dashboard -->
+            <h1>Crime Rate in USA</h1>
+
+            <!-- Adding the slider -->
+            <div class="slidecontainer">
+                <!-- Adding the slider for choosing the desired year -->
+                <p style="display: inline">Current year: <span id="displayYear"></span></p>
+                <!-- The min and max value of the slider will be assigned in the map.js file using D3 -->
+                <input type="range" class="slider" id="yearCrime">
+            </div>
+
+            <!-- Adding the two options -->
+            <h2>Choose a crime category</h2>
+
+            <form name="crimeForm">
+                <!-- For the first option, add the radio button value to be "Property" -->
+                <input type="radio" name="crime_category" value="Property" id="property"/>
+                <label class="crime_category">Property</label>
+
+                <!-- For the second option, add the radio button value to be "Violent" -->
+                <input type="radio" name="crime_category" value="Violent" id="violent"/>
+                <label class="crime_category">Violent</label>
+            </form>
+        </div>
+
+        <script type='text/javascript' src='https://d3js.org/d3.v7.min.js'></script>
+
+        <script>
+            //The below function listens for any click events on the radio button
+            function radioClick(){
+                //The two radio buttons are wrapped under a <form> tag (acts as a container for the radio buttons), hence the code uses the document to access the two 
+                //values under the form tag
+                var option = document.crimeForm.crime_category;
+
+                //The below for loop iterates through the array created 
+                //The array has two elements - Radio button data for Property and Radio button data for Violent
+                for(var i = 0; i < option.length; i++) {
+
+                    //Listening for onclick events
+                    option[i].onclick = function() {          //(Niel Sinel, 2015)
+                        //Both of the radio buttons have its respective values that have been defined above
+                        //If any button is selected, this function gets triggered, and the value of that selected button
+                        //is sent to the global function callMap
+                        callMap(this.value)
+                    };
+                }
+            }
+            radioClick()
+        </script>
+
+        <!-- Linking the required javascript files to the main.html -->
+        <!-- This is done so that all of them can be loaded accordingly -->
+        <script src="map.js"></script>
+
+        <script src="donutChart.js"></script>
+
+        <script src="circularBarplotProperty.js"></script>
+
+        <script src="bubbleChartProperty_BU.js"></script>
+        <script src="bubbleChartProperty_LA.js"></script>
+        <script src="bubbleChartProperty_MO.js"></script>
+
+        <script src="areaChartProperty.js"></script>
+
+        <script src="circularBarplotViolent.js"></script>
+
+        <script src="bubbleChartViolent_AS.js"></script>
+        <script src="bubbleChartViolent_MU.js"></script>
+        <script src="bubbleChartViolent_RA.js"></script>
+        <script src="bubbleChartViolent_RO.js"></script>
+
+        <script src="areaChartViolent.js"></script>
+        
+    </body>
+</html>
